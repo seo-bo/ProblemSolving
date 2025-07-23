@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		string str;
+		cin >> str;
+		int mask = 0;
+		for (auto& j : str)
+		{
+			mask |= (1 << (int)(j - 'a'));
+		}
+		i = mask;
+	}
+	int pivot = (1 << 26) - 1, ans = 0;
+	int left = n / 2, right = n - n / 2;
+	map<int, int>ok;
+	for (int i = 0; i < (1 << left); ++i)
+	{
+		int mask = 0;
+		for (int j = 0; j < left; ++j)
+		{
+			if (i & (1 << j))
+			{
+				mask |= v[j];
+			}
+		}
+		ok[mask]++;
+	}
+	for (int i = 0; i < (1 << right); ++i)
+	{
+		int mask = 0;
+		for (int j = 0; j < right; ++j)
+		{
+			if (i & (1 << j))
+			{
+				mask |= v[j + left];
+			}
+		}
+		for (auto& [a, b] : ok)
+		{
+			if ((a | mask) == pivot)
+			{
+				ans += b;
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
