@@ -1,0 +1,78 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, ans = 0;
+	cin >> n;
+	vector<int>cost(n + 1);
+	map<int, vector<int>>ok;
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> cost[i];
+		ok[cost[i]].push_back(i);
+	}
+	vector<vector<int>>graph(n + 1);
+	vector<int>parent(n + 1), rank(n + 1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (rank[r1] > rank[r2])
+			{
+				parent[r2] = r1;
+			}
+			else
+			{
+				parent[r1] = r2;
+				if (rank[r1] == rank[r2])
+				{
+					rank[r2]++;
+				}
+			}
+		};
+	for (int i = 0; i < n - 1; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		if (!graph[i].empty())
+		{
+			sort(graph[i].begin(), graph[i].end(), [&](const int& a, const int& b)
+				{
+					return cost[a] > cost[b];
+				});
+		}
+	}
+	for (auto i = ok.rbegin(); i != ok.rend(); ++i)
+	{
+		for (auto& j : i->second)
+		{
+			for (auto& k : graph[j])
+			{
+				if (cost[k] >= cost[j] && find(k) != find(j))
+				{
+					merge(k, j);
+				}
+			}
+		}
+		set<int>s;
+		for (auto& j : i->second)
+		{
+			s.insert(find(j));
+		}
+		ans += (int)s.size();
+	}
+	cout << ans;
+	return 0;
+}

@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n);
+	bool flag = true;
+	for (auto& i : v)
+	{
+		cin >> i;
+		if (i)
+		{
+			flag = false;
+		}
+	}
+	if (flag)
+	{
+		cout << 0 << '\n';
+		for (auto& i : v)
+		{
+			cout << 0 << ' ';
+		}
+		return 0;
+	}
+	sort(v.begin(), v.end());
+	int ans = 0;
+	for (auto& i : v)
+	{
+		if (ans == i)
+		{
+			ans++;
+		}
+		else if (ans < i)
+		{
+			break;
+		}
+	}
+	cout << ans + 1 << '\n';
+	for (auto& i : v)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}
