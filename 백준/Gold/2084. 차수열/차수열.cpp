@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<pii>v(n);
+	for (int i = 0; i < n; ++i)
+	{
+		auto& [a, b] = v[i];
+		cin >> a;
+		b = i + 1;
+	}
+	vector<vector<int>>ans(n + 1, vector<int>(n + 1, 0));
+	sort(v.rbegin(), v.rend());
+	for (int i = 0; i < n; ++i)
+	{
+		auto& [c1, v1] = v[0];
+		for (int j = 1; j < n && c1; ++j)
+		{
+			auto& [c2, v2] = v[j];
+			if (ans[v1][v2])
+			{
+				continue;
+			}
+			if (!c2)
+			{
+				cout << -1;
+				return 0;
+			}
+			ans[v1][v2] = ans[v2][v1] = 1;
+			c1--;
+			c2--;
+		}
+		sort(v.rbegin(), v.rend());
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			cout << ans[i][j] << ' ';
+		}
+		cout << '\n';
+	}
+	return 0;
+}
