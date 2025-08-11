@@ -1,0 +1,54 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	string A, B;
+	cin >> A >> B;
+	vector<int>v(4);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	vector<vector<int>>dp(n + 1, vector<int>(n + 1, -1));
+	function<int(int, int)> dfs = [&](int i, int j)
+		{
+			if (i == n && j == n)
+			{
+				return 0;
+			}
+			if (dp[i][j] != -1)
+			{
+				return dp[i][j];
+			}
+			int res = INT_MAX / 6;
+			if (i < n)
+			{
+				res = min({ res, dfs(min(n, i + 1), j) + v[0], dfs(min(n, i + 3), j) + v[1], dfs(min(n, i + 5), j) + v[2] });
+				if (A[i] == '0')
+				{
+					res = min(res, dfs(i + 1, j));
+				}
+			}
+			if (j < n)
+			{
+				res = min({ res, dfs(i, min(n, j + 1)) + v[0], dfs(i, min(n, j + 3)) + v[1], dfs(i, min(n, j + 5)) + v[2] });
+				if (B[j] == '0')
+				{
+					res = min(res, dfs(i, j + 1));
+				}
+			}
+			if (i < n && j < n && i == j)
+			{
+				int maxi = min(n, i + 4);
+				res = min(res, dfs(maxi, maxi) + v[3]);
+			}
+			return dp[i][j] = res;
+		};
+	cout << dfs(0, 0);
+	return 0;
+}
