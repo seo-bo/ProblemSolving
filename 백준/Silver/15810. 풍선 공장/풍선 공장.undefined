@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	ll left = 1, right = LLONG_MAX / 4, ans = 0;
+	while (left <= right)
+	{
+		ll mid = (left + right) / 2;
+		ll cnt = 0;
+		bool flag = false;
+		for (auto& i : v)
+		{
+			cnt += mid / i;
+			if (cnt >= m)
+			{
+				flag = true;
+				break;
+			}
+		}
+		if (flag)
+		{
+			ans = mid;
+			right = mid - 1;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+	}
+	cout << ans;
+	return 0;
+}
