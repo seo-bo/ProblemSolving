@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, ans = 0;
+	cin >> n;
+	vector<int>v;
+	for (int i = 0; i < n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		while (!v.empty() && v.back() < temp)
+		{
+			v.pop_back();
+			ans++;
+		}
+		v.push_back(temp);
+		if (v.size() > 1)
+		{
+			ans++;
+		}
+	}
+	cout << ans;
+	return 0;
+}
