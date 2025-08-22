@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0, len = 0;
+		cin >> n;
+		string str;
+		cin >> str;
+		int flag = 0, ans = 1;
+		for (int i = 0; i < 2 * n + 1; ++i)
+		{
+			if (!flag)
+			{
+				flag = (str[i] == '-');
+				continue;
+			}
+			if (flag && (str[i] == '-' || str[i] == '+'))
+			{
+				if (str[i + 1] != '0')
+				{
+					ans = 0;
+					break;
+				}
+			}
+		}
+		cout << ((ans) ? "YES" : "NO") << '\n';
+	}
+	return 0;
+}
