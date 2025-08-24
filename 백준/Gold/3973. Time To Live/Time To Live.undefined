@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0;
+		cin >> n;
+		vector<vector<int>>graph(n + 1);
+		for (int i = 0; i < n - 1; ++i)
+		{
+			int a = 0, b = 0;
+			cin >> a >> b;
+			graph[a].push_back(b);
+			graph[b].push_back(a);
+		}
+		int pivot = 0, ans = 0;
+		auto bfs = [&](int start)
+			{
+				vector<int>visited(n + 1, INT_MAX);
+				queue<int>q;
+				q.push(start);
+				visited[start] = 0;
+				while (!q.empty())
+				{
+					int cur = q.front();
+					q.pop();
+					for (auto& i : graph[cur])
+					{
+						if (visited[i] > visited[cur] + 1)
+						{
+							visited[i] = visited[cur] + 1;
+							q.push(i);
+						}
+					}
+				}
+				for (int i = 0; i < n; ++i)
+				{
+					if (visited[i] > ans)
+					{
+						pivot = i;
+						ans = visited[i];
+					}
+				}
+			};
+		bfs(pivot);
+		bfs(pivot);
+		cout << (ans + 1) / 2 << '\n';
+	}
+	return 0;
+}
