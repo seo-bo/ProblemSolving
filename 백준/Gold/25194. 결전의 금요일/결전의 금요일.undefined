@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	vector<vector<int>>dp(n + 1, vector<int>(8, -1));
+	function<int(int, int)> dfs = [&](int idx, int pivot)
+		{
+			if (idx == n + 1)
+			{
+				return (int)(pivot == 4);
+			}
+			if (dp[idx][pivot] != -1)
+			{
+				return dp[idx][pivot];
+			}
+			int res = dfs(idx + 1, pivot);
+			res |= dfs(idx + 1, (pivot + v[idx]) % 7);
+			return dp[idx][pivot] = res;
+		};
+	cout << ((dfs(1, 0)) ? "YES" : "NO");
+	return 0;
+}
