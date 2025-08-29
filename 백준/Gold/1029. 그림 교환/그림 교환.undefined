@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int dp[15][1 << 16][10];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	memset(dp, -1, sizeof(dp));
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>v(n, vector<int>(n, 0));
+	for (int i = 0; i < n; ++i)
+	{
+		string str;
+		cin >> str;
+		for (int j = 0; j < n; ++j)
+		{
+			v[i][j] = str[j] - '0';
+		}
+	}
+	function<int(int, int, int)> dfs = [&](int idx, int mask, int cost)
+		{
+			if (mask == (1 << (n + 1)) - 1)
+			{
+				return (int)__builtin_popcount(mask);
+			}
+			if (dp[idx][mask][cost] != -1)
+			{
+				return dp[idx][mask][cost];
+			}
+			int res = __builtin_popcount(mask);
+			for (int i = 0; i < n; ++i)
+			{
+				if ((mask & (1 << i)) || cost > v[idx][i])
+				{
+					continue;
+				}
+				res = max(res, dfs(i, mask | (1 << i), v[idx][i]));
+			}
+			return dp[idx][mask][cost] = res;
+		};
+	cout << dfs(0, 1, 0);
+	return 0;
+}
