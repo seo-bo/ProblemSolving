@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, string>pis;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<pis>>room;
+	vector<int>level;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, siz = room.size(), pivot = -1;
+		string b;
+		cin >> a >> b;
+		for (int i = 0; i < siz; ++i)
+		{
+			if (room[i].size() == m)
+			{
+				continue;
+			}
+			if (level[i] - 10 <= a && a <= level[i] + 10)
+			{
+				room[i].push_back(make_pair(a, b));
+				pivot = i;
+				break;
+			}
+		}
+		if (pivot == -1)
+		{
+			vector<pis>temp = { make_pair(a,b) };
+			room.push_back(temp);
+			level.push_back(a);
+		}
+	}
+	int siz = room.size();
+	for (int i = 0; i < siz; ++i)
+	{
+		if (room[i].size() == m)
+		{
+			cout << "Started!\n";
+		}
+		else
+		{
+			cout << "Waiting!\n";
+		}
+		sort(room[i].begin(), room[i].end(), [&](const pis& a, const pis& b)
+			{
+				return a.second < b.second;
+			});
+		for (auto& [a, b] : room[i])
+		{
+			cout << a << ' ' << b << '\n';
+		}
+	}
+	return 0;
+}
