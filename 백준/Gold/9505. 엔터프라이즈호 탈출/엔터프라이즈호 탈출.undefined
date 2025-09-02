@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<ll, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	while (T--)
+	{
+		int k = 0, n = 0, m = 0;
+		cin >> k >> m >> n;
+		vector<int>score(30, 0);
+		vector<vector<int>>v(n, vector<int>(m));
+		for (int i = 0; i < k; ++i)
+		{
+			char a;
+			int b;
+			cin >> a >> b;
+			score[(int)a - 'A'] = b;
+		}
+		priority_queue<tp, vector<tp>, greater<tp>>pq;
+		vector<vector<ll>>dist(n, vector<ll>(m, LLONG_MAX));
+		for (int i = 0; i < n; ++i)
+		{
+			string str;
+			cin >> str;
+			for (int j = 0; j < m; ++j)
+			{
+				v[i][j] = score[(int)str[j] - 'A'];
+				if (str[j] == 'E')
+				{
+					pq.push(make_tuple(0, i, j));
+					dist[i][j] = 0;
+				}
+			}
+		}
+		while (!pq.empty())
+		{
+			auto [cost, x, y] = pq.top();
+			pq.pop();
+			if (dist[x][y] < cost)
+			{
+				continue;
+			}
+			for (int i = 0; i < 4; ++i)
+			{
+				int nx = x + dir[i][0];
+				int ny = y + dir[i][1];
+				if (nx >= 0 && nx < n && ny >= 0 && ny < m)
+				{
+					if (dist[nx][ny] > dist[x][y] + v[nx][ny])
+					{
+						dist[nx][ny] = dist[x][y] + v[nx][ny];
+						pq.push(make_tuple(dist[nx][ny], nx, ny));
+					}
+				}
+			}
+		}
+		ll ans = LLONG_MAX;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < m; ++j)
+			{
+				if (i == 0 || i == n - 1 || j == 0 || j == m - 1)
+				{
+					ans = min(ans, dist[i][j]);
+				}
+			}
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
