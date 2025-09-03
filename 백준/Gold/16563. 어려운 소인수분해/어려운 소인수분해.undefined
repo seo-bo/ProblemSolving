@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MAX 5000000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0;
+	cin >> n;
+	vector<ll>prime(MAX + 1);
+	for (ll i = 2; i <= MAX; ++i)
+	{
+		if (!prime[i])
+		{
+			prime[i] = i;
+			for (ll j = i * i; j <= MAX; j += i)
+			{
+				if (!prime[j])
+				{
+					prime[j] = i;
+				}
+			}
+		}
+	}
+	while (n--)
+	{
+		ll temp = 0;
+		cin >> temp;
+		while (temp > 1)
+		{
+			cout << prime[temp] << ' ';
+			temp /= prime[temp];
+		}
+		cout << '\n';
+	}
+	return 0;
+}
