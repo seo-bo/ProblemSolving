@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>v(n + 1, vector<int>(n + 1, 0));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			cin >> v[i][j];
+		}
+	}
+	vector<vector<int>>dir = { {0,0},{1,0},{0,1},{1,1} };
+	function<int(int, int, int)> dfs = [&](int x, int y, int siz)
+		{
+			if (siz == 1)
+			{
+				return v[x][y];
+			}
+			int len = siz / 2;
+			int a = INT_MAX - 1, b = INT_MAX;
+			for (int i = 0; i < 4; ++i)
+			{
+				int nx = x + len * dir[i][0];
+				int ny = y + len * dir[i][1];
+				int cost = dfs(nx, ny, len);
+				if (a > cost)
+				{
+					b = a;
+					a = cost;
+				}
+				else if (b > cost)
+				{
+					b = cost;
+				}
+			}
+			return b;
+		};
+	cout << dfs(1, 1, n);
+	return 0;
+}
