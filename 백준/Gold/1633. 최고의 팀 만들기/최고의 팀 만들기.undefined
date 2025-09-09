@@ -1,0 +1,33 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<vector<int>>dp(16, vector<int>(16, -1));
+	int a = 0, b = 0;
+	dp[15][15] = 0;
+	while (cin >> a >> b)
+	{
+		for (int i = 0; i <= 15; ++i)
+		{
+			for (int j = 0; j <= 15; ++j)
+			{
+				if (dp[i][j] != -1)
+				{
+					if (i - 1 >= 0)
+					{
+						dp[i - 1][j] = max(dp[i - 1][j], dp[i][j] + a);
+					}
+					if (j - 1 >= 0)
+					{
+						dp[i][j - 1] = max(dp[i][j - 1], dp[i][j] + b);
+					}
+				}
+			}
+		}
+	}
+	cout << dp[0][0];
+	return 0;
+}
