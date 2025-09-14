@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    int n = 0;
+    cin >> n;
+    vector<vector<char>>v(1001, vector<char>(1001, '?'));
+    for (int i = 0; i < n; ++i)
+    {
+        string str;
+        cin >> str;
+        for (int j = 0; j < (int)str.size(); ++j)
+        {
+            v[i][j] = str[j];
+        }
+    }
+    int x = 0, y = 0, t = 0, ans = 0;
+    auto cal = [&](string& str)
+        {
+            int cnt = 0, len = str.size();
+            for (int i = 0; i + 4 < len; ++i)
+            {
+                string pp;
+                for (int j = 0; j <= 4; ++j)
+                {
+                    pp += str[i + j];
+                }
+                if (pp == "KUMOH")
+                {
+                    cnt++;
+                }
+            }
+            return cnt;
+        };
+    while (x < 1000 && y < 1000)
+    {
+        int nx = x, ny = y;
+        string temp;
+        while (nx >= 0 && nx < 1000 && ny >= 0 && ny < 1000)
+        {
+            if (v[nx][ny] != '?')
+            {
+                temp += v[nx][ny];
+            }
+            nx++;
+            ny--;
+        }
+        int a = 0, b = 0;
+        a = cal(temp);
+        reverse(temp.begin(), temp.end());
+        b = cal(temp);
+        ans += max(a, b);
+        if (!t)
+        {
+            y++;
+        }
+        else
+        {
+            x++;
+        }
+        if (y == 1000)
+        {
+            t = 1;
+            x++;
+            y = 999;
+        }
+    }
+    cout << ans;
+    return 0;
+}
