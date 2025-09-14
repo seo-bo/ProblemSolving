@@ -1,0 +1,102 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>line(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		line[temp] = i;
+	}
+	vector<int>P(4);
+	for (int i = 1; i <= 3; ++i)
+	{
+		cin >> P[i];
+	}
+	vector<vector<int>>v(n + 1, vector<int>(4, 0));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (auto& j : v[i])
+		{
+			cin >> j;
+		}
+	}
+	vector<int>x(4);
+	for (int i = 0; i <= 3; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		x[temp] = i;
+	}
+	int pivot = INT_MIN, ans = INT_MAX;
+	for (int i = 0; i < (1 << (2 * n)); ++i)
+	{
+		int score = 0;
+		vector<int>T(4);
+		vector<pii>temp(1, { 0,0 });
+		for (int j = 0; j < n; ++j)
+		{
+			int now = ((i >> (2 * j)) & 3);
+			T[now]++;
+			score += v[j + 1][now];
+			temp.push_back(make_pair(now, j + 1));
+		}
+		bool flag = true;
+		for (int j = 1; j <= 3; ++j)
+		{
+			if (T[j] > P[j])
+			{
+				flag = false;
+			}
+		}
+		if (!flag || pivot > score)
+		{
+			continue;
+		}
+		sort(temp.begin() + 1, temp.end(), [&](const pii& a, const pii& b)
+			{
+				if (a.first == b.first)
+				{
+					return line[a.second] < line[b.second];
+				}
+				return x[a.first] < x[b.first];
+			});
+		vector<int>pos(n + 1);
+		for (int j = 1; j <= n; ++j)
+		{
+			pos[j] = line[temp[j].second];
+		}
+		vector<bool>visited(n + 1, false);
+		int res = n;
+		for (int j = 1; j <= n; ++j)
+		{
+			if (visited[j])
+			{
+				continue;
+			}
+			res--;
+			for (int k = j; !visited[k]; k = pos[k])
+			{
+				visited[k] = true;
+			}
+		}
+		if (pivot < score)
+		{
+			pivot = score;
+			ans = res;
+		}
+		else
+		{
+			ans = min(ans, res);
+		}
+	}
+	cout << ans;
+	return 0;
+}
