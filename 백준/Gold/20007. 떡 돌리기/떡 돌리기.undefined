@@ -1,0 +1,60 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, m = 0, x = 0, y = 0;
+	cin >> n >> m >> x >> y;
+	vector<vector<pll>>graph(n);
+	for (ll i = 0; i < m; ++i)
+	{
+		ll a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	priority_queue<pll, vector<pll>, greater<pll>>pq;
+	pq.push(make_pair(0, y));
+	vector<ll>dist(n, INT_MAX);
+	dist[y] = 0;
+	while (!pq.empty())
+	{
+		auto [cost, ver] = pq.top();
+		pq.pop();
+		if (dist[ver] < cost)
+		{
+			continue;
+		}
+		for (auto& [nv, nc] : graph[ver])
+		{
+			if (dist[nv] > dist[ver] + nc)
+			{
+				dist[nv] = dist[ver] + nc;
+				pq.push(make_pair(dist[nv], nv));
+			}
+		}
+	}
+	sort(dist.begin(), dist.end());
+	ll ans = 1, pivot = 0;
+	for (ll i = 0; i < n; ++i)
+	{
+		ll cost = dist[i] * 2;
+		if (cost > x)
+		{
+			cout << -1;
+			return 0;
+		}
+		if (pivot + cost > x)
+		{
+			pivot = cost;
+			ans++;
+			continue;
+		}
+		pivot += cost;
+	}
+	cout << ans;
+	return 0;
+}
