@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<vector<int>>graph(n);
+	for (int i = 0; i < n - 1; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+	}
+	vector<int>depth(n, -1), cost(n);
+	for (auto& i : cost)
+	{
+		cin >> i;
+	}
+	function<void(int, int)> dfs = [&](int parent, int node)
+		{
+			for (auto& i : graph[node])
+			{
+				if (i == parent)
+				{
+					continue;
+				}
+				depth[i] = depth[node] + 1;
+				dfs(node, i);
+			}
+		};
+	depth[0] = 0;
+	dfs(-1, 0);
+	for (int i = 0; i < n; ++i)
+	{
+		if (cost[i] == k)
+		{
+			cout << depth[i];
+			return 0;
+		}
+	}
+	return 0;
+}
