@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MAX 50000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<bool>flag(MAX + 1, true);
+	flag[0] = flag[1] = false;
+	for (ll i = 2; i * i <= MAX; ++i)
+	{
+		if (flag[i])
+		{
+			for (ll j = i * i; j <= MAX; j += i)
+			{
+				flag[j] = false;
+			}
+		}
+	}
+	vector<int>prime;
+	for (int i = 2; i <= MAX; ++i)
+	{
+		if (flag[i])
+		{
+			prime.push_back(i);
+		}
+	}
+	int n = 0;
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+	{
+		cout << prime[i] << ' ';
+	}
+	return 0;
+}
