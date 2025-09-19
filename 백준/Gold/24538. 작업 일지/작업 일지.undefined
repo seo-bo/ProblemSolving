@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<vector<pii>>v(k + 3);
+	for (int i = 1; i <= n; ++i)
+	{
+		int start = 0, end = 0;
+		cin >> start >> end;
+		end++;
+		v[start].push_back(make_pair(1, 1));
+		v[end].push_back(make_pair(end - start + 1, -1));
+	}
+	ll cnt = 0, sum = 0;
+	for (int i = 1; i <= k; ++i)
+	{
+		for (auto& [a, b] : v[i])
+		{
+			if (b == 1)
+			{
+				cnt++;
+				sum++;
+			}
+			else
+			{
+				cnt--;
+				sum -= a;
+			}
+		}
+		cout << sum << ' ';
+		sum += cnt;
+	}
+	return 0;
+}
