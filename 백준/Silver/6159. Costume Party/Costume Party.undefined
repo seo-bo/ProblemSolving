@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, s = 0;
+	cin >> n >> s;
+	vector<ll>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	sort(v.begin(), v.end());
+	int left = 0, right = n - 1, ans = 0;
+	while (left < right)
+	{
+		ll sum = v[left] + v[right];
+		if (sum <= s)
+		{
+			ans += right - left;
+			left++;
+		}
+		else
+		{
+			right--;
+		}
+	}
+	cout << ans;
+	return 0;
+}
