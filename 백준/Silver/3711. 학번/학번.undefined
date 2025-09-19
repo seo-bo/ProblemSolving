@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int a = 0;
+		cin >> a;
+		if (a == 1)
+		{
+			int temp = 0;
+			cin >> temp;
+			cout << 1 << '\n';
+			continue;
+		}
+		vector<int>v(a);
+		for (auto& i : v)
+		{
+			cin >> i;
+		}
+		for (int i = 2;; ++i)
+		{
+			set<int>s;
+			bool flag = true;
+			for (auto& j : v)
+			{
+				if (s.find(j % i) != s.end())
+				{
+					flag = false;
+					break;
+				}
+				s.insert(j % i);
+			}
+			if (flag)
+			{
+				cout << i << '\n';
+				break;
+			}
+		}
+	}
+	return 0;
+}
