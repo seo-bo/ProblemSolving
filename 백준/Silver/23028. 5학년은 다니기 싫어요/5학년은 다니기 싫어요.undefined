@@ -1,0 +1,36 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int a = 0, b = 0, c = 0;
+	cin >> a >> b >> c;
+	a = 8 - a;
+	b = max(0, 66 - b);
+	c = max(0, 130 - c);
+	int cost = max((b + 2) / 3, (c + 2) / 3);
+	if (cost > 6 * a)
+	{
+		cout << "Nae ga wae";
+		return 0;
+	}
+	for (int i = 0; i < a; ++i)
+	{
+		int A = 0, B = 0;
+		cin >> A >> B;
+		int tot = min(6, A + B);
+		int aa = min(tot, A);
+		int bb = min(B, tot - aa);
+		b = max(0, b - aa * 3);
+		c = max(0, c - tot * 3);
+	}
+	if (b || c)
+	{
+		cout << "Nae ga wae";
+		return 0;
+	}
+	cout << "Nice";
+	return 0;
+}
