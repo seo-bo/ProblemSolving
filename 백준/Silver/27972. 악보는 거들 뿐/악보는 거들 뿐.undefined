@@ -1,0 +1,56 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	int pre = 0, t = 0, now = 1, ans = INT_MIN;
+	cin >> pre;
+	for (int i = 1; i <= n - 1; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		if (pre < temp)
+		{
+			if (!t)
+			{
+				t = 1;
+				now++;
+			}
+			else if (t == -1)
+			{
+				ans = max(ans, now);
+				t = 1;
+				now = 2;
+			}
+			else
+			{
+				now++;
+			}
+		}
+		if (pre > temp)
+		{
+			if (!t)
+			{
+				t = -1;
+				now++;
+			}
+			else if (t == 1)
+			{
+				ans = max(ans, now);
+				t = -1;
+				now = 2;
+			}
+			else
+			{
+				now++;
+			}
+		}
+		pre = temp;
+	}
+	cout << max(now, ans);
+	return 0;
+}
