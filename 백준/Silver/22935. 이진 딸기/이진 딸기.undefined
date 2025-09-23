@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		ll n = 0, ans = -1, p = 1, d = 1;
+		cin >> n;
+		ll div = ((n - 1) / 28);
+		for (ll i = div * 28 + 1;; ++i)
+		{
+			if (i == n)
+			{
+				ans = p;
+				break;
+			}
+			p += d;
+			if (p == 16)
+			{
+				p = 14;
+				d = -1;
+			}
+			if (p == 0)
+			{
+				p = 2;
+				d = 1;
+			}
+		}
+		vector<int>v(4);
+		for (int i = 3; i >= 0; --i)
+		{
+			if (p & 1)
+			{
+				v[i] = 1;
+			}
+			p >>= 1;
+		}
+		for (auto& i : v)
+		{
+			if (i)
+			{
+				cout << "딸기";
+				continue;
+			}
+			cout << "V";
+		}
+		cout << '\n';
+	}
+	return 0;
+}
