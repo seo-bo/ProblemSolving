@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, m = 0;
+	cin >> n >> m;
+	ll ans = LLONG_MAX, cnt = n;
+	if (n == 0)
+	{
+		ll p = 1, ans = 0;
+		for (int i = 1; i <= m; ++i)
+		{
+			ans += p * p;
+			p++;
+		}
+		cout << ans;
+		return 0;
+	}
+	ll sum = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		sum += temp + 1;
+	}
+	ll pivot = 0;
+	for (ll i = 0; i <= m; ++i)
+	{
+		ll p = 1;
+		pivot += i * i;
+		ll turn = m - i - sum;
+		ll temp = pivot;
+		while (turn > 0)
+		{
+			ll mini = min(turn, cnt);
+			turn -= mini;
+			temp += mini * p * p;
+			p++;
+		}
+		ans = min(ans, temp);
+	}
+	cout << ans;
+	return 0;
+}
