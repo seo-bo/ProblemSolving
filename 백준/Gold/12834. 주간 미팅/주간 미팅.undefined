@@ -1,0 +1,70 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, v = 0, e = 0;
+	cin >> n >> v >> e;
+	vector<vector<pii>>graph(v + 1);
+	int A = 0, B = 0;
+	cin >> A >> B;
+	vector<int>home(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> home[i];
+	}
+	for (int i = 0; i < e; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	auto dijkstra = [&](int start)
+		{
+			vector<int>visited(v + 1, INT_MAX);
+			visited[start] = 0;
+			priority_queue<pii, vector<pii>, greater<pii>>pq;
+			pq.push(make_pair(0, start));
+			while (!pq.empty())
+			{
+				auto [cost, ver] = pq.top();
+				pq.pop();
+				if (visited[ver] < cost)
+				{
+					continue;
+				}
+				for (auto& [nv, nc] : graph[ver])
+				{
+					if (visited[nv] > visited[ver] + nc)
+					{
+						visited[nv] = visited[ver] + nc;
+						pq.push(make_pair(visited[nv], nv));
+					}
+				}
+			}
+			return visited;
+		};
+	vector<int>a = dijkstra(A);
+	vector<int>b = dijkstra(B);
+	ll ans = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		int x = home[i];
+		int pa = -1, pb = -1;
+		if (a[x] != INT_MAX)
+		{
+			pa = a[x];
+		}
+		if (b[x] != INT_MAX)
+		{
+			pb = b[x];
+		}
+		ans += pa + pb;
+	}
+	cout << ans;
+	return 0;
+}
