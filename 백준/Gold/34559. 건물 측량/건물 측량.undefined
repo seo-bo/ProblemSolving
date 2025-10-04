@@ -8,15 +8,13 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0, m = 0;
 	cin >> n >> m;
-	vector<vector<int>>v(n + 3, vector<int>(m + 3, 0));
+	vector<vector<char>>v(n + 3, vector<char>(m + 3));
 	vector<vector<int>>prefix(n + 3, vector<int>(m + 3, 0));
 	for (int i = 1; i <= n; ++i)
 	{
-		string str;
-		cin >> str;
 		for (int j = 1; j <= m; ++j)
 		{
-			v[i][j] = int(str[j - 1] - '0');
+			cin >> v[i][j];
 		}
 	}
 	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
@@ -33,7 +31,7 @@ int main(void)
 				{
 					int nx = x + dir[i][0];
 					int ny = y + dir[i][1];
-					if (nx >= 1 && nx <= n && ny >= 1 && ny <= m && !prefix[nx][ny] && !v[nx][ny])
+					if (nx >= 1 && nx <= n && ny >= 1 && ny <= m && !prefix[nx][ny] && v[nx][ny] == '0')
 					{
 						q.push(make_pair(nx, ny));
 						prefix[nx][ny] = 1;
@@ -47,7 +45,7 @@ int main(void)
 		{
 			if (i == 1 || i == n || j == 1 || j == m)
 			{
-				if (!v[i][j] && !prefix[i][j])
+				if (v[i][j] == '0' && !prefix[i][j])
 				{
 					bfs(i, j);
 				}
