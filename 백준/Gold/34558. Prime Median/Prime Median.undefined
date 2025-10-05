@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MAX 1000000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<bool>flag(MAX + 1, true);
+	flag[0] = flag[1] = false;
+	vector<int>prime;
+	for (ll i = 2; i * i <= MAX; ++i)
+	{
+		if (flag[i])
+		{
+			for (ll j = i * i; j <= MAX; j += i)
+			{
+				flag[j] = false;
+			}
+		}
+	}
+	for (int i = 2; i <= MAX; ++i)
+	{
+		if (flag[i])
+		{
+			prime.push_back(i);
+		}
+	}
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		int it = lower_bound(prime.begin(), prime.end(), a) - prime.begin();
+		int jt = upper_bound(prime.begin(), prime.end(), b) - prime.begin() - 1;
+		int sum = jt - it + 1;
+		if (jt < 0 || sum % 2 == 0)
+		{
+			cout << -1 << '\n';
+			continue;
+		}
+		cout << prime[it + sum / 2] << '\n';
+	}
+	return 0;
+}
