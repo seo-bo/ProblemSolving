@@ -2,43 +2,43 @@
 using namespace std;
 typedef long long ll;
 
-int dp[501][501][501];
-
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0;
 	cin >> n;
-	memset(dp, -1, sizeof(dp));
+	vector<vector<int>>dp(501, vector<int>(501, -1));
 	int a = 0, b = 0, k = 0;
 	cin >> a >> b >> k;
-	dp[0][a][b] = 0;
+	dp[a][b] = 0;
 	for (int i = 0; i < n; ++i)
 	{
+		vector<vector<int>>temp = dp;
 		for (int j = 0; j <= a + b; ++j)
 		{
 			int A = j, B = a + b - A;
-			if (dp[i][A][B] == -1)
+			if (dp[A][B] == -1)
 			{
 				continue;
 			}
 			for (int z = k; z <= a + b; ++z)
 			{
-				for (auto& [pa, pb] : { make_pair(A - z, B + z), make_pair(A + z, B - z) })
+				if (A - z >= 0)
 				{
-					if (pa < 0 || pb < 0)
-					{
-						continue;
-					}
-					dp[i + 1][pa][pb] = max(dp[i + 1][pa][pb], dp[i][A][B] + pa * pb);
+					temp[A - z][B + z] = max(temp[A - z][B + z], dp[A][B] + (A - z) * (B + z));
+				}
+				if (B - z >= 0)
+				{
+					temp[A + z][B - z] = max(temp[A + z][B - z], dp[A][B] + (A + z) * (B - z));
 				}
 			}
 		}
+		dp = move(temp);
 	}
 	int ans = INT_MIN;
 	for (int i = 0; i <= a + b; ++i)
 	{
-		ans = max(ans, dp[n][i][a + b - i]);
+		ans = max(ans, dp[i][a + b - i]);
 	}
 	cout << ans;
 	return 0;
