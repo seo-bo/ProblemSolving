@@ -7,17 +7,17 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0;
 	cin >> n;
-	vector<vector<int>>dp(501, vector<int>(501, -1));
+	vector<int>dp(501, -1);
 	int a = 0, b = 0, k = 0;
 	cin >> a >> b >> k;
-	dp[a][b] = 0;
+	dp[a] = 0;
 	for (int i = 0; i < n; ++i)
 	{
-		vector<vector<int>>temp = dp;
+		vector<int>temp = dp;
 		for (int j = 0; j <= a + b; ++j)
 		{
 			int A = j, B = a + b - A;
-			if (dp[A][B] == -1)
+			if (dp[A] == -1)
 			{
 				continue;
 			}
@@ -25,11 +25,11 @@ int main(void)
 			{
 				if (A - z >= 0)
 				{
-					temp[A - z][B + z] = max(temp[A - z][B + z], dp[A][B] + (A - z) * (B + z));
+					temp[A - z] = max(temp[A - z], dp[A] + (A - z) * (B + z));
 				}
-				if (B - z >= 0)
+				if (A + z <= a + b)
 				{
-					temp[A + z][B - z] = max(temp[A + z][B - z], dp[A][B] + (A + z) * (B - z));
+					temp[A + z] = max(temp[A + z], dp[A] + (A + z) * (B - z));
 				}
 			}
 		}
@@ -38,7 +38,7 @@ int main(void)
 	int ans = INT_MIN;
 	for (int i = 0; i <= a + b; ++i)
 	{
-		ans = max(ans, dp[i][a + b - i]);
+		ans = max(ans, dp[i]);
 	}
 	cout << ans;
 	return 0;
