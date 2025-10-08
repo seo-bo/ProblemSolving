@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<string>s(2 * n);
+	for (auto& i : s)
+	{
+		cin >> i;
+	}
+	vector<vector<int>>v(n, vector<int>(n));
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				if (s[i][k] != s[j + n][k])
+				{
+					v[i][j]++;
+				}
+			}
+		}
+	}
+	vector<int>per(n);
+	iota(per.begin(), per.end(), 0);
+	int ans = INT_MIN;
+	do
+	{
+		int temp = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			temp += v[per[i]][i];
+		}
+		ans = max(ans, temp);
+	} while (next_permutation(per.begin(), per.end()));
+	cout << ans;
+	return 0;
+}
