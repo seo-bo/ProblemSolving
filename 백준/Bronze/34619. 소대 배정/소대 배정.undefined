@@ -1,0 +1,26 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int a = 0, b = 0, n = 0, k = 0, cnt = 1;
+	cin >> a >> b >> n >> k;
+	for (int i = 1; i <= a; ++i)
+	{
+		for (int j = 1; j <= b; ++j)
+		{
+			for (int p = 1; p <= n; ++p)
+			{
+				if (cnt == k)
+				{
+					cout << i << ' ' << j;
+					return 0;
+				}
+				cnt++;
+			}
+		}
+	}
+	return 0;
+}
