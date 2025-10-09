@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v;
+	string str;
+	cin >> str;
+	for (auto& i : str)
+	{
+		if (i == 'R')
+		{
+			v.push_back(0);
+		}
+		else if (i == 'G')
+		{
+			v.push_back(1);
+		}
+		else
+		{
+			v.push_back(2);
+		}
+	}
+	int ans = INT_MAX;
+	for (int i = 0; i < 3; ++i)
+	{
+		vector<int>temp = v;
+		int res = 0;
+		for (int j = 0; j < n - 2; ++j)
+		{
+			while (temp[j] != i)
+			{
+				for (int k = 0; k < 3; ++k)
+				{
+					temp[j + k] = (temp[j + k] + 1) % 3;
+				}
+				res++;
+			}
+		}
+		if (temp[n - 3] == temp[n - 2] && temp[n - 2] == temp[n - 1])
+		{
+			ans = min(ans, res);
+		}
+	}
+	cout << ((ans == INT_MAX) ? -1 : ans);
+	return 0;
+}
