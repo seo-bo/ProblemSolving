@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<int>>v(n + 1, vector<int>(m + 1));
+	vector<int>row(n + 1), col(m + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			cin >> v[i][j];
+			row[i] += v[i][j];
+		}
+	}
+	for (int j = 1; j <= m; ++j)
+	{
+		for (int i = 1; i <= n; ++i)
+		{
+			col[j] += v[i][j];
+		}
+	}
+	int ans = 0;
+	while (1)
+	{
+		int t = -1, idx = -1, res = INT_MAX;
+		for (int i = 1; i <= n; ++i)
+		{
+			if (res > row[i] && row[i])
+			{
+				t = 0, idx = i, res = row[i];
+			}
+		}
+		for (int i = 1; i <= m; ++i)
+		{
+			if (res > col[i] && col[i])
+			{
+				t = 1, idx = i, res = col[i];
+			}
+		}
+		if (idx == -1)
+		{
+			break;
+		}
+		ans = max(ans, res);
+		if (!t)
+		{
+			row[idx] = 0;
+			for (int i = 1; i <= m; ++i)
+			{
+				col[i] -= v[idx][i];
+				v[idx][i] = 0;
+			}
+		}
+		else
+		{
+			col[idx] = 0;
+			for (int i = 1; i <= n; ++i)
+			{
+				row[i] -= v[i][idx];
+				v[i][idx] = 0;
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
