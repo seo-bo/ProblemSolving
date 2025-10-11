@@ -1,0 +1,89 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<char>>A(n + 1, vector<char>(m + 1)), B(n + 1, vector<char>(m + 1));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			cin >> A[i][j];
+		}
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			cin >> B[i][j];
+		}
+	}
+	int pivot = 1;
+	auto cal = [&](vector<vector<char>>& v)
+		{
+			vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+			int cnt = 1;
+			vector<vector<int>>visited(n + 1, vector<int>(m + 1, 0));
+			auto bfs = [&](int sx, int sy, char p)
+				{
+					visited[sx][sy] = cnt;
+					queue<pii>q;
+					q.push(make_pair(sx, sy));
+					while (!q.empty())
+					{
+						auto [x, y] = q.front();
+						q.pop();
+						for (int i = 0; i < 4; ++i)
+						{
+							int nx = x + dir[i][0];
+							int ny = y + dir[i][1];
+							if (nx >= 1 && nx <= n && ny >= 1 && ny <= m && v[nx][ny] == p && !visited[nx][ny])
+							{
+								visited[nx][ny] = cnt;
+								q.push(make_pair(nx, ny));
+							}
+						}
+					}
+					cnt++;
+				};
+			for (int i = 1; i <= n; ++i)
+			{
+				for (int j = 1; j <= m; ++j)
+				{
+					if (!visited[i][j])
+					{
+						bfs(i, j, v[i][j]);
+					}
+				}
+			}
+			pivot = max(pivot, cnt);
+			return visited;
+		};
+	vector<vector<int>>a = cal(A), b = cal(B);
+	vector<int>ok(pivot + 1, -1);
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			if (ok[a[i][j]] == -1)
+			{
+				ok[a[i][j]] = b[i][j];
+			}
+			else
+			{
+				if (ok[a[i][j]] != b[i][j])
+				{
+					cout << "NO";
+					return 0;
+				}
+			}
+		}
+	}
+	cout << "YES";
+	return 0;
+}
