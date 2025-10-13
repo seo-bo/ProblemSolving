@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0;
+	cin >> n;
+	if (n <= 99)
+	{
+		cout << n;
+		return 0;
+	}
+	ll ans = 99;
+	auto cal = [&](ll base, ll p)
+		{
+			__int128 pivot = base;
+			ll last = base;
+			while (pivot <= n)
+			{
+				ll ok = last + p;
+				if (ok >= 0 && ok <= 9)
+				{
+					pivot = pivot * 10 + ok;
+					if (pivot / 100 && pivot <= n)
+					{
+						ans++;
+					}
+					last = ok;
+					continue;
+				}
+				break;
+			}
+		};
+	for (int i = -9; i <= 9; ++i)
+	{
+		for (int j = 1; j <= 9; ++j)
+		{
+			cal(j, i);
+		}
+	}
+	cout << ans;
+	return 0;
+}
