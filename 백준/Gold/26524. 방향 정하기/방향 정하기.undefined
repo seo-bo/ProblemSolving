@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 1000000007
+
+int main(void) // 진입차수 몰빵해주면 되나?
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	ll ans = 1;
+	for (int i = 2; i <= n; ++i)
+	{
+		ans = (ans * i) % MOD;
+	}
+	cout << ans;
+	return 0;
+}
