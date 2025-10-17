@@ -5,9 +5,9 @@ typedef long long ll;
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
-	ll n = 0, m = 0, x = 0;
+	int n = 0, m = 0, x = 0;
 	cin >> n >> m >> x;
-	vector<ll>a(n), b(m);
+	vector<int>a(n), b(m);
 	for (auto& i : a)
 	{
 		cin >> i;
@@ -18,19 +18,19 @@ int main(void)
 	}
 	sort(a.begin(), a.end());
 	sort(b.rbegin(), b.rend());
-	auto cal = [&](ll pivot)
+	auto cal = [&](int pivot)
 		{
 			ll cost = 0;
 			for (int i = pivot - 1, j = 0; j < pivot; --i, ++j)
 			{
-				cost += max(0LL, a[i] - b[j]);
+				cost += max(0, a[i] - b[j]);
 			}
 			return cost <= x;
 		};
-	ll left = 0, right = min(n, m), ans = 0;
+	int left = 0, right = min(n, m), ans = 0;
 	while (left <= right)
 	{
-		ll mid = (left + right) / 2;
+		int mid = (left + right) / 2;
 		if (cal(mid))
 		{
 			ans = mid;
