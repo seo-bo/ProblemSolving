@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, x = 0, y = 0;
+	cin >> n >> m;
+	vector<vector<int>>v(n + 1, vector<int>(n + 1));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			cin >> v[i][j];
+			if (v[i][j] == 2)
+			{
+				x = i, y = j;
+			}
+		}
+	}
+	map<char, string>mm;
+	string _ = "WASD";
+	char pre;
+	vector<vector<int>>dir = { {-1,0},{0,-1},{1,0},{0,1} };
+	for (auto& i : _)
+	{
+		string temp;
+		cin >> temp;
+		mm[i] = temp;
+	}
+	string base;
+	cin >> base;
+	auto check = [&](char now, char pivot)
+		{
+			if (pre == pivot && now == pivot)
+			{
+				return "Stay";
+			}
+			else if (pre != pivot && now == pivot)
+			{
+				return "Down";
+			}
+			else if (pre == pivot && now != pivot)
+			{
+				return "Up";
+			}
+			else
+			{
+				return "NO";
+			}
+		};
+	for (auto& i : base)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			if (mm[_[j]] == check(i, _[j]))
+			{
+				int nx = x + dir[j][0];
+				int ny = y + dir[j][1];
+				if (nx >= 1 && nx <= n && ny >= 1 && ny <= n && v[nx][ny] != 1)
+				{
+					x = nx, y = ny;
+				}
+			}
+		}
+		pre = i;
+	}
+	cout << x << ' ' << y;
+	return 0;
+}
