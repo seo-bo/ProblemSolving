@@ -1,0 +1,41 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+#define MOD 1000000007
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<char>>v(n + 1, vector<char>(m + 1));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			cin >> v[i][j];
+		}
+	}
+	vector<vector<int>>prefix(n + 2, vector<int>(m + 2)), suffix(n + 2, vector<int>(m + 2));
+	for (int px = 1, sx = n; px <= n; ++px, --sx)
+	{
+		for (int py = 1, sy = m; py <= m; ++py, --sy)
+		{
+			prefix[px][py] = prefix[px - 1][py] + prefix[px][py - 1] - prefix[px - 1][py - 1] + (v[px][py] == 'E');
+			suffix[sx][sy] = suffix[sx + 1][sy] + suffix[sx][sy + 1] - suffix[sx + 1][sy + 1] + (v[sx][sy] == 'M');
+		}
+	}
+	ll ans = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			if (v[i][j] == 'S')
+			{
+				ans = (ans + (ll)prefix[i][j] * suffix[i][j] % MOD) % MOD;
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
