@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, left = 1, ans = 1;
+	cin >> n;
+	map<int, int>mm;
+	vector<int>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	for (int right = 1; right <= n; ++right)
+	{
+		mm[v[right]]++;
+		while (1)
+		{
+			auto it = mm.begin()->first;
+			auto jt = prev(mm.end())->first;
+			if (it == jt || jt - it <= 2)
+			{
+				break;
+			}
+			if (--mm[v[left]] == 0)
+			{
+				mm.erase(v[left]);
+			}
+			left++;
+		}
+		ans = max(ans, right - left + 1);
+	}
+	cout << ans;
+	return 0;
+}
