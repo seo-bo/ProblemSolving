@@ -24,7 +24,7 @@
 
 <p>$ESM$을 오늘 알게 된 블롭 주환이는 이 전설을 듣고 놀라 자신이 구경하던 ENERGY SYNERGY MATRIX를 살펴보았다.</p>
 
-<p style="text-align: center;"><img alt="" src=""><img alt="" src="https://upload.acmicpc.net/5935104c-92f4-47f7-825e-97c8c9b2f1ad/-/preview/"></p>
+<p style="text-align: center;"><img alt="" src=""><img alt="" src=""></p>
 
 <p>"ENERGY SYNERGY MATRIX"는 문자 <code>E</code>, <code>S</code>, <code>M</code>으로 구성된 $N×M$ 크기의 2차원 행렬이다. 이를 줄여서 $ESM$이라고 하자.</p>
 
