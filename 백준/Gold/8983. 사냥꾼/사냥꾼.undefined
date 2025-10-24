@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int m = 0, n = 0, L = 0, ans = 0;
+	cin >> m >> n >> L;
+	vector<int>v(m);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	sort(v.begin(), v.end());
+	for (int i = 0; i < n; ++i)
+	{
+		int x = 0, y = 0;
+		cin >> x >> y;
+		int temp = L - y;
+		auto it = lower_bound(v.begin(), v.end(), x - temp);
+		for (int j = 0; j < 2 && it != v.end(); ++it, ++j)
+		{
+			if (abs(*it - x) <= temp)
+			{
+				ans++;
+				break;
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
