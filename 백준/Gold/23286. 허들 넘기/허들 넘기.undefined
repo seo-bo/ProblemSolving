@@ -1,0 +1,37 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, T = 0;
+	cin >> n >> m >> T;
+	vector<vector<int>>graph(n + 1, vector<int>(n + 1, INT_MAX));
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a][b] = min(graph[a][b], c);
+	}
+	for (int k = 1; k <= n; ++k)
+	{
+		for (int i = 1; i <= n; ++i)
+		{
+			for (int j = 1; j <= n; ++j)
+			{
+				if (graph[i][k] != INT_MAX && graph[k][j] != INT_MAX)
+				{
+					graph[i][j] = min(graph[i][j], max(graph[i][k], graph[k][j]));
+				}
+			}
+		}
+	}
+	while (T--)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		cout << ((graph[a][b] == INT_MAX) ? -1 : graph[a][b]) << '\n';
+	}
+	return 0;
+}
