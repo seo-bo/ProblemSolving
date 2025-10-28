@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<int>parent(n + 1), rank(n + 1, 1), A(n + 1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (rank[r1] < rank[r2])
+			{
+				swap(r1, r2);
+			}
+			parent[r2] = r1;
+			rank[r1] += rank[r2];
+			A[r1] += A[r2];
+		};
+	int ans = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> A[i];
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		A[i] -= temp;
+		if (A[i] < 0)
+		{
+			ans++;
+		}
+	}
+	while (m--)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a;
+		if (a == 1)
+		{
+			cin >> b >> c;
+			if (find(b) != find(c))
+			{
+				for (auto& i : { find(b),find(c) })
+				{
+					if (A[i] < 0)
+					{
+						ans -= rank[i];
+					}
+				}
+				merge(b, c);
+				int r = find(b);
+				if (A[r] < 0)
+				{
+					ans += rank[r];
+				}
+			}
+		}
+		else
+		{
+			cout << ans << '\n';
+		}
+	}
+	return 0;
+}
