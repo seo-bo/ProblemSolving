@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>v(n + 1, vector<int>(n + 1));
+	vector<vector<int>>dp(n + 1, vector<int>(n + 1, 1));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			cin >> v[i][j];
+		}
+	}
+	int ans = 1;
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			for (int a = 1; a <= i; ++a)
+			{
+				for (int b = 1; b <= j; ++b)
+				{
+					if (v[i][j] > v[a][b])
+					{
+						dp[i][j] = max(dp[i][j], 1 + dp[a][b]);
+						ans = max(ans, dp[i][j]);
+					}
+				}
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
