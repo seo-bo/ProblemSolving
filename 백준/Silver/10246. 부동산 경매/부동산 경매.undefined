@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MAX 1000000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<int>v(MAX + 1, 0);
+	ll A = 0, B = 0;
+	for (int i = 1; i <= MAX; ++i)
+	{
+		A++;
+		B += i;
+		for (int j = 1; A * j + B <= MAX; ++j)
+		{
+			v[A * j + B]++;
+		}
+	}
+	while (1)
+	{
+		int a = 0;
+		cin >> a;
+		if (!a)
+		{
+			break;
+		}
+		cout << v[a] << '\n';
+	}
+	return 0;
+}
