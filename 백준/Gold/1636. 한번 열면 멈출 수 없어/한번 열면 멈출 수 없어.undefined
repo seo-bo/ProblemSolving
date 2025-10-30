@@ -36,7 +36,7 @@ int main(void)
 			return temp;
 		};
 	ll ans = LLONG_MAX, idx = -1;
-	for (int i = 1; i <= 200; ++i)
+	for (int i = x[0].first; i <= x[0].second; ++i)
 	{
 		ll temp = cal(i);
 		if (ans > temp)
