@@ -1,42 +1,42 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef tuple<ll, ll, ll, ll> tp;
+typedef tuple<int, int, int, int> tp;
 
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
-	ll n = 0, m = 0, T = 0;
+	int n = 0, m = 0, T = 0;
 	cin >> n >> m >> T;
 	vector<tp>mon(n + 1);
-	for (ll i = 1; i <= n; ++i)
+	for (int i = 1; i <= n; ++i)
 	{
 		auto& [a, b, c, d] = mon[i];
 		cin >> a >> b >> c >> d;
 	}
-	vector<vector<ll>>graph(n + 1);
-	for (ll i = 0; i < m; ++i)
+	vector<vector<int>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
 	{
-		ll a = 0, b = 0;
+		int a = 0, b = 0;
 		cin >> a >> b;
 		graph[b].push_back(a);
 	}
 	auto cal = [&](ll def)
 		{
-			ll ans = 0;
-			vector<ll>dp(n + 1, -1);
+			int ans = 0;
+			vector<int>dp(n + 1, -1);
 			{
 				auto [a, x, y, c] = mon[1];
 				if (max(0LL, -def * y + a))
 				{
-					return 0LL;
+					return 0;
 				}
 				dp[1] = ans = c;
 			}
-			for (ll i = 1; i <= T - 1; ++i)
+			for (int i = 1; i <= T - 1; ++i)
 			{
-				vector<ll>temp = dp;
-				for (ll j = 1; j <= n; ++j)
+				vector<int>temp = dp;
+				for (int j = 1; j <= n; ++j)
 				{
 					auto [a, x, y, c] = mon[j];
 					if (max(0LL, -def * y + a + x * i))
@@ -58,11 +58,11 @@ int main(void)
 			}
 			return ans;
 		};
-	ll pivot = cal(INT_MAX);
+	int pivot = cal(INT_MAX);
 	ll left = 1, right = INT_MAX, ans = -1;
 	while (left <= right)
 	{
-		ll mid = (left + right) / 2;
+		int mid = (left + right) / 2;
 		if (cal(mid) < pivot)
 		{
 			left = mid + 1;
