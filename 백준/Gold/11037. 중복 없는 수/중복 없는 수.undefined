@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string str;
+	while (cin >> str)
+	{
+		int len = str.size();
+		string base, ans;
+		for (int i = 0, p = 9; i < len; ++i, --p)
+		{
+			base += char(p + '0');
+		}
+		if (str > base)
+		{
+			if (++len == 10)
+			{
+				cout << 0;
+			}
+			else
+			{
+				for (int i = 0, p = 1; i < len; ++i, ++p)
+				{
+					cout << p;
+				}
+			}
+			cout << '\n';
+			continue;
+		}
+		function<bool(int, int)> dfs = [&](int mask, int flag)
+			{
+				if ((int)ans.size() == len)
+				{
+					if (ans > str)
+					{
+						cout << ans << '\n';
+						return true;
+					}
+					return false;
+				}
+				for (int i = 1; i <= 9; ++i)
+				{
+					if (mask & (1 << i))
+					{
+						continue;
+					}
+					int pivot = str[(int)ans.size()] - '0';
+					if ((i < pivot && flag) || i >= pivot)
+					{
+						ans += char(i + '0');
+						int f = flag | (i > pivot);
+						if (dfs(mask | (1 << i), f))
+						{
+							return true;
+						}
+						ans.pop_back();
+					}
+				}
+				return false;
+			};
+		dfs(0, 0);
+	}
+	return 0;
+}
