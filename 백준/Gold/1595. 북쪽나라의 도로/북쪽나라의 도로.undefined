@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<vector<pii>>graph(10001);
+	int a = 0, b = 0, c = 0;
+	while (cin >> a >> b >> c)
+	{
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	auto cal = [&](int start)
+		{
+			int pivot = 0, idx = 0;
+			function<void(int, int, int)>dfs = [&](int parent, int node, int sum)
+				{
+					if (pivot < sum)
+					{
+						pivot = sum;
+						idx = node;
+					}
+					for (auto& [a, b] : graph[node])
+					{
+						if (a == parent)
+						{
+							continue;
+						}
+						dfs(node, a, sum + b);
+					}
+				};
+			dfs(0, start, 0);
+			return make_pair(pivot, idx);
+		};
+	cout << cal(cal(1).second).first;
+	return 0;
+}
