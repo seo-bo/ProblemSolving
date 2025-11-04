@@ -1,8 +1,7 @@
 #include <bits/stdc++.h>
+#include <unordered_set>
 using namespace std;
 typedef long long ll;
-
-int visited[5001] = { 0, };
 
 int main(void)
 {
@@ -19,30 +18,22 @@ int main(void)
 	vector<int>ans;
 	auto cal = [&](int term)
 		{
-			memset(visited, 0, sizeof(visited));
+			unordered_set<int>s;
 			for (int i = 0; i < n; ++i)
 			{
-				int now = i;
-				bool flag = false;
-				int prev = visited[now];
-				while (1)
+				if (idx.find(v[i] + term) == idx.end())
 				{
-					visited[now] = 1;
-					if (idx.find(v[now] + term) == idx.end())
-					{
-						break;
-					}
-					flag = true;
-					now = idx[v[now] + term];
+					continue;
 				}
-				if (i == now && !prev)
-				{
-					return;
-				}
+				s.insert(i);
+				s.insert(idx[v[i] + term]);
 			}
-			ans.push_back(term);
+			if (s.size() == n)
+			{
+				ans.push_back(term);
+			}
 		};
-	for (int i = 1; i < n; ++i)
+	for (int i = 1; i <= n / 2; ++i)
 	{
 		cal(v[i] - v[0]);
 	}
