@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int visited[5001] = { 0, };
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n);
+	unordered_map<int, int>idx;
+	for (int i = 0; i < n; ++i)
+	{
+		cin >> v[i];
+		idx[v[i]] = i;
+	}
+	vector<int>ans;
+	auto cal = [&](int term)
+		{
+			memset(visited, 0, sizeof(visited));
+			for (int i = 0; i < n; ++i)
+			{
+				int now = i;
+				bool flag = false;
+				int prev = visited[now];
+				while (1)
+				{
+					visited[now] = 1;
+					if (idx.find(v[now] + term) == idx.end())
+					{
+						break;
+					}
+					flag = true;
+					now = idx[v[now] + term];
+				}
+				if (i == now && !prev)
+				{
+					return;
+				}
+			}
+			ans.push_back(term);
+		};
+	for (int i = 1; i < n; ++i)
+	{
+		cal(v[i] - v[0]);
+	}
+	cout << ans.size() << '\n';
+	for (auto& i : ans)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}
