@@ -1,0 +1,17 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		ll c = 0, k = 0;
+		cin >> c >> k;
+		cout << c * k << ' ' << c / k << '\n';
+	}
+	return 0;
+}
