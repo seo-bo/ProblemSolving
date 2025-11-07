@@ -1,0 +1,47 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<pll>>graph(n + 1);
+	for (int i = 0; i < n - 1; ++i)
+	{
+		ll a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	vector<ll>cost(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> cost[i];
+	}
+	vector<pll>v;
+	function<void(int, int, ll)> dfs = [&](int parent, int node, ll sum)
+		{
+			for (auto& [a, b] : graph[node])
+			{
+				if (a == parent)
+				{
+					continue;
+				}
+				dfs(node, a, sum + b);
+			}
+			v.push_back(make_pair(sum, cost[node]));
+		};
+	dfs(0, 1, 0LL);
+	sort(v.begin(), v.end());
+	ll ans = 0;
+	for (auto& [a, b] : v)
+	{
+		int it = upper_bound(v.begin(), v.end(), make_pair(a, b)) - v.begin();
+		ans += n - it;
+	}
+	cout << ans << ' ' << ans;
+	return 0;
+}
