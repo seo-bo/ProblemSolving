@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<int>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+		if (m == v[i])
+		{
+			cout << 1;
+			return 0;
+		}
+	}
+	auto point = [&](int left, int right, int idx)
+		{
+			while (left < right)
+			{
+				int co = v[left] + v[right] + v[idx];
+				if (co == m)
+				{
+					cout << 1;
+					exit(0);
+				}
+				else if (co < m)
+				{
+					if (++left == idx)
+					{
+						++left;
+					}
+				}
+				else
+				{
+					if (--right == idx)
+					{
+						--right;
+					}
+				}
+			}
+		};
+	sort(v.begin() + 1, v.end());
+	for (int i = 0; i <= n; ++i)
+	{
+		int left = (i == 1) ? 2 : 1, right = (i == n) ? n - 1 : n;
+		point(left, right, i);
+	}
+	cout << 0;
+	return 0;
+}
