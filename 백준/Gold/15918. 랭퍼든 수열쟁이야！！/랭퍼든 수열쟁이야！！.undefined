@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, x = 0, y = 0, ans = 0;
+	cin >> n >> x >> y;
+	vector<int>v(2 * n + 1, 0);
+	int pivot = y - x - 1;
+	v[x] = v[y] = pivot;
+	function<void(int)> dfs = [&](int depth)
+		{
+			if (depth == n + 1)
+			{
+				if (v[x] == v[y])
+				{
+					ans++;
+				}
+				return;
+			}
+			if (pivot == depth)
+			{
+				dfs(depth + 1);
+				return;
+			}
+			for (int i = 1; i + depth + 1 <= 2 * n; ++i)
+			{
+				int a = i, b = i + depth + 1;
+				if (!v[a] && !v[b])
+				{
+					v[a] = v[b] = depth;
+					dfs(depth + 1);
+					v[a] = v[b] = 0;
+				}
+			}
+		};
+	dfs(1);
+	cout << ans;
+	return 0;
+}
