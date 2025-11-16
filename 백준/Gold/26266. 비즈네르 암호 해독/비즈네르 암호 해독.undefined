@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string A, B, str;
+	cin >> A >> B;
+	int len = A.size();
+	for (int i = 0; i < len; ++i)
+	{
+		str += ((B[i] - A[i] + 25) % 26 + 'A');
+	}
+	auto tok = [&](int idx, int term)
+		{
+			string temp;
+			int start = idx * term;
+			for (int i = start; i < start + term; ++i)
+			{
+				temp += str[i];
+			}
+			return temp;
+		};
+	for (int i = 1; i <= len; ++i)
+	{
+		if (len % i)
+		{
+			continue;
+		}
+		bool flag = true;
+		string base = tok(0, i);
+		for (int j = 1; j * i < len; ++j)
+		{
+			if (base != tok(j, i))
+			{
+				flag = false;
+				break;
+			}
+		}
+		if (flag)
+		{
+			cout << base;
+			return 0;
+		}
+	}
+	return 0;
+}
