@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+typedef tuple<int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, A = 0, B = 0, C = 0;
+	cin >> n >> m >> A >> B >> C;
+	vector<vector<pii>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	vector<vector<int>>dist(n + 1, vector<int>(21, INT_MAX));
+	dist[A][0] = 0;
+	priority_queue<tp, vector<tp>, greater<tp>>pq;
+	pq.push(make_tuple(0, 0, A));
+	while (!pq.empty())
+	{
+		auto [co, pre, ver] = pq.top();
+		pq.pop();
+		if (dist[ver][pre] < co)
+		{
+			continue;
+		}
+		for (auto& [nv, nc] : graph[ver])
+		{
+			int p = max(nc, pre);
+			if (dist[nv][p] > dist[ver][pre] + nc)
+			{
+				dist[nv][p] = dist[ver][pre] + nc;
+				pq.push(make_tuple(dist[nv][p], p, nv));
+			}
+		}
+	}
+	for (int i = 1; i <= 20; ++i)
+	{
+		if (dist[B][i] <= C)
+		{
+			cout << i;
+			return 0;
+		}
+	}
+	cout << -1;
+	return 0;
+}
