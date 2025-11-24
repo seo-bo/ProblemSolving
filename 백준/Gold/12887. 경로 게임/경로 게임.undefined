@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, p = 0;
+	cin >> n;
+	vector<vector<char>>v(3, vector<char>(n + 1));
+	vector<vector<int>>dist(3, vector<int>(n + 1, INT_MAX));
+	queue<pii>q;
+	for (int i = 1; i <= 2; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			cin >> v[i][j];
+			if (v[i][j] == '.')
+			{
+				if (j == 1)
+				{
+					q.push(make_pair(i, j));
+					dist[i][j] = 1;
+				}
+				p++;
+			}
+		}
+	}
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	while (!q.empty())
+	{
+		auto [x, y] = q.front();
+		q.pop();
+		if (y == n)
+		{
+			cout << p - dist[x][y];
+			return 0;
+		}
+		for (int i = 0; i < 4; ++i)
+		{
+			int nx = x + dir[i][0];
+			int ny = y + dir[i][1];
+			if (nx >= 1 && nx <= 2 && ny >= 1 && ny <= n && v[nx][ny] != '#')
+			{
+				if (dist[nx][ny] > dist[x][y] + 1)
+				{
+					dist[nx][ny] = dist[x][y] + 1;
+					q.push(make_pair(nx, ny));
+				}
+			}
+		}
+	}
+	return 0;
+}
