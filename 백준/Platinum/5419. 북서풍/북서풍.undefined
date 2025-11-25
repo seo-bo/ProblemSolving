@@ -1,0 +1,73 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0, cnt = 1;
+		cin >> n;
+		vector<pii>v(n);
+		vector<int>y(n);
+		unordered_map<int, int>mm;
+		for (int i = 0; i < n; ++i)
+		{
+			auto& [a, b] = v[i];
+			cin >> a >> b;
+			y[i] = b;
+		}
+		sort(y.begin(), y.end());
+		for (auto& i : y)
+		{
+			if (mm.find(i) == mm.end())
+			{
+				mm[i] = cnt++;
+			}
+		}
+		for (auto& [a, b] : v)
+		{
+			b = mm[b];
+		}
+		sort(v.begin(), v.end(), [&](const pii& a, const pii& b)
+			{
+				if (a.first == b.first)
+				{
+					return a.second < b.second;
+				}
+				return a.first > b.first;
+			});
+		int len = mm.size() + 2;
+		ll ans = 0;
+		vector<ll>BIT(len + 1, 0);
+		auto update = [&](int idx)
+			{
+				while (idx <= len)
+				{
+					BIT[idx] += 1;
+					idx += idx & -idx;
+				}
+			};
+		auto query = [&](int idx)
+			{
+				ll res = 0;
+				while (idx)
+				{
+					res += BIT[idx];
+					idx -= idx & -idx;
+				}
+				return res;
+			};
+		for (auto& [_, i] : v)
+		{
+			ans += query(i);
+			update(i);
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
