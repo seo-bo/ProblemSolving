@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>A(n + 1), B(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> A[i];
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> B[i];
+	}
+	vector<int>dp(n + 1, -1);
+	function<int(int)> dfs = [&](int idx)
+		{
+			if (idx == n + 1)
+			{
+				return 0;
+			}
+			if (dp[idx] != -1)
+			{
+				return dp[idx];
+			}
+			int res = dfs(idx + 1) + 1;
+			int min_a = A[idx], idx_a = idx;
+			int min_b = B[idx], idx_b = idx;
+			for (int i = idx + 1; i <= n; ++i)
+			{
+				if (min_a > A[i])
+				{
+					min_a = A[i];
+					idx_a = i;
+				}
+				if (min_b > B[i])
+				{
+					min_b = B[i];
+					idx_b = i;
+				}
+				if (idx_a == idx_b)
+				{
+					res = min(res, dfs(i + 1) + 1);
+				}
+			}
+			return dp[idx] = res;
+		};
+	cout << dfs(1);
+	return 0;
+}
