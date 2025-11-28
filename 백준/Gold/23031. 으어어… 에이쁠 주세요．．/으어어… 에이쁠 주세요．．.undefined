@@ -1,0 +1,103 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	string str;
+	cin >> str;
+	vector<vector<int>>dir = { {1,0},{0,1},{-1,0},{0,-1}, {1,1},{-1,-1},{1,-1},{-1,1},{0,0} };
+	vector<vector<bool>>sw(n, vector<bool>(n)), light(n, vector<bool>(n));
+	vector<vector<vector<int>>>zombie(n, vector<vector<int>>(n));
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			char a;
+			cin >> a;
+			if (a == 'Z')
+			{
+				zombie[i][j].push_back(0);
+			}
+			else if (a == 'S')
+			{
+				sw[i][j] = true;
+			}
+		}
+	}
+	auto turn = [&](int x, int y)
+		{
+			if (!sw[x][y])
+			{
+				return;
+			}
+			for (int i = 0; i < 9; ++i)
+			{
+				int nx = x + dir[i][0];
+				int ny = y + dir[i][1];
+				if (nx >= 0 && nx < n && ny >= 0 && ny < n)
+				{
+					light[nx][ny] = true;
+				}
+			}
+		};
+	int x = 0, y = 0, d = 0;
+	auto cal = [&](char A)
+		{
+			if (A == 'L')
+			{
+				d = (d + 1) % 4;
+			}
+			else if (A == 'R')
+			{
+				d = (d + 3) % 4;
+			}
+			else
+			{
+				int nx = x + dir[d][0];
+				int ny = y + dir[d][1];
+				if (nx >= 0 && nx < n && ny >= 0 && ny < n)
+				{
+					x = nx, y = ny;
+				}
+			}
+			return make_tuple(d, x, y);
+		};
+	turn(0, 0);
+	for (auto& A : str)
+	{
+		vector<vector<vector<int>>>temp(n, vector<vector<int>>(n));
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 0; j < n; ++j)
+			{
+				for (auto& k : zombie[i][j])
+				{
+					int nx = i + dir[k][0];
+					int ny = j + dir[k][1];
+					if (nx >= 0 && nx < n && ny >= 0 && ny < n)
+					{
+						temp[nx][ny].push_back(k);
+					}
+					else
+					{
+						temp[i][j].push_back((k + 2) % 4);
+					}
+				}
+			}
+		}
+		cal(A);
+		turn(x, y);
+		if ((!zombie[x][y].empty() || !temp[x][y].empty()) && !light[x][y])
+		{
+			cout << "Aaaaaah!";
+			return 0;
+		}
+		zombie = move(temp);
+	}
+	cout << "Phew...";
+	return 0;
+}
