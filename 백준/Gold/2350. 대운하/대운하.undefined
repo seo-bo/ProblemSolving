@@ -1,0 +1,72 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int>tp;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0;
+	cin >> n >> m >> k;
+	vector<int>parent(n + 1), rank(n + 1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (rank[r1] < rank[r2])
+			{
+				swap(r1, r2);
+			}
+			parent[r2] = r1;
+			rank[r1] += (rank[r1] == rank[r2]);
+		};
+	vector<tp>edge(m);
+	for (auto& [a, b, c] : edge)
+	{
+		cin >> b >> c >> a;
+	}
+	sort(edge.rbegin(), edge.rend());
+	vector<vector<pii>>graph(n + 1);
+	for (int i = 0, cnt = 0; i < m && cnt < n - 1; ++i)
+	{
+		auto [co, v1, v2] = edge[i];
+		if (find(v1) != find(v2))
+		{
+			merge(v1, v2);
+			graph[v1].push_back(make_pair(v2, co));
+			graph[v2].push_back(make_pair(v1, co));
+			cnt++;
+		}
+	}
+	vector<vector<int>>v(n + 1, vector<int>(n + 1, INT_MAX));
+	function<void(int, int, int, int)> dfs = [&](int top, int parent, int node, int num)
+		{
+			for (auto& [a, b] : graph[node])
+			{
+				if (parent == a)
+				{
+					continue;
+				}
+				int co = min(num, b);
+				v[top][a] = v[a][top] = co;
+				dfs(top, node, a, co);
+			}
+		};
+	while (k--)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		if (v[a][a] == INT_MAX)
+		{
+			dfs(a, 0, a, INT_MAX);
+			v[a][a] = 0;
+		}
+		cout << v[a][b] << '\n';
+	}
+	return 0;
+}
