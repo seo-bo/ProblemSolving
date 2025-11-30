@@ -1,0 +1,51 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, t = 0, w = 0;
+	cin >> n >> t >> w;
+	vector<pii>v(n);
+	for (auto& [a, b] : v)
+	{
+		cin >> a >> b;
+	}
+	int left = 0, right = t, ans = -1;
+	auto cal = [&](int mid)
+		{
+			int res = 0;
+			vector<int>dp(t + 1, -1);
+			dp[0] = 0;
+			for (auto [i, j] : v)
+			{
+				int cost = max(0, i - mid);
+				for (int k = t - mid; k >= 0; --k)
+				{
+					if (k - cost >= 0 && dp[k - cost] != -1)
+					{
+						dp[k] = max(dp[k], dp[k - cost] + j);
+						res = max(res, dp[k]);
+					}
+				}
+			}
+			return (res >= w);
+		};
+	while (left <= right)
+	{
+		int mid = (left + right) / 2;
+		if (cal(mid))
+		{
+			ans = mid;
+			right = mid - 1;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+	}
+	cout << ans;
+	return 0;
+}
