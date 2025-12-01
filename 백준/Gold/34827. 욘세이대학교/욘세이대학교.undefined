@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	string str, ans = string(20, 'Z');
+	cin >> str;
+	int len = str.size(), m = 0, X = 0, Y = 0;
+	for (int i = 0; i < len - 1; ++i)
+	{
+		m |= (1 << (str[i] - 'A'));
+		X += (str[i] < str[i + 1]);
+		Y += (str[i] > str[i + 1]);
+	}
+	m |= (1 << (str[len - 1] - 'A'));
+	function<void(int, int, int, int, int)> dfs = [&](int depth, int pre, int mask, int a, int b)
+		{
+			if (abs(a - b) <= 1)
+			{
+				if (ans.size() > str.size())
+				{
+					ans = str;
+				}
+				else if (ans.size() == str.size())
+				{
+					ans = min(ans, str);
+				}
+				return;
+			}
+			if (depth == 5)
+			{
+				return;
+			}
+			for (int i = 0; i < 26; ++i)
+			{
+				if (mask & (1 << i))
+				{
+					continue;
+				}
+				str += char(i + 'A');
+				dfs(depth + 1, i, mask | (1 << i), a + (pre < i), b + (pre > i));
+				str.pop_back();
+			}
+		};
+	dfs(0, int(str.back() - 'A'), m, X, Y);
+	cout << ans.size() << '\n';
+	cout << ans;
+	return 0;
+}
