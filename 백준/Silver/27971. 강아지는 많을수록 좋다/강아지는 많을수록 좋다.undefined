@@ -1,0 +1,54 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, A = 0, B = 0;
+	cin >> n >> m >> A >> B;
+	vector<int>visited(n + 1, INT_MAX);
+	vector<pii>v(m);
+	for (auto& [a, b] : v)
+	{
+		cin >> a >> b;
+	}
+	visited[0] = 0;
+	queue<int>q;
+	q.push(0);
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
+		if (cur == n)
+		{
+			cout << visited[cur];
+			return 0;
+		}
+		int a = cur + A, b = cur + B;
+		for (auto& i : { a,b })
+		{
+			if (i > n)
+			{
+				continue;
+			}
+			bool flag = true;
+			for (auto& [x, y] : v)
+			{
+				if (x <= i && i <= y)
+				{
+					flag = false;
+					break;
+				}
+			}
+			if (flag && visited[i] > visited[cur] + 1)
+			{
+				visited[i] = visited[cur] + 1;
+				q.push(i);
+			}
+		}
+	}
+	cout << -1;
+	return 0;
+}
