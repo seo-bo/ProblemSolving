@@ -1,0 +1,19 @@
+#include <bits/stdc++.h>
+#include <random>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	random_device rd;
+	mt19937 engine(rd());
+	vector<int>v(150000);
+	iota(v.begin(), v.end(), 1);
+	shuffle(v.begin(), v.end(), engine);
+	for (auto& i : v)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}
