@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    int n = 0;
+    cin >> n;
+    vector<ll>degree(n + 1, -1);
+    vector<pii>edge(n - 1);
+    for (auto& [a, b] : edge)
+    {
+        cin >> a >> b;
+        degree[a]++, degree[b]++;
+    }
+    ll ans = 0;
+    for (auto& [a, b] : edge)
+    {
+        ans += degree[a] * (degree[a] - 1) / 2 * degree[b] * (degree[b] - 1) / 2;
+    }
+    cout << ans;
+    return 0;
+}
