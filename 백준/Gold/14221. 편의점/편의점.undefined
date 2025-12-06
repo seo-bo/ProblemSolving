@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<pii>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	int p = 0, q = 0;
+	cin >> p >> q;
+	vector<int>home(p);
+	for (auto& i : home)
+	{
+		cin >> i;
+	}
+	sort(home.begin(), home.end());
+	priority_queue<pii, vector<pii>, greater<pii>>pq;
+	vector<int>dist(n + 1, INT_MAX);
+	for (int i = 0; i < q; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		pq.push(make_pair(0, temp));
+		dist[temp] = 0;
+	}
+	int pivot = INT_MAX;
+	while (!pq.empty())
+	{
+		auto [co, ver] = pq.top();
+		pq.pop();
+		if (dist[ver] < co)
+		{
+			continue;
+		}
+		for (auto& [nv, nc] : graph[ver])
+		{
+			if (dist[nv] > dist[ver] + nc)
+			{
+				dist[nv] = dist[ver] + nc;
+				pq.push(make_pair(dist[nv], nv));
+			}
+		}
+	}
+	for (auto& i : home)
+	{
+		pivot = min(pivot, dist[i]);
+	}
+	for (auto& i : home)
+	{
+		if (dist[i] == pivot)
+		{
+			cout << i;
+			return 0;
+		}
+	}
+	return 0;
+}
