@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<int>dp(m + 1);
+	vector<vector<int>>v(m + 1, vector<int>(n + 1, 0));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			cin >> v[j][i];
+			if (i == 1)
+			{
+				dp[j] = v[j][i];
+			}
+		}
+	}
+	for (int i = 2; i <= n; ++i)
+	{
+		vector<int>temp(m + 1, INT_MAX);
+		for (int j = 1; j <= m; ++j)
+		{
+			for (int k = 1; k <= m; ++k)
+			{
+				if (j == k)
+				{
+					continue;
+				}
+				temp[j] = min(temp[j], dp[k] + v[j][i]);
+			}
+		}
+		dp = move(temp);
+	}
+	cout << *min_element(dp.begin(), dp.end());
+	return 0;
+}
