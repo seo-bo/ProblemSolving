@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, base = 0, now = 0, pivot = 0;
+	cin >> n;
+	vector<int>A(n + 1), B(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> A[i];
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> B[i];
+		base += (B[i] == 1) * A[i];
+	}
+	now = pivot = (B[1] == 1) ? -A[1] : A[1];
+	for (int i = 2; i <= n; ++i)
+	{
+		int cost = (B[i] == 1) ? -A[i] : A[i];
+		now = max(cost, now + cost);
+		pivot = max(pivot, now);
+	}
+	cout << base + pivot;
+	return 0;
+}
