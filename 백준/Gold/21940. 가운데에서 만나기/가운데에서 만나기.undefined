@@ -1,0 +1,67 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<ll>>graph(n + 1, vector<ll>(n + 1, INT_MAX));
+	for (int i = 1; i <= n; ++i)
+	{
+		graph[i][i] = 0;
+	}
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a][b] = c;
+	}
+	for (int k = 1; k <= n; ++k)
+	{
+		for (int i = 1; i <= n; ++i)
+		{
+			for (int j = 1; j <= n; ++j)
+			{
+				if (graph[i][k] == INT_MAX || graph[k][j] == INT_MAX)
+				{
+					continue;
+				}
+				graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j]);
+			}
+		}
+	}
+	int q = 0;
+	cin >> q;
+	vector<int>v(q);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	vector<int>ans;
+	ll pivot = LLONG_MAX;
+	for (int i = 1; i <= n; ++i)
+	{
+		ll sum = LLONG_MIN;
+		for (auto& j : v)
+		{
+			sum = max(sum, graph[i][j] + graph[j][i]);
+		}
+		if (pivot > sum)
+		{
+			pivot = sum;
+			ans.clear();
+			ans.push_back(i);
+		}
+		else if (pivot == sum)
+		{
+			ans.push_back(i);
+		}
+	}
+	for (auto& i : ans)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}
