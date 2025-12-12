@@ -1,0 +1,73 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, m = 0, d = 0, e = 0;
+	cin >> n >> m >> d >> e;
+	vector<ll>cost(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> cost[i];
+		cost[i] *= e;
+	}
+	vector<vector<pll>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		ll a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c * d));
+		graph[b].push_back(make_pair(a, c * d));
+	}
+	auto dijkstra = [&](int start)
+		{
+			vector<ll>dist(n + 1, LLONG_MAX);
+			priority_queue<pll, vector<pll>, greater<pll>>pq;
+			dist[start] = 0;
+			pq.push(make_pair(0, start));
+			while (!pq.empty())
+			{
+				auto [co, ver] = pq.top();
+				pq.pop();
+				if (dist[ver] < co)
+				{
+					continue;
+				}
+				for (auto& [nv, nc] : graph[ver])
+				{
+					if (cost[nv] <= cost[ver])
+					{
+						continue;
+					}
+					if (dist[nv] > dist[ver] + nc)
+					{
+						dist[nv] = dist[ver] + nc;
+						pq.push(make_pair(dist[nv], nv));
+					}
+				}
+			}
+			return dist;
+		};
+	vector<ll>A = dijkstra(1), B = dijkstra(n);
+	ll ans = LLONG_MIN;
+	for (int i = 2; i <= n - 1; ++i)
+	{
+		if (A[i] == LLONG_MAX || B[i] == LLONG_MAX)
+		{
+			continue;
+		}
+		ans = max(ans, cost[i] - A[i] - B[i]);
+	}
+	if (ans == LLONG_MIN)
+	{
+		cout << "Impossible";
+	}
+	else
+	{
+		cout << ans;
+	}
+	return 0;
+}
