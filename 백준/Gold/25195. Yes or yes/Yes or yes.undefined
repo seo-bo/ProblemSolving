@@ -16,7 +16,7 @@ int main(void)
 	}
 	int k = 0;
 	cin >> k;
-	vector<int>ban(n + 1);
+	vector<int>ban(n + 1), dp(n + 1, -1);
 	for (int i = 0; i < k; ++i)
 	{
 		int temp = 0;
@@ -25,22 +25,26 @@ int main(void)
 	}
 	function<int(int, int)> dfs = [&](int parent, int node)
 		{
-			bool flag = false;
-			int cnt = ban[node], pivot = n;
+			if (dp[node] != -1)
+			{
+				return dp[node];
+			}
+			int flag = 0, pivot = n;
+			dp[node] = ban[node];
 			for (auto& i : graph[node])
 			{
 				if (i == parent)
 				{
 					continue;
 				}
-				flag = true;
+				flag = 1;
 				pivot = min(pivot, dfs(node, i));
 			}
 			if (flag)
 			{
-				cnt += pivot;
+				dp[node] += pivot;
 			}
-			return cnt;
+			return dp[node];
 		};
 	if (dfs(0, 1))
 	{
