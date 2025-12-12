@@ -1,0 +1,58 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0, c = 0;
+	cin >> n >> k >> c;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	ll left = 0, right = LLONG_MAX / 4, ans = -1;
+	auto cal = [&](ll mid)
+		{
+			vector<ll>dp(c + 1);
+			for (auto& i : v)
+			{
+				vector<ll>temp = dp;
+				for (int j = 0; j <= c; ++j)
+				{
+					for (int k = 0; k <= c; ++k)
+					{
+						if (j + k > c)
+						{
+							continue;
+						}
+						ll div = mid / max(1, i - k);
+						temp[j + k] = max(temp[j + k], dp[j] + div);
+					}
+				}
+				dp = move(temp);
+			}
+			ll res = 0;
+			for (int i = 0; i <= c; ++i)
+			{
+				res = max(res, dp[i]);
+			}
+			return (res >= k);
+		};
+	while (left <= right)
+	{
+		ll mid = (left + right) / 2;
+		if (cal(mid))
+		{
+			ans = mid;
+			right = mid - 1;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+	}
+	cout << ans;
+	return 0;
+}
