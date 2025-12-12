@@ -1,0 +1,39 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<tp>v(n);
+	for (auto& [a, b, c] : v)
+	{
+		cin >> b >> a >> c;
+	}
+	sort(v.rbegin(), v.rend());
+	vector<vector<int>>dp(n + 1, vector<int>(m + 1, -1));
+	dp[0][0] = 0;
+	int ans = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		auto [b, a, c] = v[i - 1];
+		for (int j = i; j >= 1; --j)
+		{
+			int co = b * (n - j) + a;
+			for (int k = m; k >= c; --k)
+			{
+				if (dp[j - 1][k - c] == -1)
+				{
+					continue;
+				}
+				dp[j][k] = max(dp[j][k], dp[j - 1][k - c] + co);
+				ans = max(ans, dp[j][k]);
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
