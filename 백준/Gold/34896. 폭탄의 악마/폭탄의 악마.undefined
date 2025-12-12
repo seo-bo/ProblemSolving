@@ -1,40 +1,37 @@
 #include<bits/stdc++.h> 
 using namespace std;
 typedef long long ll;
-typedef pair<ll, ll>pll;
+typedef pair<int, int>pii;
 
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
-	int n = 0;
+	int n = 0, b = 0;
 	cin >> n;
-	vector<pll>v(n);
-	for (int i = 0; i < n; ++i)
+	vector<pii>v(n);
+	for (auto& [a, _] : v)
 	{
-		cin >> v[i].first;
-		v[i].second = i;
+		cin >> a;
+	}
+	for (auto& [_, b] : v)
+	{
+		cin >> b;
 	}
 	sort(v.begin(), v.end());
-	vector<ll>cost(n);
-	for (auto& i : cost)
-	{
-		cin >> i;
-	}
-	ll b = 0;
 	cin >> b;
 	auto cal = [&](ll mid)
 		{
 			ll res = 0, pivot = 0, pre = LLONG_MIN / 4;
-			for (auto& [x, idx] : v)
+			for (auto& [x, co] : v)
 			{
 				if (llabs(pre - x) > mid)
 				{
 					res += pivot;
-					pivot = cost[idx];
+					pivot = co;
 				}
 				else
 				{
-					pivot = min(pivot, cost[idx]);
+					pivot = min(pivot, (ll)co);
 				}
 				pre = x;
 			}
