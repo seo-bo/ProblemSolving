@@ -40,7 +40,7 @@ int main(void)
 			}
 			return (res + pivot <= b);
 		};
-	ll left = 1, right = INT_MAX, ans = -1;
+	ll left = 1, right = INT_MAX / 10, ans = -1;
 	while (left <= right)
 	{
 		ll mid = (left + right) / 2;
