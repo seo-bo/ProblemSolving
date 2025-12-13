@@ -1,0 +1,72 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    int n = 0, m = 0;
+    cin >> n >> m;
+    vector<vector<pii>>graph(n);
+    while (m--)
+    {
+        int a = 0, b = 0, c = 0;
+        cin >> a >> b >> c;
+        b--, c--;
+        if (a == 1)
+        {
+            int len = c - b + 1, left = b, right = c;
+            for (int i = 0; i < len / 2; ++i)
+            {
+                graph[left].push_back(make_pair(right, 0));
+                graph[right].push_back(make_pair(left, 0));
+                left++, right--;
+            }
+        }
+        else
+        {
+            graph[b].push_back(make_pair(c, 1));
+            graph[c].push_back(make_pair(b, 1));
+        }
+    }
+    string ans(n, '-');
+    auto bfs = [&](int start)
+        {
+            queue<int>q;
+            q.push(start);
+            ans[start] = 'A';
+            while (!q.empty())
+            {
+                int cur = q.front();
+                q.pop();
+                for (auto& [ver, flag] : graph[cur])
+                {
+                    char nxt = ans[cur];
+                    if (flag)
+                    {
+                        nxt = (ans[cur] == 'A') ? 'B' : 'A';
+                    }
+                    if (ans[ver] == '-')
+                    {
+                        ans[ver] = nxt;
+                        q.push(ver);
+                    }
+                    else if (ans[ver] != nxt)
+                    {
+                        cout << "No";
+                        exit(0);
+                    }
+                }
+            }
+        };
+    for (int i = 0; i < n; ++i)
+    {
+        if (ans[i] == '-')
+        {
+            bfs(i);
+        }
+    }
+    cout << "Yes\n" << ans;
+    return 0;
+}
