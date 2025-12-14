@@ -4,55 +4,55 @@ typedef long long ll;
 
 int main(void)
 {
-    cin.tie(0)->sync_with_stdio(0);
-    int l = 0, n = 0, k = 0;
-    cin >> l >> n >> k;
-    vector<int>v(n + 1, 0), term;
-    for (int i = 1; i <= n; ++i)
-    {
-        cin >> v[i];
-        term.push_back(v[i] - v[i - 1]);
-    }
-    term.push_back(l - v.back());
-    int left = 1, right = INT_MAX / 4, ans = -1;
-    auto cal = [&](int mid)
-        {
-            int x = mid, cnt = k;
-            for (auto& i : term)
-            {
-                if (mid < i)
-                {
-                    return false;
-                }
-                if (x < i)
-                {
-                    if (cnt)
-                    {
-                        cnt--;
-                        x = mid;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                x -= i;
-            }
-            return true;
-        };
-    while (left <= right)
-    {
-        int mid = (left + right) / 2;
-        if (cal(mid))
-        {
-            ans = mid;
-            right = mid - 1;
-        }
-        else
-        {
-            left = mid + 1;
-        }
-    }
-    cout << ans;
-    return 0;
+	cin.tie(0)->sync_with_stdio(0);
+	int l = 0, n = 0, k = 0;
+	cin >> l >> n >> k;
+	vector<int>v(n + 2, 0);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	v[n + 1] = l;
+	int left = 1, right = 200005, ans = -1;
+	auto cal = [&](int mid)
+		{
+			int x = mid, cnt = k;
+			for (int i = 1; i < n + 2; ++i)
+			{
+				int co = v[i] - v[i - 1];
+				if (mid < co)
+				{
+					return false;
+				}
+				if (x < co)
+				{
+					if (cnt)
+					{
+						cnt--;
+						x = mid;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				x -= co;
+			}
+			return true;
+		};
+	while (left <= right)
+	{
+		int mid = (left + right) / 2;
+		if (cal(mid))
+		{
+			ans = mid;
+			right = mid - 1;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+	}
+	cout << ans;
+	return 0;
 }
