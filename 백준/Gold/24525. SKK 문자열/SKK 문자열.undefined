@@ -8,25 +8,21 @@ int main(void)
 	string str;
 	cin >> str;
 	int len = str.size(), prefix = 0, ans = -1;
-	vector<int>idx;
+	vector<int>idx(len + 1);
 	unordered_map<int, int>mm;
-	mm[0] = -1;
-	for (int i = 0; i < len; ++i)
+	mm[0] = 0;
+	for (int i = 1; i <= len; ++i)
 	{
-		int a = (str[i] == 'S'), b = (str[i] == 'K');
+		int a = (str[i - 1] == 'S'), b = (str[i - 1] == 'K');
 		prefix = prefix + 2 * a - b;
-		if (a)
-		{
-			idx.push_back(i);
-		}
+		idx[i] = idx[i - 1] + a;
 		if (mm.find(prefix) == mm.end())
 		{
 			mm[prefix] = i;
 			continue;
 		}
 		int left = mm[prefix];
-		auto it = lower_bound(idx.begin(), idx.end(), left + 1);
-		if (it == idx.end())
+		if (idx[i] - idx[left] == 0)
 		{
 			continue;
 		}
