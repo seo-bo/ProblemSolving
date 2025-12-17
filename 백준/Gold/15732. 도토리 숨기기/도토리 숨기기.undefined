@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, k = 0, d = 0;
+	cin >> n >> k >> d;
+	vector<tp>v(k);
+	for (auto& [a, b, c] : v)
+	{
+		cin >> a >> b >> c;
+	}
+	sort(v.begin(), v.end());
+	auto cal = [&](int mid)
+		{
+			ll pivot = d;
+			for (auto& [l, r, c] : v)
+			{
+				if (l > mid)
+				{
+					continue;
+				}
+				pivot -= (min(mid, r) - l) / c + 1;
+			}
+			return (pivot <= 0);
+		};
+	int left = 1, right = n, ans = -1;
+	while (left <= right)
+	{
+		int mid = (left + right) / 2;
+		if (cal(mid))
+		{
+			ans = mid;
+			right = mid - 1;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+	}
+	cout << ans;
+	return 0;
+}
