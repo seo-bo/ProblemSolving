@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>v(n, vector<int>(3, 0));
+	for (auto& i : v)
+	{
+		for (auto& j : i)
+		{
+			cin >> j;
+		}
+	}
+	int ta = 0, tb = 0, tc = 0;
+	cin >> ta >> tb >> tc;
+	int ans = INT_MAX;
+	function<void(int, int, int, int, int)> dfs = [&](int idx, int depth, int a, int b, int c)
+		{
+			if (idx == n || depth == 7)
+			{
+				if (depth < 2)
+				{
+					return;
+				}
+				a /= depth, b /= depth, c /= depth;
+				ans = min(ans, abs(ta - a) + abs(tb - b) + abs(tc - c));
+				return;
+			}
+			dfs(idx + 1, depth, a, b, c);
+			dfs(idx + 1, depth + 1, a + v[idx][0], b + v[idx][1], c + v[idx][2]);
+		};
+	dfs(0, 0, 0, 0, 0);
+	cout << ans;
+	return 0;
+}
