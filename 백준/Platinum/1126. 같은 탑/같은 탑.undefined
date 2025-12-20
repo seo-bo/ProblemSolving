@@ -7,7 +7,7 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0;
 	cin >> n;
-	vector<int>dp(500001, -1);
+	vector<int>dp(250001, -1);
 	dp[0] = 0;
 	for (int i = 1; i <= n; ++i)
 	{
@@ -15,7 +15,7 @@ int main(void)
 		cin >> temp;
 		vector<vector<int>>ok = { {0,0},{temp,0},{0,temp} };
 		vector<int>nxt = dp;
-		for (int j = 0; j <= 500000; ++j)
+		for (int j = 0; j <= 250000; ++j)
 		{
 			if (dp[j] == -1)
 			{
@@ -26,7 +26,7 @@ int main(void)
 			{
 				int na = a + ok[k][0];
 				int nb = b + ok[k][1];
-				if (na <= 500000 && nb <= 500000)
+				if (na <= 250000 && nb <= 250000)
 				{
 					if (na < nb)
 					{
