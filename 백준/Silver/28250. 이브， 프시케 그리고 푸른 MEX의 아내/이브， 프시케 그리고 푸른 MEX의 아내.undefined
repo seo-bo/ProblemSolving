@@ -1,0 +1,22 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	ll a = 0, b = 0, c = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		a += (temp == 0);
+		b += (temp == 1);
+		c += (temp >= 2);
+	}
+	ll ans = a * (a - 1) / 2 + a * c + a * b * 2;
+	cout << ans;
+	return 0;
+}
