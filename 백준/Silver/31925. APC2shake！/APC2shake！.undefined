@@ -1,0 +1,36 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<int, string>pis;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<pis>temp;
+	while (n--)
+	{
+		string a, b, c;
+		int d = 0, e = 0;
+		cin >> a >> b >> c >> d >> e;
+		if (b == "hewhak" || c == "winner" || 1 <= d && d <= 3)
+		{
+			continue;
+		}
+		temp.push_back(make_pair(e, a));
+	}
+	sort(temp.begin(), temp.end());
+	vector<string>ans;
+	for (int i = 0; i < min(10, (int)temp.size()); ++i)
+	{
+		ans.push_back(temp[i].second);
+	}
+	cout << ans.size() << '\n';
+	sort(ans.begin(), ans.end());
+	for (auto& i : ans)
+	{
+		cout << i << '\n';
+	}
+	return 0;
+}
