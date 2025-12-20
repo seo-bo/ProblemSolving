@@ -1,0 +1,20 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	int temp = 0;
+	cin >> temp;
+	ll ans = (temp - 2) * 180;
+	for (int i = 1; i < n; ++i)
+	{
+		cin >> temp;
+		ans += temp * 180;
+	}
+	cout << ans;
+	return 0;
+}
