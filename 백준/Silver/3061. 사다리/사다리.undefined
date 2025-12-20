@@ -1,0 +1,32 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		int n = 0, ans = 0;
+		cin >> n;
+		vector<int>v(n);
+		for (auto& i : v)
+		{
+			cin >> i;
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = i + 1; j < n; ++j)
+			{
+				if (v[i] > v[j])
+				{
+					ans++;
+				}
+			}
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
