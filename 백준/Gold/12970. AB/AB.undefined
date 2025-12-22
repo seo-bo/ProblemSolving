@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	string str(n, 'B');
+	for (int i = 0, j = n - 1, cnt = 0; i < n && k; ++i, --j)
+	{
+		int cost = j - cnt;
+		if (k >= j - cnt)
+		{
+			k -= j - cnt, str[i] = 'A', cnt++;
+		}
+	}
+	cout << ((k) ? "-1" : str);
+	return 0;
+}
