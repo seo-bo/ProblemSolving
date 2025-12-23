@@ -1,0 +1,101 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	map<string, int>mm;
+	map<int, int>empty, ban;
+	empty[1] = 100000;
+	vector<int>v = { 11,12,30 };
+	while (n--)
+	{
+		string str, name, s;
+		cin >> str;
+		int len = str.size();
+		for (auto& i : v)
+		{
+			if (len <= i)
+			{
+				int st = (i % 30) / 2;
+				for (int j = st; j < st + 4; ++j)
+				{
+					name += str[j];
+				}
+				break;
+			}
+		}
+		if (len == 11) // free
+		{
+			if (mm.find(name) == mm.end() || mm[name] == 0)
+			{
+				continue;
+			}
+			int start = mm[name], end = ban[start];
+			ban.erase(start);
+			auto it = empty.upper_bound(end);
+			vector<int>del;
+			if (it != empty.begin())
+			{
+				if (prev(it)->second == start - 1)
+				{
+					start = prev(it)->first;
+					del.push_back(start);
+				}
+			}
+			if (it != empty.end())
+			{
+				if (it->first == end + 1)
+				{
+					end = it->second;
+					del.push_back(it->first);
+				}
+			}
+			for (auto& i : del)
+			{
+				empty.erase(i);
+			}
+			empty[start] = end;
+			mm[name] = 0;
+		}
+		else if (len == 12) // print
+		{
+			cout << ((mm.find(name) == mm.end()) ? 0 : mm[name]) << '\n';
+		}
+		else // malloc
+		{
+			int idx = 12;
+			while (str[idx] != ')')
+			{
+				s += str[idx++];
+			}
+			int siz = stoi(s), start = -1, end = -1;
+			for (auto& [a, b] : empty)
+			{
+				if (b - a + 1 >= siz)
+				{
+					start = a, end = b;
+					break;
+				}
+			}
+			if (start == -1)
+			{
+				mm[name] = 0;
+			}
+			else
+			{
+				empty.erase(start);
+				if (start + siz <= end)
+				{
+					empty[start + siz] = end;
+				}
+				ban[start] = start + siz - 1;
+				mm[name] = start;
+			}
+		}
+	}
+	return 0;
+}
