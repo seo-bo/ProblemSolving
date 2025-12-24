@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    int n = 0, up = 0, down = 0, fst = 0;
+    cin >> n >> fst;
+    int pre = fst, u = 0, d = 0;
+    for (int i = 2; i <= n; ++i)
+    {
+        int temp = 0;
+        cin >> temp;
+        if (pre < temp)
+        {
+            up++;
+            u = i - 1;
+        }
+        else if (pre > temp)
+        {
+            down++;
+            d = i - 1;
+        }
+        pre = temp;
+    }
+    int ans = INT_MAX;
+    if (up == 0 || down == 0)
+    {
+        cout << 0;
+        return 0;
+    }
+    if (up == 1 && pre >= fst)
+    {
+        ans = min(ans, u);
+    }
+    if (down == 1 && pre <= fst)
+    {
+        ans = min(ans, d);
+    }
+    cout << ((ans == INT_MAX) ? -1 : ans);
+    return 0;
+}
