@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	string str;
+	cin >> str;
+	vector<bool>dp(n, false);
+	dp[0] = true;
+	vector<int> dir = { 1,k };
+	for (int i = 0; i < n; ++i)
+	{
+		if (!dp[i])
+		{
+			continue;
+		}
+		for (auto& j : dir)
+		{
+			if (i + j < n && str[i + j] != '#')
+			{
+				dp[i + j] = true;
+			}
+		}
+	}
+	cout << ((dp[n - 1]) ? "YES" : "NO");
+	return 0;
+}
