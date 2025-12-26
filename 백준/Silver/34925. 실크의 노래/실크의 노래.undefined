@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll h = 0, s = 0;
+	cin >> h >> s;
+	if (h <= 2)
+	{
+		cout << 1;
+		return 0;
+	}
+	if (h <= 4)
+	{
+		cout << 2 + s;
+		return 0;
+	}
+	cout << (h + 3 * s + 1) / 2;
+	return 0;
+}
