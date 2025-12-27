@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<ll, ll, ll>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0, s = 0, t = 0;
+	cin >> n >> m >> k >> s >> t;
+	vector<vector<tp>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		ll a = 0, b = 0, c = 0, d = 0;
+		cin >> a >> b >> c >> d;
+		graph[a].push_back(make_tuple(b, c, d));
+	}
+	vector<vector<ll>>dist(n + 1, vector<ll>(k + 1, LLONG_MAX));
+	priority_queue<tp, vector<tp>, greater<tp>>pq;
+	pq.push(make_tuple(0, 0, s));
+	dist[s][0] = 0;
+	while (!pq.empty())
+	{
+		auto [co, div, ver] = pq.top();
+		pq.pop();
+		if (dist[ver][div] < co)
+		{
+			continue;
+		}
+		for (auto& [nv, nc, d] : graph[ver])
+		{
+			ll nd = (div + nc) % k;
+			if (div % d)
+			{
+				continue;
+			}
+			if (dist[nv][nd] > dist[ver][div] + nc)
+			{
+				dist[nv][nd] = dist[ver][div] + nc;
+				pq.push(make_tuple(dist[nv][nd], nd, nv));
+			}
+		}
+	}
+	ll ans = LLONG_MAX;
+	for (int i = 0; i <= k; ++i)
+	{
+		ans = min(ans, dist[t][i]);
+	}
+	cout << ((ans == LLONG_MAX) ? -1 : ans);
+	return 0;
+}
