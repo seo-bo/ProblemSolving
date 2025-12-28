@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 1000000007
+
+ll dp[51][51][51][51];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, a = 0, b = 0, c = 0;
+	cin >> n >> a >> b >> c;
+	memset(dp, -1, sizeof(dp));
+	vector<vector<int>>d = { {-1,0,0},{0,-1,0},{0,0,-1},{-1,-1,0},{-1,0,-1},{0,-1,-1},{-1,-1,-1} };
+	function<ll(int, int, int, int)> dfs = [&](int idx, int A, int B, int C)
+		{
+			if (idx == n + 1)
+			{
+				if (!A && !B && !C)
+				{
+					return 1LL;
+				}
+				return 0LL;
+			}
+			if (dp[idx][A][B][C] != -1)
+			{
+				return dp[idx][A][B][C];
+			}
+			ll res = 0;
+			for (auto& i : d)
+			{
+				int na = A + i[0];
+				int nb = B + i[1];
+				int nc = C + i[2];
+				if (na >= 0 && nb >= 0 && nc >= 0)
+				{
+					res = (res + dfs(idx + 1, na, nb, nc)) % MOD;
+				}
+			}
+			return dp[idx][A][B][C] = res;
+		};
+	cout << dfs(1, a, b, c);
+	return 0;
+}
