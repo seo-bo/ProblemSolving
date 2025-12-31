@@ -1,0 +1,159 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<vector<int>>dir = { {0,1},{1,0},{0,-1},{-1,0} };
+	string base = "RDLU";
+	int T = 0;
+	cin >> T;
+	if (T == 1)
+	{
+		int n = 0, m = 0;
+		cin >> n >> m;
+		vector<vector<char>>v(n, vector<char>(m));
+		for (auto& i : v)
+		{
+			for (auto& j : i)
+			{
+				cin >> j;
+			}
+		}
+		auto bfs = [&](int sx, int sy)
+			{
+				vector<vector<int>>visited(n, vector<int>(m, (1 << 20)));
+				visited[sx][sy] = 0;
+				queue<pii>q;
+				q.push(make_pair(sx, sy));
+				while (!q.empty())
+				{
+					auto [x, y] = q.front();
+					q.pop();
+					for (int i = 0; i < 4; ++i)
+					{
+						int nx = x + dir[i][0];
+						int ny = y + dir[i][1];
+						if (nx >= 0 && nx < n && ny >= 0 && ny < m && v[nx][ny] != '#')
+						{
+							if (visited[nx][ny] > visited[x][y] + 1)
+							{
+								visited[nx][ny] = visited[x][y] + 1;
+								q.push(make_pair(nx, ny));
+							}
+						}
+					}
+				}
+				return visited;
+			};
+		vector<vector<int>>a = bfs(0, 0), b = bfs(n - 1, m - 1);
+		int now = 0, x = 0, y = 0, res = 0, pivot = b[0][0], ver = 1;
+		vector<pii>edge;
+		for (int i = 0; i < pivot; ++i)
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				int nx = x + dir[j][0];
+				int ny = y + dir[j][1];
+				if (nx >= 0 && nx < n && ny >= 0 && ny < m && v[nx][ny] != '#')
+				{
+					if (a[nx][ny] + b[nx][ny] == pivot && a[nx][ny] == a[x][y] + 1)
+					{
+						int df = (j - now + 4) % 4;
+						if (df == 0)
+						{
+							edge.push_back(make_pair(ver, ver + 1));
+							ver++;
+						}
+						else if (df == 1)
+						{
+							edge.push_back(make_pair(ver, ver + 1));
+							edge.push_back(make_pair(ver, ver + 2));
+							ver += 2;
+						}
+						else
+						{
+							edge.push_back(make_pair(ver, ver + 1));
+							edge.push_back(make_pair(ver, ver + 2));
+							edge.push_back(make_pair(ver, ver + 3));
+							ver += 3;
+						}
+						now = j;
+						x = nx, y = ny;
+						break;
+					}
+				}
+			}
+		}
+		for (int i = ver; i < 3 * pivot; ++i)
+		{
+			edge.push_back(make_pair(i, i + 1));
+		}
+		cout << pivot << '\n';
+		for (auto& [a, b] : edge)
+		{
+			cout << a << ' ' << b << '\n';
+		}
+	}
+	else
+	{
+		int d = 0, n = 0;
+		cin >> d;
+		n = (d * 3) + 1;
+		vector<vector<int>>graph(n), res(n);
+		vector<int>degree(n), depth(n, -1);
+		for (int i = 0; i < n - 2; ++i)
+		{
+			int a = 0, b = 0;
+			cin >> a >> b;
+			graph[a].push_back(b);
+			graph[b].push_back(a);
+			degree[a]++;
+			degree[b]++;
+		}
+		queue<int>q;
+		q.push(1);
+		res[1].push_back(1);
+		depth[1] = 1;
+		while (!q.empty())
+		{
+			int cur = q.front();
+			q.pop();
+			for (auto& i : graph[cur])
+			{
+				if (depth[i] == -1)
+				{
+					depth[i] = depth[cur] + 1;
+					q.push(i);
+					res[depth[i]].push_back(i);
+				}
+			}
+		}
+		int idx = 0;
+		for (int i = 1; i <= d; ++i)
+		{
+			int co = -2;
+			if (i == 1)
+			{
+				co = -1;
+			}
+			int temp = 0;
+			for (auto& j : res[i])
+			{
+				temp = max(temp, degree[j] + co);
+			}
+			if (temp == 1)
+			{
+				idx = (idx + 1) % 4;
+			}
+			else if (temp == 2)
+			{
+				idx = (idx + 3) % 4;
+			}
+			cout << base[idx];
+		}
+	}
+	return 0;
+}
