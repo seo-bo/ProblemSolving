@@ -1,19 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef pair<ll, ll>pll;
-typedef tuple<ll, ll, ll>tp;
+typedef pair<int, int>pii;
+typedef tuple<int, int, int>tp;
 
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
 	priority_queue<tp, vector<tp>, greater<tp>>wait;
-	priority_queue<pll, vector<pll>, greater<pll>>pq;
+	priority_queue<pii, vector<pii>, greater<pii>>pq;
 	int n = 0;
 	cin >> n;
 	for (int i = 0; i < n; ++i)
 	{
-		ll a = 0, b = 0;
+		int a = 0, b = 0;
 		cin >> a >> b;
 		pq.push(make_pair(b, a));
 	}
@@ -21,11 +21,11 @@ int main(void)
 	cin >> m;
 	for (int i = 0; i < m; ++i)
 	{
-		ll a = 0, b = 0, c = 0;
+		int a = 0, b = 0, c = 0;
 		cin >> a >> b >> c;
 		wait.push(make_tuple(a, c, b));
 	}
-	ll pre = 0, now = 0;
+	ll now = 0;
 	while (!wait.empty() || !pq.empty())
 	{
 		while (!wait.empty())
