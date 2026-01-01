@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    int k = 0, n = 0, f = 0;
+    cin >> k >> n >> f;
+    if (k == 1)
+    {
+        cout << 1;
+        return 0;
+    }
+    vector<vector<int>>graph(n + 1);
+    vector<vector<bool>>check(n + 1, vector<bool>(n + 1, false));
+    for (int i = 0; i < f; ++i)
+    {
+        int a = 0, b = 0;
+        cin >> a >> b;
+        graph[a].push_back(b);
+        graph[b].push_back(a);
+        check[a][b] = check[b][a] = true;
+    }
+    vector<int>v;
+    function<void(int, int)> dfs = [&](int base, int idx)
+        {
+            int len = v.size(), siz = graph[base].size();
+            if (len == k)
+            {
+                for (auto& i : v)
+                {
+                    cout << i << '\n';
+                }
+                exit(0);
+            }
+            if (idx == siz || len + siz - idx < k)
+            {
+                return;
+            }
+            int now = graph[base][idx];
+            bool flag = true;
+            for (auto& i : v)
+            {
+                if (!check[i][now])
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag && graph[now].size() >= k - 1)
+            {
+                v.push_back(now);
+                dfs(base, idx + 1);
+                v.pop_back();
+            }
+            dfs(base, idx + 1);
+        };
+    int pivot = (k - 1) * k;
+    for (int i = 1; i <= n; ++i)
+    {
+        int cnt = graph[i].size();
+        sort(graph[i].begin(), graph[i].end());
+        for (auto& j : graph[i])
+        {
+            cnt += graph[j].size();
+        }
+        if (cnt >= pivot)
+        {
+            v.push_back(i);
+            dfs(i, 0);
+            v.pop_back();
+        }
+    }
+    cout << -1;
+    return 0;
+}
