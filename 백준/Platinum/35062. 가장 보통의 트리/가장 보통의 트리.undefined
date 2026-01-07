@@ -24,7 +24,6 @@ int main(void)
 	}
 	int cnt = 1;
 	vector<int>ans(n + 1);
-	vector<bool>visited(n + 1, false);
 	queue<int>ready;
 	for (int i = 1; i <= n; ++i)
 	{
@@ -37,20 +36,19 @@ int main(void)
 		{
 			queue<int>q;
 			q.push(a);
-			visited[a] = true;
+			ans[a] = cnt++;
 			while (!q.empty())
 			{
 				int cur = q.front();
-				ans[cur] = cnt++;
 				q.pop();
 				for (auto& i : graph[cur])
 				{
-					if (visited[i] || --degree[i])
+					if (ans[i] || --degree[i])
 					{
 						continue;
 					}
 					q.push(i);
-					visited[i] = true;
+					ans[i] = cnt++;
 				}
 			}
 		};
@@ -58,7 +56,7 @@ int main(void)
 	{
 		int cur = ready.front();
 		ready.pop();
-		if (visited[cur])
+		if (ans[cur])
 		{
 			continue;
 		}
