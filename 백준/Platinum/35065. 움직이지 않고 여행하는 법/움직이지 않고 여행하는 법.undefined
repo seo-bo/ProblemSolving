@@ -1,0 +1,101 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 998244353
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<int>>graph(n + 1);
+	vector<ll>depth(n + 1, -1), cnt(n + 1), sum(n + 1);
+	depth[1] = 0, cnt[1] = 1, sum[0] = 1;
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		sort(graph[i].begin(), graph[i].end());
+	}
+	set<int>s;
+	priority_queue<pii, vector<pii>, greater<pii>>pq;
+	int _ = 2;
+	for (auto& i : graph[1])
+	{
+		if (_ > n)
+		{
+			break;
+		}
+		while (_ <= n && _ < i)
+		{
+			pq.push(make_pair(1, _));
+			depth[_++] = 1;
+		}
+		if (_ == i)
+		{
+			s.insert(_++);
+		}
+	}
+	for (; _ <= n; ++_)
+	{
+		pq.push(make_pair(1, _));
+		depth[_] = 1;
+	}
+	while (!pq.empty())
+	{
+		auto [d, ver] = pq.top();
+		pq.pop();
+		ll base = sum[d - 1];
+		for (auto& i : graph[ver])
+		{
+			if (depth[i] == d - 1)
+			{
+				base = (base - cnt[i] + MOD) % MOD;
+			}
+		}
+		cnt[ver] = base;
+		sum[d] = (sum[d] + base) % MOD;
+		int idx = 0, siz = graph[ver].size();
+		vector<int>save;
+		auto it = s.begin();
+		for (auto& i : graph[ver])
+		{
+			if (it == s.end())
+			{
+				break;
+			}
+			while (it != s.end() && *it < i)
+			{
+				depth[*it] = d + 1;
+				pq.push(make_pair(d + 1, *it));
+				save.push_back(*it);
+				++it;
+			}
+			if (it != s.end() && *it == i)
+			{
+				++it;
+			}
+		}
+		for (; it != s.end(); ++it)
+		{
+			depth[*it] = d + 1;
+			pq.push(make_pair(d + 1, *it));
+			save.push_back(*it);
+		}
+		for (auto& i : save)
+		{
+			s.erase(i);
+		}
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cout << depth[i] << ' ' << cnt[i] << '\n';
+	}
+	return 0;
+}
