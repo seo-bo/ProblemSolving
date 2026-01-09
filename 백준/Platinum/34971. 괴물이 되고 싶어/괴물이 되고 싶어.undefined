@@ -1,0 +1,96 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 998244353
+typedef tuple<int, int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<ll>p(1000 * 1000 + 1, 1);
+	for (int i = 1; i <= 1000 * 1000; ++i)
+	{
+		p[i] = (p[i - 1] * 2) % MOD;
+	}
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0;
+		cin >> n;
+		vector<vector<int>>v(n + 1, vector<int>(n + 1));
+		vector<int>row(n + 1, -1), col(n + 1, -1);
+		priority_queue<tp>pq;
+		for (int i = 1; i <= n; ++i)
+		{
+			for (int j = 1; j <= n; ++j)
+			{
+				cin >> v[i][j];
+			}
+		}
+		for (int i = 1; i <= n; ++i)
+		{
+			tp a = make_tuple(INT_MAX, -1, -1, 0), b = make_tuple(INT_MAX, -1, -1, 1);
+			for (int j = 1; j <= n; ++j)
+			{
+				auto& [a_co, a_x, a_y, _] = a;
+				auto& [b_co, b_x, b_y, __] = b;
+				if (v[i][j] < a_co)
+				{
+					a_co = v[i][j];
+					a_x = i, a_y = j;
+				}
+				if (v[j][i] < b_co)
+				{
+					b_co = v[j][i];
+					b_x = j, b_y = i;
+				}
+			}
+			pq.push(a);
+			pq.push(b);
+		}
+		vector<vector<bool>>res(n + 1, vector<bool>(n + 1)), ban(2, vector<bool>(n + 1));
+		while (!pq.empty())
+		{
+			auto [co, x, y, type] = pq.top();
+			pq.pop();
+			if ((type == 0 && ban[0][x]) || (type == 1 && ban[1][y]))
+			{
+				continue;
+			}
+			res[x][y] = true;
+			if (type == 0)
+			{
+				row[x] = co;
+			}
+			else
+			{
+				col[y] = co;
+			}
+			ban[0][x] = ban[1][y] = true;
+		}
+		ll ans = 0;
+		for (int i = 1; i <= n; ++i)
+		{
+			for (int j = 1; j <= n; ++j)
+			{
+				if (res[i][j])
+				{
+					continue;
+				}
+				ll base = p[v[i][j]];
+				if (row[i] != -1)
+				{
+					base = (base - p[row[i]] + MOD) % MOD;
+				}
+				if (col[j] != -1)
+				{
+					base = (base - p[col[j]] + MOD) % MOD;
+				}
+				ans = (ans + base) % MOD;
+			}
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
