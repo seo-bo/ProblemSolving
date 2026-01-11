@@ -1,0 +1,137 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+class SCC //https://github.com/seo-bo/Algorithm_templates/blob/main/SCC.cpp 
+{
+private:
+	int V, cnt, ver;
+	vector<vector<int>>graph, DAG_graph;
+	vector<int>low, num, id, stk;
+	vector<bool>in;
+	void tarjan(int node)
+	{
+		num[node] = low[node] = ++cnt;
+		stk.push_back(node);
+		in[node] = true;
+		for (auto& i : graph[node])
+		{
+			if (!num[i])
+			{
+				tarjan(i);
+				low[node] = min(low[node], low[i]);
+			}
+			else if (in[i])
+			{
+				low[node] = min(low[node], num[i]);
+			}
+		}
+		if (num[node] == low[node])
+		{
+			while (1)
+			{
+				int cur = stk.back();
+				stk.pop_back();
+				in[cur] = false;
+				id[cur] = ver;
+				if (cur == node)
+				{
+					break;
+				}
+			}
+			ver++;
+		}
+	}
+	vector<vector<int>>DAG()
+	{
+		int len = *max_element(id.begin() + 1, id.end()) + 1;
+		DAG_graph.resize(len);
+		for (int i = 1; i <= V; ++i)
+		{
+			for (auto& j : graph[i])
+			{
+				if (id[i] != id[j])
+				{
+					DAG_graph[id[i]].push_back(id[j]);
+				}
+			}
+		}
+		return DAG_graph;
+	}
+public:
+	SCC(int vertex, vector<vector<int>>& G)
+	{
+		V = vertex;
+		graph = G;
+		low.resize(V + 1, 0);
+		num.resize(V + 1, 0);
+		id.resize(V + 1, -1);
+		in.resize(V + 1, false);
+		cnt = 0, ver = 1;
+		for (int i = 1; i <= V; ++i)
+		{
+			if (!num[i])
+			{
+				tarjan(i);
+			}
+		}
+	}
+	vector<int>get_id()
+	{
+		return id;
+	}
+	vector<vector<int>>get_DAG()
+	{
+		return DAG();
+	}
+};
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, x = 0, len = -1;
+	cin >> n >> m >> x;
+	vector<vector<int>>g(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		g[a].push_back(b);
+	}
+	SCC scc(n, g);
+	set<int>s;
+	vector<int>id = scc.get_id();
+	for (int i = 1; i <= n; ++i)
+	{
+		s.insert(id[i]);
+		len = max(len, id[i]);
+	}
+	vector<vector<int>>graph = scc.get_DAG();
+	vector<bool>visited(len + 1);
+	queue<int>q;
+	q.push(id[x]);
+	visited[id[x]] = true;
+	int ans = s.size();
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
+		for (auto& i : graph[cur])
+		{
+			if (!visited[i])
+			{
+				visited[i] = true;
+				q.push(i);
+			}
+		}
+	}
+	for (int i = 1; i <= len; ++i)
+	{
+		if (visited[i])
+		{
+			ans--;
+		}
+	}
+	cout << ans;
+	return 0;
+}
