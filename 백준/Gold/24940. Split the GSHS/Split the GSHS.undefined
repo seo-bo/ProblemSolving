@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<ll>v(n + 1), prefix(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+		prefix[i] = prefix[i - 1] + v[i];
+	}
+	vector<vector<ll>>dp(n + 1, vector<ll>(n + 1, -1));
+	function<ll(int, int)> dfs = [&](int left, int right)
+		{
+			if (left == right)
+			{
+				return 0LL;
+			}
+			if (dp[left][right] != -1)
+			{
+				return dp[left][right];
+			}
+			ll res = LLONG_MAX / 8;
+			for (int i = left; i < right; ++i)
+			{
+				ll l = prefix[i] - prefix[left - 1], r = prefix[right] - prefix[i];
+				ll cost = -llabs(l * r) * (l * r < 0);
+				res = min(res, dfs(left, i) + dfs(i + 1, right) + cost);
+			}
+			return dp[left][right] = res;
+		};
+	cout << dfs(1, n);
+	return 0;
+}
