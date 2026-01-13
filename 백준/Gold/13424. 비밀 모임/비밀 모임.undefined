@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0, m = 0;
+		cin >> n >> m;
+		vector<vector<int>>graph(n + 1, vector<int>(n + 1, 1 << 20));
+		for (int i = 1; i <= n; ++i)
+		{
+			graph[i][i] = 0;
+		}
+		for (int i = 0; i < m; ++i)
+		{
+			int a = 0, b = 0, c = 0;
+			cin >> a >> b >> c;
+			graph[a][b] = graph[b][a] = min(graph[a][b], c);
+		}
+		for (int k = 1; k <= n; ++k)
+		{
+			for (int i = 1; i <= n; ++i)
+			{
+				for (int j = 1; j <= n; ++j)
+				{
+					graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j]);
+				}
+			}
+		}
+		int k = 0;
+		cin >> k;
+		vector<int>v(k);
+		for (auto& i : v)
+		{
+			cin >> i;
+		}
+		int ans = -1, pivot = INT_MAX;
+		for (int i = 1; i <= n; ++i)
+		{
+			int temp = 0;
+			for (auto& j : v)
+			{
+				temp += graph[i][j];
+			}
+			if (pivot > temp)
+			{
+				pivot = temp;
+				ans = i;
+			}
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
