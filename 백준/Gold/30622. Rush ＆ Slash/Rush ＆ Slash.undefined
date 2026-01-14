@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	map<pii, int>mm;
+	vector<int>parent(n + 1), rank(n + 1);
+	vector<ll>dist(n + 1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (rank[r1] < rank[r2])
+			{
+				swap(r1, r2);
+			}
+			parent[r2] = r1;
+			rank[r1] += (rank[r1] == rank[r2]);
+			dist[r1] = min(dist[r1], dist[r2]);
+		};
+	vector<vector<int>>dir = { {-1,-1},{-1,0},{-1,1},{0,-1},{0,1},{1,-1},{1,0},{1,1} };
+	for (int i = 1; i <= n; ++i)
+	{
+		int x = 0, y = 0;
+		cin >> x >> y;
+		mm[make_pair(x, y)] = i;
+		dist[i] = llabs(x) + llabs(y);
+		for (int j = 0; j < 8; ++j)
+		{
+			int nx = x + dir[j][0];
+			int ny = y + dir[j][1];
+			if (mm.find(make_pair(nx, ny)) == mm.end())
+			{
+				continue;
+			}
+			int ver = mm[make_pair(nx, ny)];
+			if (find(i) != find(ver))
+			{
+				merge(i, ver);
+			}
+		}
+	}
+	ll ans = 0, maxi = -1;
+	set<int>s;
+	for (int i = 1; i <= n; ++i)
+	{
+		int ver = find(i);
+		if (s.find(ver) == s.end())
+		{
+			ans += 2 * dist[ver];
+			s.insert(ver);
+			maxi = max(maxi, dist[ver]);
+		}
+	}
+	cout << ans - maxi;
+	return 0;
+}
