@@ -1,0 +1,69 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+#define MAX 10000000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<bool>prime(MAX + 1, true);
+	prime[0] = prime[1] = false;
+	for (ll i = 2; i * i <= MAX; ++i)
+	{
+		if (prime[i])
+		{
+			for (ll j = i * i; j <= MAX; j += i)
+			{
+				prime[j] = false;
+			}
+		}
+	}
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<int>d(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> d[i];
+	}
+	vector<vector<pll>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		if (!prime[d[a] + d[b]])
+		{
+			continue;
+		}
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	vector<ll>visited(n + 1, LLONG_MAX);
+	priority_queue<pll, vector<pll>, greater<pll>>pq;
+	visited[1] = 0;
+	pq.push(make_pair(0, 1));
+	while (!pq.empty())
+	{
+		auto [co, ver] = pq.top();
+		pq.pop();
+		if (visited[ver] < co)
+		{
+			continue;
+		}
+		for (auto& [nv, nc] : graph[ver])
+		{
+			if (visited[nv] > co + nc)
+			{
+				visited[nv] = co + nc;
+				pq.push(make_pair(visited[nv], nv));
+			}
+		}
+	}
+	if (visited[n] == LLONG_MAX)
+	{
+		cout << "Now where are you?";
+		return 0;
+	}
+	cout << visited[n];
+	return 0;
+}
