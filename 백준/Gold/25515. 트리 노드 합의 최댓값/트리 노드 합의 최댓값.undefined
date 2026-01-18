@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>graph(n);
+	vector<int>v(n);
+	for (int i = 0; i < n - 1; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+	}
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	function<ll(int)> dfs = [&](int node)
+		{
+			ll res = v[node];
+			for (auto& i : graph[node])
+			{
+				ll temp = dfs(i);
+				if (temp < 0)
+				{
+					continue;
+				}
+				res += temp;
+			}
+			return res;
+		};
+	cout << dfs(0);
+	return 0;
+}
