@@ -1,0 +1,53 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+typedef tuple<ll, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0;
+	cin >> n >> m >> k;
+	vector<vector<pii>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	vector<vector<ll>>visited(n + 1, vector<ll>(k + 1, LLONG_MAX));
+	priority_queue<tp, vector<tp>, greater<tp>>pq;
+	visited[1][0] = 0;
+	pq.push(make_tuple(0, 0, 1));
+	while (!pq.empty())
+	{
+		auto [co, cnt, ver] = pq.top();
+		pq.pop();
+		if (visited[ver][cnt] < co)
+		{
+			continue;
+		}
+		for (auto& [nv, nc] : graph[ver])
+		{
+			if (visited[nv][cnt] > co + nc)
+			{
+				visited[nv][cnt] = co + nc;
+				pq.push(make_tuple(visited[nv][cnt], cnt, nv));
+			}
+			if (cnt + 1 <= k && visited[nv][cnt + 1] > co)
+			{
+				visited[nv][cnt + 1] = co;
+				pq.push(make_tuple(visited[nv][cnt + 1], cnt + 1, nv));
+			}
+		}
+	}
+	ll ans = LLONG_MAX;
+	for (int i = 0; i <= k; ++i)
+	{
+		ans = min(ans, visited[n][i]);
+	}
+	cout << ans;
+	return 0;
+}
