@@ -7,14 +7,14 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0;
 	cin >> n;
-	vector<ll>v(n);
+	vector<int>v(n);
 	for (auto& i : v)
 	{
 		cin >> i;
 	}
 	ll p = 0, q = 0, r = 0, s = 0;
 	cin >> p >> q >> r >> s;
-	ll left = 1, right = LLONG_MAX / 8, ans = -1;
+	ll left = 1, right = 100005, ans = -1;
 	while (left <= right)
 	{
 		ll mid = (left + right) / 2;
