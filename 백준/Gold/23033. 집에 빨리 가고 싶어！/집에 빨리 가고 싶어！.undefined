@@ -1,0 +1,43 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+typedef tuple<int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<tp>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0, d = 0;
+		cin >> a >> b >> c >> d;
+		graph[a].push_back(make_tuple(b, c, d));
+	}
+	vector<ll>visited(n + 1, LLONG_MAX);
+	visited[1] = 0;
+	priority_queue<pll, vector<pll>, greater<pll>>pq;
+	pq.push(make_pair(0, 1));
+	while (!pq.empty())
+	{
+		auto [co, ver] = pq.top();
+		pq.pop();
+		if (visited[ver] < co)
+		{
+			continue;
+		}
+		for (auto& [nv, nc, p] : graph[ver])
+		{
+			ll w = (p - (co % p)) % p;
+			if (visited[nv] > co + nc + w)
+			{
+				visited[nv] = co + nc + w;
+				pq.push(make_pair(visited[nv], nv));
+			}
+		}
+	}
+	cout << visited[n];
+	return 0;
+}
