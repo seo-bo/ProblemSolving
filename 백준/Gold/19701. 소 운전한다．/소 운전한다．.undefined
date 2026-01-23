@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-typedef tuple<ll, ll, ll>tp;
+typedef tuple<int, int, int>tp;
 
 int main(void)
 {
@@ -16,7 +16,7 @@ int main(void)
 		graph[a].push_back(make_tuple(b, c, d));
 		graph[b].push_back(make_tuple(a, c, d));
 	}
-	vector<vector<ll>>visited(n + 1, vector<ll>(2, LLONG_MAX));
+	vector<vector<int>>visited(n + 1, vector<int>(2, INT_MAX));
 	visited[1][0] = 0;
 	priority_queue<tp, vector<tp>, greater<tp>>pq;
 	pq.push(make_tuple(0, 0, 1));
