@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, T = 0;
+	cin >> n >> m >> T;
+	vector<vector<char>>v(n, vector<char>(m));
+	vector<vector<vector<int>>>visited(n, vector<vector<int>>(m, vector<int>(4, INT_MAX)));
+	vector<vector<int>>dir = { {-1,0},{0,-1},{1,0},{0,1} };
+	priority_queue<tp, vector<tp>, greater<tp>>pq;
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			cin >> v[i][j];
+			if ('0' <= v[i][j] && v[i][j] <= '3')
+			{
+				int a = v[i][j] - '0';
+				visited[i][j][a] = 0;
+				pq.push(make_tuple(0, a, i, j));
+			}
+		}
+	}
+	while (!pq.empty())
+	{
+		auto [co, turn, x, y] = pq.top();
+		pq.pop();
+		if (visited[x][y][turn] < co)
+		{
+			continue;
+		}
+		if (v[x][y] == 'S')
+		{
+			cout << co;
+			return 0;
+		}
+		int nt = (turn + 1) % 4;
+		if (v[x][y] == 'T')
+		{
+			int nx = x + dir[nt][0];
+			int ny = y + dir[nt][1];
+			if (nx >= 0 && nx < n && ny >= 0 && ny < m && visited[nx][ny][nt] > co)
+			{
+				visited[nx][ny][nt] = co;
+				pq.push(make_tuple(co, nt, nx, ny));
+			}
+			continue;
+		}
+		if (visited[x][y][nt] > co + T)
+		{
+			visited[x][y][nt] = co + T;
+			pq.push(make_tuple(co + T, nt, x, y));
+		}
+		for (int i = (turn + 1) % 4, cnt = 0; cnt < 2; i = (i + 2) % 4, cnt++)
+		{
+			int nx = x + dir[i][0];
+			int ny = y + dir[i][1];
+			if (nx >= 0 && nx < n && ny >= 0 && ny < m && visited[nx][ny][turn] > co + 1)
+			{
+				visited[nx][ny][turn] = co + 1;
+				pq.push(make_tuple(co + 1, turn, nx, ny));
+			}
+		}
+	}
+	cout << -1;
+	return 0;
+}
