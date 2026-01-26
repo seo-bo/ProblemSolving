@@ -2,6 +2,8 @@
 using namespace std;
 typedef long long ll;
 
+int siz[100001], cnt[50001];
+
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
@@ -14,7 +16,6 @@ int main(void)
 		cin >> a;
 		graph[a].push_back(i);
 	}
-	vector<int>siz(n + 1), cnt(n + 1);
 	int ans = 0;
 	function<int(int)> tour = [&](int node)
 		{
@@ -23,14 +24,20 @@ int main(void)
 			{
 				res += tour(i);
 			}
-			cnt[res]++;
+			if (res <= n / 2)
+			{
+				cnt[res]++;
+			}
 			return siz[node] = res;
 		};
 	tour(1);
 	function<int(int, int)> dfs = [&](int node, int depth)
 		{
 			int maxi = depth;
-			cnt[siz[node]]--;
+			if (siz[node] <= n / 2)
+			{
+				cnt[siz[node]]--;
+			}
 			for (auto& i : graph[node])
 			{
 				maxi = max(maxi, dfs(i, depth + 1));
@@ -46,7 +53,10 @@ int main(void)
 					ans = max(ans, 2);
 				}
 			}
-			cnt[siz[node]]++;
+			if (siz[node] <= n / 2)
+			{
+				cnt[siz[node]]++;
+			}
 			return maxi;
 		};
 	dfs(1, 1);
