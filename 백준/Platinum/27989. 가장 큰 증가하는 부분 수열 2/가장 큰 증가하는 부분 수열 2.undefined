@@ -41,7 +41,6 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0, cnt = 1;
 	cin >> n;
-	map<ll, int>mm;
 	vector<ll>v(n), a;
 	for (auto& i : v)
 	{
@@ -49,16 +48,10 @@ int main(void)
 		a.push_back(i);
 	}
 	sort(a.begin(), a.end());
-	for (auto& i : a)
-	{
-		if (mm.find(i) == mm.end())
-		{
-			mm[i] = cnt++;
-		}
-	}
+	a.erase(unique(a.begin(), a.end()), a.end());
 	for (auto& i : v)
 	{
-		int p = mm[i];
+		int p = lower_bound(a.begin(), a.end(), i) - a.begin() + 1;
 		if (p == 1)
 		{
 			update(1, n, 1, 1, i);
