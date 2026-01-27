@@ -1,40 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-#define MAX 300000
 
-ll tree[4 * (MAX + 1)];
-
-void update(int start, int end, int node, int idx, ll delta)
-{
-	if (idx < start || idx > end)
-	{
-		return;
-	}
-	if (start == end)
-	{
-		tree[node] = max(tree[node], delta);
-		return;
-	}
-	int mid = (start + end) / 2;
-	update(start, mid, node * 2, idx, delta);
-	update(mid + 1, end, node * 2 + 1, idx, delta);
-	tree[node] = max(tree[node * 2], tree[node * 2 + 1]);
-}
-
-ll query(int start, int end, int node, int left, int right)
-{
-	if (right < start || left > end)
-	{
-		return INT_MIN;
-	}
-	if (left <= start && end <= right)
-	{
-		return tree[node];
-	}
-	int mid = (start + end) / 2;
-	return max(query(start, mid, node * 2, left, right), query(mid + 1, end, node * 2 + 1, left, right));
-}
+ll tree[300001];
 
 int main(void)
 {
@@ -49,17 +17,34 @@ int main(void)
 	}
 	sort(a.begin(), a.end());
 	a.erase(unique(a.begin(), a.end()), a.end());
+	auto update = [&](int idx, ll delta)
+		{
+			while (idx <= n)
+			{
+				tree[idx] = max(tree[idx], delta);
+				idx += idx & -idx;
+			}
+		};
+	auto query = [&](int idx)
+		{
+			ll res = 0;
+			while (idx)
+			{
+				res = max(res, tree[idx]);
+				idx -= idx & -idx;
+			}
+			return res;
+		};
 	for (auto& i : v)
 	{
 		int p = lower_bound(a.begin(), a.end(), i) - a.begin() + 1;
 		if (p == 1)
 		{
-			update(1, n, 1, 1, i);
+			update(1, i);
 			continue;
 		}
-		ll pivot = i + query(1, n, 1, 1, p - 1);
-		update(1, n, 1, p, pivot);
+		update(p, i + query(p - 1));
 	}
-	cout << query(1, n, 1, 1, n);
+	cout << query(n);
 	return 0;
 }
