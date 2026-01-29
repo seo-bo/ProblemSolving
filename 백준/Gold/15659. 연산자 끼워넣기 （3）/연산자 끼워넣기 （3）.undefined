@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n), cal, op(5);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	for (int i = 1; i <= 4; ++i)
+	{
+		cin >> op[i];
+	}
+	int mini = INT_MAX, maxi = INT_MIN;
+	function<void(int)> dfs = [&](int depth)
+		{
+			if (depth == n)
+			{
+				deque<int>dq;
+				auto sv = [&](int t = 0)
+					{
+						int temp = 0;
+						if (t == 1)
+						{
+							temp = dq.front();
+							dq.pop_front();
+						}
+						else
+						{
+							temp = dq.back();
+							dq.pop_back();
+						}
+						return temp;
+					};
+				for (int i = 0; i < 2 * n - 1; ++i)
+				{
+					int pivot = ((i % 2) ? cal[i / 2] : v[i / 2]);
+					if (i % 2 == 0 && dq.size() >= 2 && dq.back() >= 3)
+					{
+						int op = sv(), a = sv(), b = v[i / 2];
+						if (b == 0)
+						{
+							return;
+						}
+						pivot = ((op == 3) ? a * b : a / b);
+					}
+					dq.push_back(pivot);
+				}
+				while (dq.size() > 1)
+				{
+					int a = sv(1), op = sv(1), b = sv(1);
+					dq.push_front((op == 1) ? a + b : a - b);
+				}
+				int res = dq.front();
+				mini = min(mini, res), maxi = max(maxi, res);
+				return;
+			}
+			for (int i = 1; i <= 4; ++i)
+			{
+				if (op[i] == 0)
+				{
+					continue;
+				}
+				op[i]--, cal.push_back(i);
+				dfs(depth + 1);
+				cal.pop_back(), op[i]++;
+			}
+		};
+	dfs(1);
+	cout << maxi << '\n' << mini;
+	return 0;
+}
