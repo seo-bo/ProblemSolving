@@ -1,0 +1,76 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	int len = n + m;
+	vector<vector<int>>graph(len + 1);
+	vector<int>v(len + 1), degree(len + 1);
+	iota(v.begin(), v.end(), 0);
+	for (int i = 1; i <= n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		graph[i].push_back(n + a);
+		degree[n + a]++;
+	}
+	for (int i = n + 1; i <= len; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		graph[i].push_back(a);
+		degree[a]++;
+	}
+	sort(v.begin() + 1, v.end(), [&](const int& a, const int& b)
+		{
+			return degree[a] < degree[b];
+		});
+	vector<int>ans(len + 1, 1);
+	vector<bool>visited(len + 1, false);
+	auto topo = [&](int p)
+		{
+			queue<int>q;
+			q.push(p);
+			while (!q.empty())
+			{
+				int cur = q.front();
+				q.pop();
+				visited[cur] = true;
+				for (auto& i : graph[cur])
+				{
+					ans[i] &= (ans[cur] ^ 1);
+					if (visited[i])
+					{
+						continue;
+					}
+					if (--degree[i] == 0 || ans[i] == 0)
+					{
+						q.push(i);
+					}
+				}
+			}
+		};
+	for (int i = 1; i <= len; ++i)
+	{
+		if (visited[v[i]])
+		{
+			continue;
+		}
+		topo(v[i]);
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cout << ans[i];
+	}
+	cout << '\n';
+	for (int i = n + 1; i <= len; ++i)
+	{
+		cout << ans[i];
+	}
+	return 0;
+}
