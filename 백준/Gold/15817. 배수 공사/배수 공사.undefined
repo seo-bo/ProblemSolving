@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, x = 0;
+	cin >> n >> x;
+	vector<int>dp(x + 1, 0);
+	dp[0] = 1;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		vector<int>temp = dp;
+		for (int j = 1; j <= b; ++j)
+		{
+			int p = j * a;
+			for (int k = x; k >= p; --k)
+			{
+				if (!dp[k - p])
+				{
+					continue;
+				}
+				temp[k] += dp[k - p];
+			}
+		}
+		dp = move(temp);
+	}
+	cout << dp[x];
+	return 0;
+}
