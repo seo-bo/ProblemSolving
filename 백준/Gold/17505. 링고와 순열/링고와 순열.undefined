@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, k = 0;
+	cin >> n >> k;
+	for (int i = n - 1, left = 1, right = n; i >= 0; --i)
+	{
+		int flag = k >= i;
+		cout << (flag ? right-- : left++) << ' ';
+		k -= i * flag;
+	}
+	return 0;
+}
