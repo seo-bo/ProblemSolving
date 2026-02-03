@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		ll n = 0, m = 0, k = 0;
+		cin >> n >> m >> k;
+		vector<ll>prefix(2 * n + 1), v(2 * n + 1);
+		ll ans = 0;
+		for (int i = 1; i <= n; ++i)
+		{
+			cin >> v[i];
+			v[n + i] = v[i];
+		}
+		for (int i = 1; i <= 2 * n; ++i)
+		{
+			prefix[i] = prefix[i - 1] + v[i];
+		}
+		for (int i = m; i <= ((n == m) ? m : n + m - 1); ++i)
+		{
+			ans += (prefix[i] - prefix[i - m] < k);
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
