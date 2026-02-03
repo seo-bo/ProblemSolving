@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, ans = 0;
+	cin >> n;
+	vector<ll>v;
+	for (ll i = 11; i <= n; i = i * 10 + 1)
+	{
+		v.push_back(i);
+	}
+	int len = v.size();
+	for (int i = 1; i < (1 << len); ++i)
+	{
+		int p = __builtin_popcount(i), res = -1;
+		if (p % 2)
+		{
+			res = 1;
+		}
+		ll now = 1;
+		for (int j = 0; j < len; ++j)
+		{
+			if (i & (1 << j))
+			{
+				ll g = gcd(now, v[j]);
+				if ((__int128)now / g * v[j] > n)
+				{
+					now = LLONG_MAX;
+					break;
+				}
+				now = now / g * v[j];
+			}
+		}
+		ans += n / now * res;
+	}
+	cout << ans;
+	return 0;
+}
