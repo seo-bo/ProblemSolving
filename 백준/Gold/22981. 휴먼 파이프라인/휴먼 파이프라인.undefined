@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, k = 0;
+	cin >> n >> k;
+	vector<ll>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	sort(v.begin(), v.end());
+	ll ans = LLONG_MAX;
+	for (int i = 1, j = n; i < n; ++i, --j)
+	{
+		ll a = v[1] * (j - 1), b = v[j] * i;
+		ll left = 1, right = LLONG_MAX / 10, res = -1;
+		while (left <= right)
+		{
+			__int128 mid = (left + right) / 2;
+			__int128 pivot = mid * b + mid * a;
+			if (pivot >= k)
+			{
+				right = mid - 1;
+				res = mid;
+			}
+			else
+			{
+				left = mid + 1;
+			}
+		}
+		ans = min(ans, res);
+	}
+	cout << ans;
+	return 0;
+}
