@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<int>>graph(n + 1), visited(n + 1, vector<int>(n + 1));
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+		visited[a][b] = visited[b][a] = 1;
+	}
+	auto bfs = [&]
+		{
+			vector<int>dist(n + 1, INT_MAX);
+			queue<int>q;
+			q.push(1);
+			dist[1] = 0;
+			while (!q.empty())
+			{
+				int cur = q.front();
+				q.pop();
+				for (auto& i : graph[cur])
+				{
+					if (!visited[cur][i])
+					{
+						continue;
+					}
+					if (dist[i] > dist[cur] + 1)
+					{
+						dist[i] = dist[cur] + 1;
+						q.push(i);
+					}
+				}
+			}
+			for (int i = 1; i <= n; ++i)
+			{
+				cout << ((dist[i] == INT_MAX) ? -1 : dist[i]) << ' ';
+			}
+			cout << '\n';
+		};
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		if (a == 1)
+		{
+			graph[b].push_back(c);
+			graph[c].push_back(b);
+		}
+		visited[b][c] = visited[c][b] = a % 2;
+		bfs();
+	}
+	return 0;
+}
