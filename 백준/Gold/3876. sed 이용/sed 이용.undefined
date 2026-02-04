@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	while (1)
+	{
+		int n = 0;
+		cin >> n;
+		if (!n)
+		{
+			break;
+		}
+		unordered_map<string, string>mm;
+		unordered_map<string, int>visited;
+		for (int i = 0; i < n; ++i)
+		{
+			string a, b;
+			cin >> a >> b;
+			mm[a] = b;
+		}
+		auto bfs = [&]
+			{
+				string A, B;
+				cin >> A >> B;
+				queue<string>q;
+				q.push(A);
+				visited[A] = 0;
+				while (!q.empty())
+				{
+					string str = q.front();
+					q.pop();
+					if (str == B)
+					{
+						cout << visited[str] << '\n';
+						return;
+					}
+					int len = str.size();
+					for (auto& [a, b] : mm)
+					{
+						int siz = a.size();
+						string temp;
+						for (int i = 0; i < len;)
+						{
+							if (i + siz <= len)
+							{
+								int f = 1;
+								for (int j = i, idx = 0; idx < siz; ++idx, ++j)
+								{
+									if (str[j] != a[idx])
+									{
+										f = 0;
+										break;
+									}
+								}
+								if (f)
+								{
+									temp += b;
+									i += siz;
+									continue;
+								}
+							}
+							temp += str[i++];
+						}
+						if (temp.size() <= B.size() && visited.find(temp) == visited.end() || visited[temp] > visited[str] + 1)
+						{
+							visited[temp] = visited[str] + 1;
+							q.push(temp);
+						}
+					}
+				}
+				cout << -1 << '\n';
+			};
+		bfs();
+	}
+	return 0;
+}
