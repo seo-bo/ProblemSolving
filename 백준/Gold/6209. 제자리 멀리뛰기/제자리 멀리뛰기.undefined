@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int d = 0, n = 0, m = 0;
+	cin >> d >> n >> m;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	sort(v.begin(), v.end());
+	v.push_back(d);
+	int left = 1, right = INT_MAX / 2, ans = -1;
+	auto cal = [&](ll mid)
+		{
+			int pre = 0, cnt = 0;
+			for (int i = 0; i <= n; ++i)
+			{
+				if (mid > v[i] - pre)
+				{
+					cnt++;
+					continue;
+				}
+				pre = v[i];
+			}
+			return (cnt <= m);
+		};
+	while (left <= right)
+	{
+		int mid = (left + right) / 2;
+		if (cal(mid))
+		{
+			ans = mid;
+			left = mid + 1;
+		}
+		else
+		{
+			right = mid - 1;
+		}
+	}
+	cout << ans;
+	return 0;
+}
