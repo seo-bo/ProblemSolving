@@ -1,0 +1,81 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, t = 0, d = 0;
+	cin >> n >> m >> t >> d;
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	vector<vector<int>>v(n, vector<int>(m));
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			char a;
+			cin >> a;
+			if ('A' <= a && a <= 'Z')
+			{
+				v[i][j] = int(a - 'A');
+			}
+			else
+			{
+				v[i][j] = int(a - 'a' + 26);
+			}
+		}
+	}
+	auto dijkstra = [&](int flag)
+		{
+			vector<int>dist(n * m + 1, 1000501);
+			dist[0] = 0;
+			priority_queue<pii, vector<pii>, greater<pii>>pq;
+			pq.push(make_pair(0, 0));
+			while (!pq.empty())
+			{
+				auto [co, cur] = pq.top();
+				pq.pop();
+				if (dist[cur] < co)
+				{
+					continue;
+				}
+				int x = cur / m, y = cur % m, cost = v[x][y];
+				for (int i = 0; i < 4; ++i)
+				{
+					int nx = x + dir[i][0];
+					int ny = y + dir[i][1];
+					int np = nx * m + ny;
+					if (nx >= 0 && nx < n && ny >= 0 && ny < m && abs(cost - v[nx][ny]) <= t)
+					{
+						int nc = ((cost < v[nx][ny]) ? ((v[nx][ny] - cost) * (v[nx][ny] - cost)) : 1);
+						if (flag == -1)
+						{
+							nc = ((cost > v[nx][ny]) ? ((v[nx][ny] - cost) * (v[nx][ny] - cost)) : 1);
+						}
+						if (dist[np] > co + nc)
+						{
+							dist[np] = co + nc;
+							pq.push(make_pair(co + nc, np));
+						}
+					}
+				}
+			}
+			return dist;
+		};
+	vector<int>A = dijkstra(1), B = dijkstra(-1);
+	int ans = v[0][0];
+	for (int x = 0; x < n; ++x)
+	{
+		for (int y = 0; y < m; ++y)
+		{
+			int pos = x * m + y;
+			if (A[pos] + B[pos] <= d)
+			{
+				ans = max(ans, v[x][y]);
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
