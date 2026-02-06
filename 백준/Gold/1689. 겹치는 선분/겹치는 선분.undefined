@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>a(n), b(n);
+	for (int i = 0; i < n; ++i)
+	{
+		cin >> a[i] >> b[i];
+	}
+	sort(a.begin(), a.end());
+	sort(b.begin(), b.end());
+	int idx = 0, jdx = 0, ans = 0, cnt = 0;
+	for (int i = 0; i < 2 * n; ++i)
+	{
+		if (idx == n)
+		{
+			ans = max(ans, --cnt);
+			jdx++;
+		}
+		else if (jdx == n)
+		{
+			ans = max(ans, ++cnt);
+			idx++;
+		}
+		else
+		{
+			if (a[idx] < b[jdx])
+			{
+				ans = max(ans, ++cnt);
+				idx++;
+			}
+			else
+			{
+				ans = max(ans, --cnt);
+				jdx++;
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
