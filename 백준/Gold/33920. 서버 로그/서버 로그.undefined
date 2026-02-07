@@ -1,30 +1,38 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
+#define S 511111
 
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0, m = 0;
 	cin >> n >> m;
-	map<int, int>mm;
-	for (int i = 0; i < n; ++i)
+	vector<int>v(n), cnt(2 * S + 1);
+	for (auto& i : v)
 	{
-		int a = 0;
-		cin >> a;
-		mm[a]++;
+		cin >> i;
+		i += S;
+		cnt[i]++;
 	}
+	sort(v.begin(), v.end());
+	v.erase(unique(v.begin(), v.end()), v.end());
 	for (int i = 0; i < m; ++i)
 	{
 		int a = 0;
 		cin >> a;
-		a -= i;
+		a = a - i + S;
 		ll ans = 0;
-		for (auto it = mm.upper_bound(a); it != mm.end();)
+		while (!v.empty() && v.back() > a)
 		{
-			ans += (ll)it->second * (it->first - a);
-			mm[a] += it->second;
-			mm.erase(it++);
+			ans += (ll)cnt[v.back()] * (v.back() - a);
+			cnt[a] += cnt[v.back()];
+			cnt[v.back()] = 0;
+			v.pop_back();
+		}
+		if (v.empty() || v.back() != a)
+		{
+			v.push_back(a);
 		}
 		cout << ans << '\n';
 	}
