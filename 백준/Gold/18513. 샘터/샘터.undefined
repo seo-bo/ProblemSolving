@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	priority_queue<pii, vector<pii>, greater<pii>>pq;
+	unordered_set<int>s;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		s.insert(a);
+		pq.push(make_pair(0, a));
+	}
+	ll ans = 0;
+	while ((int)s.size() < n + k)
+	{
+		auto [co, x] = pq.top();
+		pq.pop();
+		for (int i = -1; i <= 1 && (int)s.size() < n + k; i += 2)
+		{
+			int nx = x + i;
+			if (s.find(nx) == s.end())
+			{
+				ans += co + 1;
+				pq.push(make_pair(co + 1, nx));
+				s.insert(nx);
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
