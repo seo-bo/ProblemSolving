@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<pii>s(n), e(n);
+	vector<int>h(n);
+	vector<int>v;
+	for (int i = 0; i < n; ++i)
+	{
+		cin >> s[i].first >> h[i] >> e[i].first;
+		s[i].second = e[i].second = i;
+		v.push_back(s[i].first);
+		v.push_back(e[i].first);
+	}
+	map<int, int>mm = { {0,0} };
+	sort(s.begin(), s.end());
+	sort(e.begin(), e.end());
+	sort(v.begin(), v.end());
+	v.erase(unique(v.begin(), v.end()), v.end());
+	int idx = 0, jdx = 0;
+	for (auto& i : v)
+	{
+		int pre = prev(mm.end())->first;
+		while (idx < n && s[idx].first == i)
+		{
+			int a = h[s[idx].second];
+			mm[a]++, idx++;
+		}
+		while (jdx < n && e[jdx].first == i)
+		{
+			int a = h[e[jdx].second];
+			if (--mm[a] == 0)
+			{
+				mm.erase(a);
+			}
+			jdx++;
+		}
+		int nxt = prev(mm.end())->first;
+		if (pre != nxt)
+		{
+			cout << i << ' ' << nxt << ' ';
+		}
+	}
+	return 0;
+}
