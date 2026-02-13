@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+#define MAX 1000004
+
+int tree[(MAX + 2) * 4], lazy[(MAX + 2) * 4];
+
+void comb(int start, int end, int node, int delta)
+{
+	tree[node] += delta;
+	if (start != end)
+	{
+		lazy[node * 2] += delta;
+		lazy[node * 2 + 1] += delta;
+	}
+}
+
+void update(int start, int end, int node, int left, int right, int delta)
+{
+	if (lazy[node])
+	{
+		comb(start, end, node, lazy[node]);
+		lazy[node] = 0;
+	}
+	if (left > end || right < start)
+	{
+		return;
+	}
+	if (left <= start && end <= right)
+	{
+		comb(start, end, node, delta);
+		return;
+	}
+	int mid = (start + end) / 2;
+	update(start, mid, node * 2, left, right, delta);
+	update(mid + 1, end, node * 2 + 1, left, right, delta);
+	tree[node] = max(tree[node * 2], tree[node * 2 + 1]);
+}
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int l = 0, k = 0;
+	cin >> l >> k;
+	vector<pii>y, s, e;
+	vector<int>v;
+	for (int i = 0; i < k; ++i)
+	{
+		int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+		cin >> y1 >> x1 >> y2 >> x2;
+		if (x2 - x1 > l || y2 - y1 > l)
+		{
+			continue;
+		}
+		x2 = max(0, x2 - l);
+		y2 = max(0, y2 - l);
+		int cnt = y.size();
+		s.push_back(make_pair(x2, cnt)), e.push_back(make_pair(x1, cnt));
+		y.push_back(make_pair(y2, y1));
+		v.push_back(x1), v.push_back(x2);
+	}
+	sort(s.begin(), s.end());
+	sort(e.begin(), e.end());
+	sort(v.begin(), v.end());
+	v.erase(unique(v.begin(), v.end()), v.end());
+	int ans = 0, idx = 0, jdx = 0, slen = s.size(), elen = e.size();
+	for (auto& i : v)
+	{
+		while (idx < slen && s[idx].first == i)
+		{
+			int num = s[idx].second;
+			auto [l, r] = y[num];
+			update(1, MAX, 1, l + 1, r + 1, 1);
+			idx++;
+		}
+		ans = max(ans, tree[1]);
+		while (jdx < elen && e[jdx].first == i)
+		{
+			int num = e[jdx].second;
+			auto [l, r] = y[num];
+			update(1, MAX, 1, l + 1, r + 1, -1);
+			jdx++;
+		}
+	}
+	cout << ans;
+	return 0;
+}
