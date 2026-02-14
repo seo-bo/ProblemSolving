@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<pll>v(n), x(m);
+	for (auto& [a, b] : v)
+	{
+		cin >> b >> a;
+	}
+	for (auto& [a, b] : x)
+	{
+		cin >> a >> b;
+	}
+	sort(v.rbegin(), v.rend());
+	sort(x.rbegin(), x.rend());
+	int idx = 0, ans = 0;
+	priority_queue<ll>pq;
+	for (auto& [co, cnt] : x)
+	{
+		while (idx < n && v[idx].first >= co)
+		{
+			pq.push(v[idx++].second);
+		}
+		while (!pq.empty() && cnt)
+		{
+			ll a = pq.top();
+			pq.pop();
+			if (a <= co)
+			{
+				cnt--;
+				ans++;
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}
