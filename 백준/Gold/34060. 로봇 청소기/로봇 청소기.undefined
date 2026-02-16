@@ -1,0 +1,62 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	int pre = INT_MAX, x = 0;
+	ll base = 1e9;
+	vector<int>parent(n + 1), rank(n + 1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (rank[r2] > rank[r1])
+			{
+				swap(r1, r2);
+			}
+			parent[r2] = r1;
+			rank[r1] += (rank[r1] == rank[r2]);
+		};
+	map<ll, int>mm;
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	for (int i = 1; i <= n; ++i)
+	{
+		int y = 0;
+		cin >> y;
+		if (y <= pre)
+		{
+			x++;
+		}
+		mm[base * x + y] = i;
+		for (int j = 0; j < 4; ++j)
+		{
+			int nx = x + dir[j][0];
+			int ny = y + dir[j][1];
+			ll pos = base * nx + ny;
+			if (mm.find(pos) == mm.end())
+			{
+				continue;
+			}
+			if (find(mm[pos]) != find(i))
+			{
+				merge(mm[pos], i);
+			}
+		}
+		pre = y;
+	}
+	set<int>s;
+	for (int i = 1; i <= n; ++i)
+	{
+		s.insert(find(i));
+	}
+	cout << s.size() << '\n' << n;
+	return 0;
+}
