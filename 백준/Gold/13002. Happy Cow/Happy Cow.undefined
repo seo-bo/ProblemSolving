@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	vector<vector<ll>>dp(n + 1, vector<ll>(n + 1, -1));
+	function<ll(int, int)> dfs = [&](int left, int right)
+		{
+			if (left > right)
+			{
+				return 0LL;
+			}
+			if (dp[left][right] != -1)
+			{
+				return dp[left][right];
+			}
+			ll day = left - 1 + n - right + 1;
+			ll res = max(dfs(left + 1, right) + day * v[left], dfs(left, right - 1) + day * v[right]);
+			return dp[left][right] = res;
+		};
+	cout << dfs(1, n);
+	return 0;
+}
