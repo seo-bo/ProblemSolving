@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		ll base = 5e6;
+		vector<ll>v;
+		while (1)
+		{
+			int a = 0;
+			cin >> a;
+			if (!a)
+			{
+				break;
+			}
+			v.push_back(a);
+		}
+		sort(v.rbegin(), v.rend());
+		ll now = 0, flag = 1;
+		int len = v.size();
+		for (int i = 0; i < len; ++i)
+		{
+			ll temp = 1;
+			for (int j = 0; j <= i && temp <= base; ++j)
+			{
+				temp *= v[i];
+			}
+			if (now + temp > base)
+			{
+				now = LLONG_MAX / 8;
+				break;
+			}
+			now += temp;
+		}
+		if (base >= now * 2)
+		{
+			cout << now * 2;
+		}
+		else
+		{
+			cout << "Too expensive";
+		}
+		cout << '\n';
+	}
+	return 0;
+}
