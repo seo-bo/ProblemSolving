@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0, m = 0;
+		cin >> n >> m;
+		vector<vector<int>>v(n + 1, vector<int>(m + 1));
+		auto cal = [&](int now, int A, int B, int C)
+			{
+				int idx = -1, res = INT_MAX;
+				vector<int>p = { now, now - A, now - B, now - (A + B) / 2, now - A - B + C };
+				for (int i = 0; i < 5; ++i)
+				{
+					if (abs(p[i]) < abs(res))
+					{
+						res = p[i];
+						idx = i;
+					}
+				}
+				return make_pair(idx, res);
+			};
+		for (int i = 1; i <= n; ++i)
+		{
+			for (int j = 1; j <= m; ++j)
+			{
+				cin >> v[i][j];
+				auto [a, b] = cal(v[i][j], v[i][j - 1], v[i - 1][j], v[i - 1][j - 1]);
+				cout << a << ' ' << b << ' ';
+			}
+			cout << '\n';
+		}
+	}
+	return 0;
+}
