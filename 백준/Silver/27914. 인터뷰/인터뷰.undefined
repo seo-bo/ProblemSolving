@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0, q = 0;
+	cin >> n >> k >> q;
+	vector<ll>v(n + 1);
+	int pre = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		if (a == k)
+		{
+			pre = i;
+		}
+		v[i] = v[i - 1] + i - pre;
+	}
+	while (q--)
+	{
+		int a = 0;
+		cin >> a;
+		cout << v[a] << '\n';
+	}
+	return 0;
+}
