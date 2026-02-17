@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<pii>v(3);
+	ll ans = 0;
+	for (auto& [a, _] : v)
+	{
+		cin >> a;
+	}
+	for (auto& [_, a] : v)
+	{
+		cin >> a;
+		int p = min(_, a);
+		ans += p, _ -= p, a -= p;
+	}
+	auto cal = [&](int idx)
+		{
+			vector<pii>o = v;
+			ll res = 0;
+			int x = idx;
+			do
+			{
+				auto& [a, b] = o[x];
+				int p = min(a, b);
+				res += p, a -= p, b -= p;
+				int nxt = (x + 1) % 3;
+				o[nxt].second += b / 3;
+				x = nxt;
+			} while (x != idx);
+			return res;
+		};
+	ll res = 0;
+	for (int i = 0; i < 3; ++i)
+	{
+		ll temp = cal(i);
+		res = max(res, temp);
+	}
+	cout << ans + res;
+	return 0;
+}
