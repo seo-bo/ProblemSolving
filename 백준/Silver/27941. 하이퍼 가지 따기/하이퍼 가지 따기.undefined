@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void) // 아 꼭짓점이니까 [l,r] 둘중 하나겠네;
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<int>v(11);
+	for (int i = 0; i < 2047; ++i)
+	{
+		for (int j = 0; j < 11; ++j)
+		{
+			int a = 0;
+			cin >> a;
+			v[j] ^= a;
+		}
+	}
+	for (auto& i : v)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}
