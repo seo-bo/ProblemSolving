@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	vector<pii>t;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		for (auto& j : v)
+		{
+			t.push_back(make_pair(j, a));
+		}
+	}
+	sort(t.begin(), t.end(), [&](const pii& a, const pii& b)
+		{
+			return a.first * a.second > b.first * b.second;
+		});
+	set<int>s;
+	for (auto& [a, b] : t)
+	{
+		if (s.find(b) != s.end())
+		{
+			continue;
+		}
+		if (s.size() == k)
+		{
+			cout << a * b;
+			return 0;
+		}
+		s.insert(b);
+	}
+	return 0;
+}
