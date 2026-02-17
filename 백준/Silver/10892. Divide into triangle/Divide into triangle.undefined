@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<pll>v;
+	for (int i = 0; i < 3 * n; ++i)
+	{
+		ll a = 0, b = 0;
+		cin >> a >> b;
+		v.push_back(make_pair(a + b * INT_MAX, i + 1));
+	}
+	sort(v.rbegin(), v.rend());
+	for (int i = 0; i < 3 * n; ++i)
+	{
+		if (i && i % 3 == 0)
+		{
+			cout << '\n';
+		}
+		cout << v[i].second << ' ';
+	}
+	return 0;
+}
