@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>graph(n);
+	for (int i = 0; i < n - 1; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+	}
+	vector<vector<int>>cost(n, vector<int>(2, 0));
+	for (auto& i : cost)
+	{
+		for (auto& j : i)
+		{
+			cin >> j;
+		}
+	}
+	function<ll(int, int, int)> dfs = [&](int parent, int node, int color)
+		{
+			ll res = cost[node][color];
+			for (auto& i : graph[node])
+			{
+				if (parent == i)
+				{
+					continue;
+				}
+				res += dfs(node, i, color ^ 1);
+			}
+			return res;
+		};
+	cout << min(dfs(-1, 0, 0), dfs(-1, 0, 1));
+	return 0;
+}
