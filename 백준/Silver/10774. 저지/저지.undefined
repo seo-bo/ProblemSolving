@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	map<char, int>mm = { {'L',2}, {'M',1}, {'S',0} };
+	vector<int>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		char a;
+		cin >> a;
+		v[i] = mm[a];
+	}
+	int ans = 0;
+	for (int i = 0; i < m; ++i)
+	{
+		char a;
+		int b;
+		cin >> a >> b;
+		if (v[b] >= mm[a])
+		{
+			ans++;
+			v[b] = -1;
+		}
+	}
+	cout << ans;
+	return 0;
+}
