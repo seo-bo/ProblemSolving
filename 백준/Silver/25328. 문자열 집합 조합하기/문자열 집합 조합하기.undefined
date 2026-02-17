@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<string>v(3);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	int k = 0;
+	cin >> k;
+	auto cal = [&](string S)
+		{
+			int len = S.size();
+			set<string>temp;
+			function<void(string, int)> dfs = [&](string str, int idx)
+				{
+					if (str.size() == k)
+					{
+						temp.insert(str);
+						return;
+					}
+					for (int i = idx; i < S.size(); ++i)
+					{
+						dfs(str + S[i], i + 1);
+					}
+				};
+			dfs("", 0);
+			return temp;
+		};
+	vector<set<string>>ss;
+	for (auto& i : v)
+	{
+		ss.push_back(cal(i));
+	}
+	set<string>ans;
+	for (int i = 0; i < 3; ++i)
+	{
+		for (int j = i + 1; j < 3; ++j)
+		{
+			for (auto& k : ss[i])
+			{
+				if (ss[j].find(k) != ss[j].end())
+				{
+					ans.insert(k);
+				}
+			}
+		}
+	}
+	if (ans.empty())
+	{
+		cout << -1;
+		return 0;
+	}
+	for (auto& i : ans)
+	{
+		cout << i << '\n';
+	}
+	return 0;
+}
