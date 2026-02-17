@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, ans = 0;
+	cin >> n >> m;
+	vector<int>visited(n + 3);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> visited[i];
+		if (visited[i] == 0)
+		{
+			continue;
+		}
+		if (!visited[i - 1])
+		{
+			ans++;
+		}
+	}
+	while (m--)
+	{
+		int a = 0, b = 0;
+		cin >> a;
+		if (a == 0)
+		{
+			cout << ans << '\n';
+		}
+		else
+		{
+			cin >> b;
+			if (visited[b])
+			{
+				continue;
+			}
+			visited[b] = 1;
+			if (!visited[b - 1] && !visited[b + 1])
+			{
+				ans++;
+			}
+			if (visited[b - 1] && visited[b + 1])
+			{
+				ans--;
+			}
+		}
+	}
+	return 0;
+}
