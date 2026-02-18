@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 5000000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<vector<int>>BIT(100001, vector<int>(k + 1, 0));
+	auto update = [&](int p, int idx, ll delta)
+		{
+			while (idx <= 100000)
+			{
+				BIT[idx][p] = (BIT[idx][p] + delta) % MOD;
+				idx += idx & -idx;
+			}
+		};
+	auto query = [&](int p, int idx)
+		{
+			ll res = 0;
+			while (idx)
+			{
+				res = (res + BIT[idx][p]) % MOD;
+				idx -= idx & -idx;
+			}
+			return res;
+		};
+	for (int i = 1; i <= n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		update(1, a, 1);
+		for (int j = 2; j <= k; ++j)
+		{
+			update(j, a, query(j - 1, a - 1));
+		}
+	}
+	cout << query(k, 100000);
+	return 0;
+}
