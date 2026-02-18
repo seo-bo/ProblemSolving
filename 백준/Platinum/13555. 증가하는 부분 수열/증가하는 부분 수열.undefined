@@ -3,12 +3,13 @@ using namespace std;
 typedef long long ll;
 #define MOD 5000000
 
+int BIT[100001][51];
+
 int main(void)
 {
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0, k = 0;
 	cin >> n >> k;
-	vector<vector<int>>BIT(100001, vector<int>(k + 1, 0));
 	auto update = [&](int p, int idx, ll delta)
 		{
 			while (idx <= 100000)
@@ -19,7 +20,7 @@ int main(void)
 		};
 	auto query = [&](int p, int idx)
 		{
-			ll res = 0;
+			int res = 0;
 			while (idx)
 			{
 				res = (res + BIT[idx][p]) % MOD;
