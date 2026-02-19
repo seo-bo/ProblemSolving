@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 1000000007
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	auto power = [&](ll a)
+		{
+			ll res = 1, exp = MOD - 2;
+			while (exp)
+			{
+				if (exp & 1)
+				{
+					res = (res * a) % MOD;
+				}
+				a = (a * a) % MOD;
+				exp >>= 1;
+			}
+			return res;
+		};
+	int n = 0;
+	cin >> n;
+	ll a = 1, b = 1;
+	for (int i = 1; i <= 2 * n; ++i)
+	{
+		if (i <= n)
+		{
+			b = b * i % MOD;
+		}
+		a = a * i % MOD;
+	}
+	b = power(b) * power(b) % MOD;
+	cout << a * b % MOD * power(n + 1) % MOD;
+	return 0;
+}
