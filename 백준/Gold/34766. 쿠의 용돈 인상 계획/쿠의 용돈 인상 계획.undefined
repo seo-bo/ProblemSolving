@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0, k = 0;
+		cin >> n >> k;
+		string str, res;
+		cin >> str;
+		while (!str.empty())
+		{
+			int p = str.back();
+			str.pop_back();
+			if (!k || '0' <= p && p <= '1')
+			{
+				res += p;
+				continue;
+			}
+			str += to_string((p - '0') * 9);
+			k--;
+		}
+		if (k == 1)
+		{
+			res.back() = '9';
+			k--;
+		}
+		else if (k >= 2)
+		{
+			res.pop_back();
+			res += "18";
+			k -= 2;
+		}
+		string ans;
+		while (!res.empty())
+		{
+			int p = res.back();
+			res.pop_back();
+			if (!k || (p != '2' && p != '8'))
+			{
+				ans += p;
+				continue;
+			}
+			string pivot = to_string((p - '0') * 9);
+			swap(pivot[0], pivot[1]);
+			res += pivot;
+			k--;
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
