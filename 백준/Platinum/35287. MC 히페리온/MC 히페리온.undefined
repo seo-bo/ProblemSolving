@@ -1,0 +1,137 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+struct Trie
+{
+	int fin, in, out;
+	Trie* child[26];
+	Trie()
+	{
+		fin = -1, in = INT_MAX, out = INT_MIN;
+		for (int i = 0; i < 26; ++i)
+		{
+			child[i] = nullptr;
+		}
+	}
+};
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	Trie* root = new Trie();
+	auto add = [&](string str, int idx)
+		{
+			Trie* cur = root;
+			for (int i = str.size() - 1; i >= 0; --i)
+			{
+				int a = str[i] - 'a';
+				if (!cur->child[a])
+				{
+					cur->child[a] = new Trie();
+				}
+				cur = cur->child[a];
+			}
+			cur->fin = idx;
+		};
+	auto find = [&](string str)
+		{
+			Trie* cur = root;
+			for (int i = str.size() - 1; i >= 0; --i)
+			{
+				int a = str[i] - 'a';
+				if (!cur->child[a])
+				{
+					return make_pair(-1, -1);
+				}
+				cur = cur->child[a];
+			}
+			return make_pair(cur->in, cur->out);
+		};
+	for (int i = 1; i <= n; ++i)
+	{
+		string str;
+		cin >> str;
+		add(str, i);
+	}
+	vector<int>cost(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> cost[i];
+	}
+	vector<ll>BIT(n + 3);
+	auto update = [&](int idx, int delta)
+		{
+			while (idx <= n)
+			{
+				BIT[idx] += delta;
+				idx += idx & -idx;
+			}
+		};
+	auto query = [&](int idx)
+		{
+			ll res = 0;
+			while (idx)
+			{
+				res += BIT[idx];
+				idx -= idx & -idx;
+			}
+			return res;
+		};
+	vector<int>rev(n + 1);
+	int cnt = 0;
+	function<void(Trie*)> dfs = [&](Trie* now)
+		{
+			if (now->fin != -1)
+			{
+				now->in = ++cnt, now->out = now->in;
+				rev[now->fin] = now->in;
+				update(now->in, cost[now->fin]);
+			}
+			for (int i = 0; i < 26; ++i)
+			{
+				if (!now->child[i])
+				{
+					continue;
+				}
+				dfs(now->child[i]);
+				now->in = min(now->in, now->child[i]->in);
+				now->out = max(now->out, now->child[i]->out);
+			}
+		};
+	for (int i = 0; i < 26; ++i)
+	{
+		if (!root->child[i])
+		{
+			continue;
+		}
+		dfs(root->child[i]);
+	}
+	while (m--)
+	{
+		int a = 0, b = 0, c = 0;
+		string str;
+		cin >> a;
+		if (a == 1)
+		{
+			cin >> b >> c;
+			update(rev[b], c - cost[b]);
+			cost[b] = c;
+		}
+		else
+		{
+			cin >> str;
+			auto [l, r] = find(str);
+			if (l == -1)
+			{
+				cout << 0 << '\n';
+				continue;
+			}
+			cout << (query(r) - query(l - 1)) * str.size() << '\n';
+		}
+	}
+	return 0;
+}
