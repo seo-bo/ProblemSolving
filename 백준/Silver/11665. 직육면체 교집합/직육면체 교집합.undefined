@@ -1,0 +1,28 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>a(3, INT_MIN), b(3, INT_MAX);
+	for (int i = 0; i < n; ++i)
+	{
+		vector<int>A(3), B(3);
+		for (int j = 0; j < 3; ++j)
+		{
+			cin >> A[j];
+			a[j] = max(A[j], a[j]);
+		}
+		for (int j = 0; j < 3; ++j)
+		{
+			cin >> B[j];
+			b[j] = min(B[j], b[j]);
+		}
+	}
+	int ans = max(0, (b[0] - a[0])) * max(0, (b[1] - a[1])) * max(0, (b[2] - a[2]));
+	cout << ans;
+	return 0;
+}
