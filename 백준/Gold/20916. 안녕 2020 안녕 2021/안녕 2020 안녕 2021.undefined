@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<int>v = { 202021, 20202021, 202002021, 202012021, 202022021, 202032021, 202042021, 202052021, 202062021, 202072021, 202082021, 202092021 };
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0;
+		cin >> n;
+		ll ans = 0;
+		vector<int>p(n);
+		for (auto& i : p)
+		{
+			cin >> i;
+		}
+		sort(p.begin(), p.end());
+		for (auto& i : p)
+		{
+			for (auto& j : v)
+			{
+				int t = j - i;
+				ans += upper_bound(p.begin(), p.end(), t) - lower_bound(p.begin(), p.end(), t);
+			}
+		}
+		cout << ans / 2 << '\n';
+	}
+	return 0;
+}
