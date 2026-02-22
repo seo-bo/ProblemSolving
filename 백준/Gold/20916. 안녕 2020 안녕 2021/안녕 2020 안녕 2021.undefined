@@ -10,24 +10,26 @@ int main(void)
 	cin >> T;
 	while (T--)
 	{
+		unordered_map<int, int>mm;
 		int n = 0;
 		cin >> n;
 		ll ans = 0;
-		vector<int>p(n);
-		for (auto& i : p)
+		for (int i = 0; i < n; ++i)
 		{
-			cin >> i;
-		}
-		sort(p.begin(), p.end());
-		for (auto& i : p)
-		{
+			int a = 0;
+			cin >> a;
 			for (auto& j : v)
 			{
-				int t = j - i;
-				ans += upper_bound(p.begin(), p.end(), t) - lower_bound(p.begin(), p.end(), t);
+				int t = j - a;
+				if (mm.find(t) == mm.end())
+				{
+					continue;
+				}
+				ans += mm[t];
 			}
+			mm[a]++;
 		}
-		cout << ans / 2 << '\n';
+		cout << ans << '\n';
 	}
 	return 0;
 }
