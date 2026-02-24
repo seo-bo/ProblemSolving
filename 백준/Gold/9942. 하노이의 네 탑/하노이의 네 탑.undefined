@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<ll>dp(2);
+	dp[1] = 1;
+	ll p = 2, cnt = 2;
+	while (dp.size() < 1005)
+	{
+		for (int i = 0; i < cnt; ++i)
+		{
+			dp.push_back(dp.back() + p);
+		}
+		p *= 2;
+		cnt++;
+	}
+	int a = 0, c = 1;
+	while (cin >> a)
+	{
+		cout << format("Case {}: {}\n", c++, dp[a]);
+	}
+	return 0;
+}
