@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0;
+	cin >> n >> m >> k;
+	vector<int>cost(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> cost[i];
+	}
+	vector<vector<int>>graph(n + 1);
+	vector<int>degree(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		degree[b]++;
+	}
+	queue<int>q;
+	vector<int>od, zero;
+	for (int i = 1; i <= n; ++i)
+	{
+		if (!degree[i])
+		{
+			q.push(i);
+			zero.push_back(i);
+		}
+	}
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
+		od.push_back(cur);
+		for (auto& i : graph[cur])
+		{
+			if (--degree[i] == 0)
+			{
+				q.push(i);
+			}
+		}
+	}
+	int fin = od.back();
+	int ans = INT_MAX;
+	auto cal = [&](int a, int b, int c)
+		{
+			vector<int>dp(n + 1, -(1 << 28));
+			for (auto& i : zero)
+			{
+				dp[i] = ((a == i) || (b == i) || (c == i)) ? 0 : cost[i];
+			}
+			for (auto& i : od)
+			{
+				for (auto& j : graph[i])
+				{
+					int co = ((a == j) || (b == j) || (c == j)) ? 0 : cost[j];
+					dp[j] = max(dp[j], dp[i] + co);
+				}
+			}
+			ans = min(ans, dp[fin]);
+		};
+	vector<int>save(3, -1);
+	function<void(int, int)> dfs = [&](int idx, int depth)
+		{
+			if (depth == k)
+			{
+				cal(save[0], save[1], save[2]);
+				return;
+			}
+			for (int i = idx; i <= n; ++i)
+			{
+				if (i == fin)
+				{
+					continue;
+				}
+				save[depth] = i;
+				dfs(i + 1, depth + 1);
+				save[depth] = -1;
+			}
+		};
+	dfs(2, 0);
+	cout << ans;
+	return 0;
+}
