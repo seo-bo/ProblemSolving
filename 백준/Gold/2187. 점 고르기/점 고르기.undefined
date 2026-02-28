@@ -28,10 +28,8 @@ int main(void)
 		{
 			for (int i = 0; i < 4; ++i)
 			{
-				int sx = x + dir[i][0] * A;
-				int sy = y + dir[i][1] * B;
-				int ex = x + dir[i][2] * A;
-				int ey = y + dir[i][3] * B;
+				int sx = x + dir[i][0] * A, sy = y + dir[i][1] * B;
+				int ex = x + dir[i][2] * A, ey = y + dir[i][3] * B;
 				int maxi = co, mini = co;
 				for (auto it = v.lower_bound(sx); it != v.end() && it->first <= ex; ++it)
 				{
