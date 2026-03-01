@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	while (1)
+	{
+		ll a = 0, b = 0, c = 0, d = 0;
+		cin >> a >> b >> c >> d;
+		if (a == -1)
+		{
+			break;
+		}
+		ll ans = 0;
+		for (ll i = c; i <= d; ++i)
+		{
+			ans += ((__builtin_popcountll(b & i) & 1) ? -1 : 1);
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}
