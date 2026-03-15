@@ -7,22 +7,22 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0, m = 0;
 	cin >> n;
-	set<int>s;
-	vector<int>v(n + 1);
-	for (int i = 1; i <= n; ++i)
+	vector<int>v(n);
+	for (auto& i : v)
 	{
-		cin >> v[i];
-		s.insert(v[i]);
+		cin >> i;
 	}
 	cin >> m;
 	if (m <= n)
 	{
-		cout << v[m];
+		cout << v[m - 1];
 		return 0;
 	}
-	int len = s.size(), ans = len + m - n - 1;
-	auto it = s.lower_bound(len);
-	if (it == s.end() || ans <= *it)
+	sort(v.begin(), v.end());
+	v.erase(unique(v.begin(), v.end()), v.end());
+	int len = v.size(), ans = len + m - n - 1;
+	auto it = lower_bound(v.begin(), v.end(), len);
+	if (it == v.end() || ans <= *it)
 	{
 		cout << ans;
 		return 0;
