@@ -2,7 +2,7 @@
 using namespace std;
 typedef long long ll;
 typedef pair<int, int>pii;
-typedef tuple<ll, ll, ll>tp;
+typedef tuple<int, int, int>tp;
 
 int main(void)
 {
@@ -23,7 +23,7 @@ int main(void)
 			graph[i].push_back(make_pair(j, a));
 		}
 	}
-	vector<vector<ll>>dist(n + 1, vector<ll>(n + 1, LLONG_MAX));
+	vector<vector<int>>dist(n + 1, vector<int>(n + 1, INT_MAX));
 	priority_queue<tp, vector<tp>, greater<tp>>pq;
 	for (int i = 1; i <= n; ++i)
 	{
@@ -47,11 +47,11 @@ int main(void)
 			}
 		}
 	}
-	ll ans = LLONG_MAX;
+	int ans = INT_MAX;
 	for (int i = 1; i <= n; ++i)
 	{
 		ans = min(ans, dist[i][n]);
 	}
-	cout << ((ans == LLONG_MAX) ? -1 : ans);
+	cout << ((ans == INT_MAX) ? -1 : ans);
 	return 0;
 }
