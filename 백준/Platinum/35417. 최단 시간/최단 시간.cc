@@ -21,40 +21,43 @@ int main(void)
 			cout << i;
 			return 0;
 		}
-		vector<pii>temp;
-		auto cal = [&](int a, int b)
-			{
-				if (a > b)
-				{
-					return;
-				}
-				if (temp.empty() || temp.back().second + 1 < a)
-				{
-					temp.push_back(make_pair(a, b));
-				}
-				else
-				{
-					temp.back().second = max(temp.back().second, b);
-				}
-			};
+		vector<pii>A, B;
 		int left = 0, right = 0;
 		cin >> left >> right;
 		for (auto& [a, b] : now)
 		{
 			a = max(1, a - 1), b = min(n, b + 1);
-			if (left > b || right < a)
+			if (A.empty() || A.back().second + 1 < a)
 			{
-				cal(a, b);
+				A.push_back(make_pair(a, b));
+			}
+			else
+			{
+				A.back().second = max(A.back().second, b);
+			}
+		}
+		for (auto& [a, b] : A)
+		{
+			if (b < left || right < a)
+			{
+				B.push_back(make_pair(a, b));
 				continue;
 			}
-			cal(a, left - 1), cal(right + 1, b);
+			if (a < left)
+			{
+				B.push_back(make_pair(a, left - 1));
+			}
+			if (right < b)
+			{
+				B.push_back(make_pair(right + 1, b));
+			}
 		}
-		if (temp.empty())
+		if (B.empty())
 		{
 			cout << -1;
 			return 0;
 		}
-		now = move(temp);
+		now = move(B);
 	}
 	cout << t + (n - now.back().second);
 	return 0;
