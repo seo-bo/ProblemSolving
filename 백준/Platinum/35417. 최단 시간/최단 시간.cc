@@ -14,7 +14,7 @@ int main(void)
 		return 0;
 	}
 	vector<pii>now = { make_pair(1,1) };
-	for (int i = 1; i <= t; ++i)
+	for (int i = 1; i <= 2 * max(n, t); ++i)
 	{
 		if (!now.empty() && now.back().second + 1 == n)
 		{
@@ -54,11 +54,10 @@ int main(void)
 		}
 		if (B.empty())
 		{
-			cout << -1;
-			return 0;
+			break;
 		}
 		now = move(B);
 	}
-	cout << t + (n - now.back().second);
+	cout << -1;
 	return 0;
 }
