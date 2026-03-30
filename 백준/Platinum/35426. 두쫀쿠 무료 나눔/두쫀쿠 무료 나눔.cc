@@ -9,16 +9,16 @@ int main(void)
 	cin.tie(0)->sync_with_stdio(0);
 	int n = 0, m = 0;
 	cin >> n >> m;
-	vector<vector<pll>>graph(n + 3), rev(n + 3);
+	vector<vector<pll>>graph(n + 3);
 	for (int i = 0; i < m; ++i)
 	{
 		ll a = 0, b = 0, c = 0;
 		cin >> a >> b >> c;
 		if (c & 1)
 		{
-			c = (b - a + 1) * c;
+			c = (b - --a) * c;
 			graph[a].push_back(make_pair(b, c));
-			rev[b].push_back(make_pair(a - 1, c));
+			graph[b].push_back(make_pair(a, c));
 		}
 	}
 	vector<vector<ll>>dist(n + 1, vector<ll>(2, LLONG_MAX));
@@ -33,20 +33,13 @@ int main(void)
 		{
 			continue;
 		}
-		for (auto& [nv, nc] : rev[ver])
+		for (auto& [nv, nc] : graph[ver])
 		{
-			if (dist[nv][0] > nc + co)
+			int nxt = (ver <= nv);
+			if (dist[nv][nxt] > nc + co)
 			{
-				dist[nv][0] = nc + co;
-				pq.push(make_tuple(nc + co, 0, nv));
-			}
-		}
-		for (auto& [nv, nc] : graph[ver + 1])
-		{
-			if (dist[nv][1] > nc + co)
-			{
-				dist[nv][1] = nc + co;
-				pq.push(make_tuple(nc + co, 1, nv));
+				dist[nv][nxt] = nc + co;
+				pq.push(make_tuple(nc + co, nxt, nv));
 			}
 		}
 	}
