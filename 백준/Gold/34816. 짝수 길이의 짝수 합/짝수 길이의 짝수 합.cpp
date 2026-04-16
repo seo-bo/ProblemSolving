@@ -1,0 +1,35 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, q = 0;
+	cin >> n >> q;
+	vector<char>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	while (q--)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b;
+		if (a == 1)
+		{
+			v[b] = (v[b] == '0') ? '1' : '0';
+		}
+		else
+		{
+			cin >> c;
+			bool flag = (c - b >= 3);
+			for (int i = b; i + 1 <= min(n, c) && !flag; ++i)
+			{
+				flag |= (v[i] == v[i + 1]);
+			}
+			cout << ((flag) ? "YES" : "NO") << '\n';
+		}
+	}
+	return 0;
+}

@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, c = 0;
+	cin >> n >> c;
+	vector<int>v(n + 1), w(n + 1);
+	vector<vector<int>>graph(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> w[i];
+	}
+	for (int i = 0; i < n - 1; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+	}
+	function<vector<ll>(int, int)> dfs = [&](int parent, int node)
+		{
+			vector<ll>cost(13, 0);
+			cost[v[node]] = w[node];
+			for (auto& i : graph[node])
+			{
+				if (i == parent)
+				{
+					continue;
+				}
+				vector<ll>nxt = dfs(node, i);
+				ll maxi = 0;
+				for (int j = 1; j <= 12; ++j)
+				{
+					maxi = max(maxi, nxt[j]);
+				}
+				for (int j = 1; j <= 12; ++j)
+				{
+					cost[j] = max(cost[j] + nxt[j], cost[j] + maxi - c);
+				}
+			}
+			return cost;
+		};
+	vector<ll>res = dfs(0, 1);
+	ll ans = 0;
+	for (int i = 1; i <= 12; ++i)
+	{
+		ans = max(ans, res[i]);
+	}
+	cout << ans;
+	return 0;
+}

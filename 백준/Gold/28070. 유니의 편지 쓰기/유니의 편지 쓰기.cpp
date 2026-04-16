@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int lim = 8000 * 12;
+	vector<int>prefix(lim + 5);
+	int n = 0;
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+	{
+		string A, B;
+		cin >> A >> B;
+		int s = (stoi(A.substr(0, 4)) - 2000) * 12 + stoi(A.substr(5, 2));
+		int e = (stoi(B.substr(0, 4)) - 2000) * 12 + stoi(B.substr(5, 2));
+		prefix[s]++, prefix[e + 1]--;
+	}
+	int maxi = -1;
+	for (int i = 1; i <= lim; ++i)
+	{
+		prefix[i] += prefix[i - 1];
+		maxi = max(maxi, prefix[i]);
+	}
+	for (int i = 1; i <= lim; ++i)
+	{
+		if (prefix[i] == maxi)
+		{
+			int y = 2000 + (i - 1) / 12;
+			cout << y << '-';
+			int m = (i % 12 == 0) ? 12 : i % 12;
+			if (m < 10)
+			{
+				cout << 0;
+			}
+			cout << m;
+			return 0;
+		}
+	}
+	return 0;
+}

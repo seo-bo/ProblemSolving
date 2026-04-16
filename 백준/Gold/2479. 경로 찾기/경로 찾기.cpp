@@ -1,0 +1,78 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<ll>pivot(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		string str;
+		cin >> str;
+		for (int j = 0; j < k; ++j)
+		{
+			if (str[j] == '1')
+			{
+				pivot[i] |= (1 << j);
+			}
+		}
+	}
+	vector<vector<int>>graph(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			ll cost = pivot[i] ^ pivot[j];
+			if (__builtin_popcount(cost) <= 1)
+			{
+				graph[i].push_back(j);
+			}
+		}
+	}
+	int a = 0, b = 0;
+	cin >> a >> b;
+	queue<int>q;
+	q.push(a);
+	vector<int>visited(n + 1, INT_MAX);
+	vector<int>parent(n + 1, -1);
+	visited[a] = 0;
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
+		for (auto& i : graph[cur])
+		{
+			if (visited[i] > visited[cur] + 1)
+			{
+				visited[i] = visited[cur] + 1;
+				parent[i] = cur;
+				q.push(i);
+			}
+		}
+	}
+	vector<int>path;
+	if (visited[b] == INT_MAX)
+	{
+		cout << -1;
+		return 0;
+	}
+	int x = b;
+	while (x != -1)
+	{
+		path.push_back(x);
+		x = parent[x];
+	}
+	int len = path.size();
+	for (int i = len - 1; i >= 0; --i)
+	{
+		cout << path[i] << ' ';
+	}
+	return 0;
+}

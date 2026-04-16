@@ -1,0 +1,53 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		int n = 0;
+		cin >> n;
+		bool flag = true;
+		set<string>s;
+		int pivot = -1;
+		for (int i = 0; i < n; ++i)
+		{
+			string str;
+			cin >> str;
+			int len = str.size() - 1;
+			if (str.find('-') != string::npos)
+			{
+				flag = false;
+				continue;
+			}
+			string A;
+			int B = 0;
+			A += str[0];
+			if ('A' <= str[0] && str[0] <= 'Z')
+			{
+				A += str[1];
+			}
+			s.insert(A);
+			B = 10 * (str[len - 1] - '0') + (str[len] - '0');
+			if (pivot == -1)
+			{
+				pivot = B;
+			}
+			else if (pivot != B)
+			{
+				flag = false;
+			}
+		}
+		if (!flag || n == 1 || s.size() == 1)
+		{
+			cout << "NO\n";
+			continue;
+		}
+		cout << "YES\n";
+	}
+	return 0;
+}

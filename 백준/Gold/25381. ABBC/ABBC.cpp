@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string str;
+	cin >> str;
+	queue<int>a, b;
+	int ans = 0;
+	for (int i = 0; i < str.size(); ++i)
+	{
+		if (str[i] == 'A')
+		{
+			a.push(i);
+		}
+		else if (str[i] == 'B')
+		{
+			b.push(i);
+		}
+		else
+		{
+			if (!b.empty())
+			{
+				b.pop();
+				ans++;
+			}
+		}
+	}
+	while (!a.empty() && !b.empty())
+	{
+		int pre = a.front();
+		a.pop();
+		while (!b.empty() && pre > b.front())
+		{
+			b.pop();
+		}
+		if (b.empty())
+		{
+			break;
+		}
+		ans++, b.pop();
+	}
+	cout << ans;
+	return 0;
+}

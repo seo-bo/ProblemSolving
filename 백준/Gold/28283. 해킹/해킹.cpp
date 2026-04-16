@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, x = 0, y = 0;
+	cin >> n >> m >> x >> y;
+	vector<int>A(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> A[i];
+	}
+	vector<vector<int>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+	}
+	queue<int>q;
+	vector<int>visited(n + 1, INT_MAX);
+	for (int i = 0; i < y; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		q.push(a);
+		visited[a] = 0;
+	}
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
+		for (auto& i : graph[cur])
+		{
+			if (visited[i] > visited[cur] + 1)
+			{
+				visited[i] = visited[cur] + 1;
+				q.push(i);
+			}
+		}
+	}
+	ll ans = 0;
+	vector<ll>res;
+	for (int i = 1; i <= n; ++i)
+	{
+		if (visited[i] == INT_MAX && A[i])
+		{
+			cout << -1;
+			return 0;
+		}
+		res.push_back((ll)visited[i] * A[i]);
+	}
+	sort(res.rbegin(), res.rend());
+	for (int i = 0; i < x; ++i)
+	{
+		ans += res[i];
+	}
+	cout << ans;
+	return 0;
+}

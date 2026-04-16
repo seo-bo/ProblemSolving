@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int siz[100001], cnt[50001];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>graph(n + 1);
+	for (int i = 2; i <= n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		graph[a].push_back(i);
+	}
+	int ans = 0;
+	function<int(int)> tour = [&](int node)
+		{
+			int res = 1;
+			for (auto& i : graph[node])
+			{
+				res += tour(i);
+			}
+			if (res <= n / 2)
+			{
+				cnt[res]++;
+			}
+			return siz[node] = res;
+		};
+	tour(1);
+	function<int(int, int)> dfs = [&](int node, int depth)
+		{
+			int maxi = depth;
+			if (siz[node] <= n / 2)
+			{
+				cnt[siz[node]]--;
+			}
+			for (auto& i : graph[node])
+			{
+				maxi = max(maxi, dfs(i, depth + 1));
+			}
+			if (siz[node] == n / 2)
+			{
+				ans = max(ans, maxi - depth + 1);
+			}
+			if (siz[node] + siz[node] <= n / 2)
+			{
+				if (cnt[n / 2 - siz[node]])
+				{
+					ans = max(ans, 2);
+				}
+			}
+			if (siz[node] <= n / 2)
+			{
+				cnt[siz[node]]++;
+			}
+			return maxi;
+		};
+	dfs(1, 1);
+	cout << ans;
+	return 0;
+}

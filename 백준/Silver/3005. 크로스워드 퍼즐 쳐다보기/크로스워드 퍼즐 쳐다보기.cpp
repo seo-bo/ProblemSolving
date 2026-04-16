@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<char>>v(n, vector<char>(m));
+	for (auto& i : v)
+	{
+		for (auto& j : i)
+		{
+			cin >> j;
+		}
+	}
+	string ans = string(50, 'z');
+	for (int i = 0; i < n; ++i)
+	{
+		string A;
+		for (int j = 0; j < m; ++j)
+		{
+			if (v[i][j] == '#')
+			{
+				if (A.size() > 1)
+				{
+					ans = min(ans, A);
+				}
+				A.clear();
+				continue;
+			}
+			A += v[i][j];
+		}
+		if (A.size() > 1)
+		{
+			ans = min(ans, A);
+		}
+	}
+	for (int i = 0; i < m; ++i)
+	{
+		string A;
+		for (int j = 0; j < n; ++j)
+		{
+			if (v[j][i] == '#')
+			{
+				if (A.size() > 1)
+				{
+					ans = min(ans, A);
+				}
+				A.clear();
+				continue;
+			}
+			A += v[j][i];
+		}
+		if (A.size() > 1)
+		{
+			ans = min(ans, A);
+		}
+	}
+	cout << ans;
+	return 0;
+}

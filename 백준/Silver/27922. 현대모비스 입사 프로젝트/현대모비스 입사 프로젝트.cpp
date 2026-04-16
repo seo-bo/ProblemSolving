@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>A, B, C;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		A.push_back(a + b);
+		B.push_back(a + c);
+		C.push_back(b + c);
+	}
+	sort(A.rbegin(), A.rend());
+	sort(B.rbegin(), B.rend());
+	sort(C.rbegin(), C.rend());
+	ll aa = 0, bb = 0, cc = 0;
+	for (int i = 0; i < k; ++i)
+	{
+		aa += A[i];
+		bb += B[i];
+		cc += C[i];
+	}
+	cout << max({ aa,bb,cc });
+	return 0;
+}

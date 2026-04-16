@@ -1,0 +1,99 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<pll>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		ll a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	vector<int>p(n + 1);
+	int cnt = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> p[i];
+		cnt += p[i];
+	}
+	auto dijkstra = [&](int start)
+		{
+			vector<ll>visited(n + 1, LLONG_MAX);
+			priority_queue<pll, vector<pll>, greater<pll>>pq;
+			visited[start] = 0;
+			pq.push(make_pair(0, start));
+			while (!pq.empty())
+			{
+				auto [co, ver] = pq.top();
+				pq.pop();
+				if (visited[ver] < co)
+				{
+					continue;
+				}
+				for (auto& [nv, nc] : graph[ver])
+				{
+					if (visited[nv] > co + nc)
+					{
+						visited[nv] = co + nc;
+						pq.push(make_pair(visited[nv], nv));
+					}
+				}
+			}
+			return visited;
+		};
+	vector<ll>A = dijkstra(1), B = dijkstra(n);
+	vector<int>visited(n + 1, INT_MIN), parent(n + 1, -1);
+	priority_queue<pll>pq;
+	pq.push(make_pair(A[n], n));
+	visited[n] = p[n];
+	while (!pq.empty())
+	{
+		auto [_, ver] = pq.top();
+		pq.pop();
+		for (auto& [nv, nc] : graph[ver])
+		{
+			if (A[nv] == LLONG_MAX || B[nv] == LLONG_MAX)
+			{
+				continue;
+			}
+			if (A[nv] + B[nv] == A[n] && A[ver] == A[nv] + nc)
+			{
+				if (visited[nv] < visited[ver] + p[nv])
+				{
+					visited[nv] = visited[ver] + p[nv];
+					parent[nv] = ver;
+					pq.push(make_pair(A[nv], nv));
+				}
+			}
+		}
+	}
+	vector<int>path;
+	int x = 1;
+	while (x != -1)
+	{
+		path.push_back(x);
+		if (p[x])
+		{
+			cnt--;
+		}
+		x = parent[x];
+	}
+	if (cnt)
+	{
+		cout << -1;
+		return 0;
+	}
+	cout << path.size() << '\n';
+	for (auto& i : path)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}

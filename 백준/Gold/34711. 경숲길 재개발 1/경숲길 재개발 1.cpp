@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, ans = 0;
+	cin >> n;
+	for (ll i = 1; i <= n; i *= 2)
+	{
+		ans += n / i;
+	}
+	cout << ans;
+	return 0;
+}

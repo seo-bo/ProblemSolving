@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, e = 0;
+	cin >> n >> e;
+	vector<set<int>>v(n + 1);
+	int pivot = 1;
+	for (int i = 0; i < e; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		vector<int>temp(a);
+		bool flag = false;
+		for (auto& j : temp)
+		{
+			cin >> j;
+			if (j == 1)
+			{
+				flag = true;
+			}
+		}
+		if (flag)
+		{
+			for (auto& j : temp)
+			{
+				v[j].insert(pivot);
+			}
+			pivot++;
+			continue;
+		}
+		set<int>ok;
+		for (auto& j : temp)
+		{
+			for (auto& k : v[j])
+			{
+				ok.insert(k);
+			}
+		}
+		for (auto& j : temp)
+		{
+			for (auto& k : ok)
+			{
+				v[j].insert(k);
+			}
+		}
+	}
+	set<int>base = v[1];
+	cout << 1 << '\n';
+	for (int i = 2; i <= n; ++i)
+	{
+		if (v[i] == base)
+		{
+			cout << i << '\n';
+		}
+	}
+	return 0;
+}

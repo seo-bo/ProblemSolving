@@ -1,0 +1,24 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		ll a = 0, b = 0, c = 0, d = 0;
+		cin >> a >> b >> c >> d;
+		ll pivot = lcm(b, lcm(c, d));
+		ll pa = pivot / b + pivot / c + pivot / d; // 어쩌피 pa씩 메꾸기 증가하니까?
+		if (pa > pivot || a % pa)
+		{
+			cout << -1 << '\n';
+			continue;
+		}
+		cout << a / pa * pivot - a << '\n';
+	}
+	return 0;
+}

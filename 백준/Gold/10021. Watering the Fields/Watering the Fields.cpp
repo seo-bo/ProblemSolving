@@ -1,0 +1,65 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+typedef tuple<int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, c = 0;
+	cin >> n >> c;
+	vector<pii>v(n);
+	for (auto& [a, b] : v)
+	{
+		cin >> a >> b;
+	}
+	vector<tp>edge;
+	vector<int>parent(n + 1), rank(n + 1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (rank[r1] < rank[r2])
+			{
+				swap(r1, r2);
+			}
+			parent[r2] = r1;
+			rank[r1] += (rank[r1] == rank[r2]);
+		};
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			auto [ax, ay] = v[i];
+			auto [bx, by] = v[j];
+			int pivot = (ax - bx) * (ax - bx) + (ay - by) * (ay - by);
+			if (pivot < c)
+			{
+				continue;
+			}
+			edge.push_back(make_tuple(pivot, i, j));
+		}
+	}
+	sort(edge.begin(), edge.end());
+	int cnt = n - 1, ans = 0;
+	for (auto& [co, v1, v2] : edge)
+	{
+		if (find(v1) != find(v2))
+		{
+			merge(v1, v2);
+			cnt--;
+			ans += co;
+		}
+	}
+	cout << ((cnt) ? -1 : ans);
+	return 0;
+}

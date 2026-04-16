@@ -1,0 +1,44 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef unsigned long long ull;
+
+/*
+		1 1 4  |  3 2 2
+		1 4 4  |  3 3 2
+	*/
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int q = 0;
+	cin >> q;
+	vector<vector<string>>v = { {"114","322"},{"144","332"} };
+	while (q--)
+	{
+		ull a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		c--;
+		if (a == 1 || b % 3)
+		{
+			cout << -1 << '\n';
+			continue;
+		}
+		b /= 3;
+		if (b <= 63 && c >= (1ULL << b))
+		{
+			cout << -1 << '\n';
+			continue;
+		}
+		for (int i = 0; i < 2; ++i)
+		{
+			for (int j = b - 1; j >= 0; --j)
+			{
+				int p = (j >= 64) ? 0 : ((c >> j) & 1);
+				cout << v[i][p];
+			}
+			cout << '\n';
+		}
+	}
+	return 0;
+}

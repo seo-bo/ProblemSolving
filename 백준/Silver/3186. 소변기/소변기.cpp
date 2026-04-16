@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int k = 0, l = 0, n = 0;
+	cin >> k >> l >> n;
+	bool flag = false;
+	int cnt = 0, time = 0;
+	string str;
+	cin >> str;
+	bool o = false;
+	while ((int)str.size() < 100001)
+	{
+		str += '0';
+	}
+	for (int i = 1; i <= 100000; ++i)
+	{
+		int p = str[i - 1];
+		if (p == '1')
+		{
+			time = 0;
+			if (++cnt >= k)
+			{
+				flag = true;
+			}
+		}
+		else
+		{
+			cnt = 0;
+			if (!flag)
+			{
+				continue;
+			}
+			if (++time >= l)
+			{
+				o = true;
+				cout << i << '\n';
+				flag = false;
+				cnt = 0, time = 0;
+			}
+		}
+	}
+	if (!o)
+	{
+		cout << "NIKAD";
+	}
+	return 0;
+}

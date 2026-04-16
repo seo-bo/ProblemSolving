@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(3);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	int m = 0;
+	cin >> m;
+	vector<vector<pll>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	vector<ll>ans(n + 1, LLONG_MAX);
+	auto dijkstra = [&](int base)
+		{
+			vector<ll>visited(n + 1, LLONG_MAX);
+			visited[base] = 0;
+			priority_queue<pll, vector<pll>, greater<pll>>pq;
+			pq.push(make_pair(0, base));
+			while (!pq.empty())
+			{
+				auto [co, ve] = pq.top();
+				pq.pop();
+				if (visited[ve] < co)
+				{
+					continue;
+				}
+				for (auto& [nv, nc] : graph[ve])
+				{
+					if (visited[nv] > visited[ve] + nc)
+					{
+						visited[nv] = visited[ve] + nc;
+						pq.push(make_pair(visited[nv], nv));
+					}
+				}
+			}
+			for (int i = 1; i <= n; ++i)
+			{
+				ans[i] = min(ans[i], visited[i]);
+			}
+		};
+	for (auto& i : v)
+	{
+		dijkstra(i);
+	}
+	for (auto& i : v)
+	{
+		ans[i] = LLONG_MIN;
+	}
+	ll res = LLONG_MIN, pivot = LLONG_MIN;
+	for (int i = 1; i <= n; ++i)
+	{
+		if (pivot < ans[i])
+		{
+			pivot = ans[i];
+			res = i;
+		}
+	}
+	cout << res;
+	return 0;
+}

@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<int>v = { 202021, 20202021, 202002021, 202012021, 202022021, 202032021, 202042021, 202052021, 202062021, 202072021, 202082021, 202092021 };
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		unordered_map<int, int>mm;
+		int n = 0;
+		cin >> n;
+		ll ans = 0;
+		for (int i = 0; i < n; ++i)
+		{
+			int a = 0;
+			cin >> a;
+			for (auto& j : v)
+			{
+				int t = j - a;
+				if (mm.find(t) == mm.end())
+				{
+					continue;
+				}
+				ans += mm[t];
+			}
+			mm[a]++;
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}

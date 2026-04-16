@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+char v[1000][1000];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	queue<pii>q;
+	int sx = 0, sy = 0, ans = 0, res = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			cin >> v[i][j];
+			if (v[i][j] == '@')
+			{
+				v[i][j] = '.';
+				sx = i, sy = j;
+			}
+			ans += (v[i][j] == '#' || v[i][j] == '*');
+		}
+	}
+	q.push(make_pair(sx, sy));
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	while (!q.empty())
+	{
+		auto [x, y] = q.front();
+		q.pop();
+		int mask = 0;
+		for (int k = 1; k <= 1 + (x == sx && y == sy); ++k)
+		{
+			for (int i = 0; i < 4; ++i)
+			{
+				if (mask & (1 << i))
+				{
+					continue;
+				}
+				int nx = x + dir[i][0] * k;
+				int ny = y + dir[i][1] * k;
+				if (nx >= 0 && nx < n && ny >= 0 && ny < m && v[nx][ny] != '.')
+				{
+					if (v[nx][ny] == '|')
+					{
+						mask |= (1 << i);
+						continue;
+					}
+					else if (v[nx][ny] == '#')
+					{
+						v[nx][ny] = '*';
+					}
+					else if (v[nx][ny] == '*')
+					{
+						v[nx][ny] = '.';
+						res++;
+						q.push(make_pair(nx, ny));
+					}
+				}
+			}
+		}
+	}
+	cout << res << ' ' << ans - res;
+	return 0;
+}

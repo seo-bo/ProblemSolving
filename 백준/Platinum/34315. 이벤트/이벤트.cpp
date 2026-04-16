@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<ll>time(1), p(n), d(n), o(n);
+	vector<pii>s(n), e(n);
+	for (int i = 0; i < n; ++i)
+	{
+		cin >> s[i].first >> e[i].first >> p[i] >> d[i];
+		o[i] = e[i].first - s[i].first;
+		s[i].second = e[i].second = i;
+		time.push_back(s[i].first);
+		time.push_back(e[i].first);
+	}
+	sort(s.begin(), s.end());
+	sort(e.begin(), e.end());
+	sort(time.begin(), time.end());
+	time.erase(unique(time.begin(), time.end()), time.end());
+	ll P = 0, del = 0, D = 0, cnt = 0, ans = LLONG_MAX;
+	int len = time.size(), idx = 0, jdx = 0;
+	for (int i = 1; i < len; ++i)
+	{
+		ll term = time[i] - time[i - 1];
+		del += D * term;
+		if (cnt >= k && term > 1)
+		{
+			ans = min(ans, P - del + D);
+		}
+		while (idx < n && s[idx].first == time[i])
+		{
+			int num = s[idx].second;
+			P += p[num], D += d[num];
+			idx++, cnt++;
+		}
+		if (cnt >= k)
+		{
+			ans = min(ans, P - del);
+		}
+		while (jdx < n && e[jdx].first == time[i])
+		{
+			int num = e[jdx].second;
+			P -= p[num], D -= d[num];
+			del -= o[num] * d[num];
+			jdx++, cnt--;
+		}
+	}
+	cout << ((ans == LLONG_MAX) ? -1 : ans);
+	return 0;
+}

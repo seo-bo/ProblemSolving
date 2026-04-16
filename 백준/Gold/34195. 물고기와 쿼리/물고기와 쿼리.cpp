@@ -1,0 +1,164 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+class Lazyseg //https://github.com/seo-bo/Algorithm_templates/blob/main/Lazyseg.cpp
+{
+private:
+	int n;
+	long long MOD;
+	vector<long long>tree, lazy;
+	void build(vector<long long>& v, int start, int end, int node)
+	{
+		if (start == end)
+		{
+			tree[node] = v[start];
+			return;
+		}
+		int mid = (start + end) / 2;
+		build(v, start, mid, node * 2);
+		build(v, mid + 1, end, node * 2 + 1);
+		tree[node] = tree[node * 2] ^ tree[node * 2 + 1];
+	}
+	void lazy_update(int start, int end, int node)
+	{
+		if (lazy[node])
+		{
+			tree[node] ^= (end - start + 1) % 2 * lazy[node];
+			if (start != end)
+			{
+				lazy[node * 2] ^= lazy[node];
+				lazy[node * 2 + 1] ^= lazy[node];
+			}
+			lazy[node] = 0;
+		}
+	}
+	void update_tree(int start, int end, int node, int left, int right, long long value)
+	{
+		lazy_update(start, end, node);
+		if (start > right || end < left)
+		{
+			return;
+		}
+		if (left <= start && end <= right)
+		{
+			tree[node] ^= (end - start + 1) % 2 * value;
+			if (start != end)
+			{
+				lazy[node * 2] ^= value;
+				lazy[node * 2 + 1] ^= value;
+			}
+			return;
+		}
+		int mid = (start + end) / 2;
+		update_tree(start, mid, node * 2, left, right, value);
+		update_tree(mid + 1, end, node * 2 + 1, left, right, value);
+		tree[node] = tree[node * 2] ^ tree[node * 2 + 1];
+	}
+	long long get_xor(int start, int end, int node, int left, int right)
+	{
+		lazy_update(start, end, node);
+		if (start > right || end < left)
+		{
+			return 0LL;
+		}
+		if (left <= start && end <= right)
+		{
+			return tree[node];
+		}
+		int mid = (start + end) / 2;
+		return get_xor(start, mid, node * 2, left, right) ^ get_xor(mid + 1, end, node * 2 + 1, left, right);
+	}
+public:
+	Lazyseg(vector<long long>& v, long long mod = LLONG_MAX)
+	{
+		n = v.size();
+		MOD = mod;
+		tree.resize(4 * n + 3, 0);
+		lazy.resize(4 * n + 3, 0);
+		build(v, 0, n - 1, 1);
+	}
+	void update(int left, int right, long long value)
+	{
+		if (left > right)
+		{
+			swap(left, right);
+		}
+		update_tree(0, n - 1, 1, left, right, value);
+	}
+	long long query(int left, int right)
+	{
+		if (left > right)
+		{
+			swap(left, right);
+		}
+		return get_xor(0, n - 1, 1, left, right);
+	}
+};
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, ans = 0;
+	cin >> n;
+	vector<ll>v(1);
+	string str;
+	cin >> str;
+	for (auto& i : str)
+	{
+		v.push_back((ll)(i == '<'));
+	}
+	Lazyseg seg(v);
+	for (int i = 1; i + 2 <= n; ++i)
+	{
+		if (v[i] != v[i + 1] && v[i + 1] != v[i + 2])
+		{
+			ans++;
+		}
+	}
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		int a = 0, l = 0, r = 0;
+		cin >> a;
+		if (a == 2)
+		{
+			cout << ans << '\n';
+			continue;
+		}
+		cin >> l >> r;
+		set<int>pos = { l - 2,l - 1,r - 1,r };
+		for (auto& i : pos)
+		{
+			if (1 <= i && i + 2 <= n)
+			{
+				int a = seg.query(i, i);
+				int b = seg.query(i + 1, i + 1);
+				int c = seg.query(i + 2, i + 2);
+				if (a != b && b != c)
+				{
+					ans--;
+				}
+				if (l <= i && i <= r)
+				{
+					a ^= 1;
+				}
+				if (l <= i + 1 && i + 1 <= r)
+				{
+					b ^= 1;
+				}
+				if (l <= i + 2 && i + 2 <= r)
+				{
+					c ^= 1;
+				}
+				if (a != b && b != c)
+				{
+					ans++;
+				}
+			}
+		}
+		seg.update(l, r, 1);
+	}
+	return 0;
+}

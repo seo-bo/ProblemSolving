@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, t = 0, m = 0, s = 0, e = 0;
+	cin >> n >> t >> m >> s >> e;
+	vector<ll>dp(n + 1, LLONG_MAX);
+	dp[s] = 0;
+	for (int i = 1; i <= t; ++i)
+	{
+		vector<ll>temp = dp;
+		for (int j = 0; j < m; ++j)
+		{
+			int a = 0, b = 0, c = 0;
+			cin >> a >> b >> c;
+			if (dp[a] != LLONG_MAX)
+			{
+				temp[b] = min(temp[b], dp[a] + c);
+			}
+			if (dp[b] != LLONG_MAX)
+			{
+				temp[a] = min(temp[a], dp[b] + c);
+			}
+		}
+		dp = move(temp);
+	}
+	cout << ((dp[e] == LLONG_MAX) ? -1 : dp[e]);
+	return 0;
+}

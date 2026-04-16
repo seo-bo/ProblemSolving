@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int x = 0, y = 0, n = 0;
+	cin >> x >> y >> n;
+	x += 500, y += 500;
+	vector<vector<int>>v(1001, vector<int>(1001));
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		v[a + 500][b + 500] = -1;
+	}
+	queue<pii>q;
+	q.push(make_pair(500, 500));
+	vector<vector<int>>visited(1001, vector<int>(1001, INT_MAX));
+	visited[500][500] = 0;
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	while (!q.empty())
+	{
+		auto [xx, yy] = q.front();
+		q.pop();
+		if (xx == x && yy == y)
+		{
+			cout << visited[x][y];
+			return 0;
+		}
+		for (int i = 0; i < 4; ++i)
+		{
+			int nx = xx + dir[i][0];
+			int ny = yy + dir[i][1];
+			if (nx >= 0 && nx <= 1000 && ny >= 0 && ny <= 1000 && v[nx][ny] != -1)
+			{
+				if (visited[nx][ny] > visited[xx][yy] + 1)
+				{
+					visited[nx][ny] = visited[xx][yy] + 1;
+					q.push(make_pair(nx, ny));
+				}
+			}
+		}
+	}
+	return 0;
+}

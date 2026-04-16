@@ -1,0 +1,47 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n);
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < 5; ++j)
+		{
+			int temp = 0;
+			cin >> temp;
+			if (temp)
+			{
+				v[i] |= (1 << j);
+			}
+		}
+	}
+	int ans = -1, res = -1;
+	for (int i = 0; i < (1 << 5); ++i)
+	{
+		if (__builtin_popcount(i) != 2)
+		{
+			continue;
+		}
+		int cnt = 0;
+		for (auto& j : v)
+		{
+			cnt += (__builtin_popcount(i & j) == 2);
+		}
+		if (cnt > ans)
+		{
+			ans = cnt;
+			res = i;
+		}
+	}
+	cout << ans << '\n';
+	for (int i = 0; i < 5; ++i)
+	{
+		cout << ((res >> i) & 1) << ' ';
+	}
+	return 0;
+}

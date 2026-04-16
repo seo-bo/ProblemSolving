@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, sum = 0;
+	cin >> n;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+		sum += i;
+	}
+	int ans = sum;
+	vector<bool>visited(sum + 1);
+	function<void(int, int, int)> dfs = [&](int depth, int a, int b)
+		{
+			if (depth == n)
+			{
+				if (!visited[abs(a - b)])
+				{
+					visited[abs(a - b)] = true;
+					ans--;
+				}
+				return;
+			}
+			dfs(depth + 1, a + v[depth], b);
+			dfs(depth + 1, a, b + v[depth]);
+			dfs(depth + 1, a, b);
+		};
+	dfs(0, 0, 0);
+	cout << ans + 1;
+	return 0;
+}

@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    int n = 0, m = 0;
+    cin >> n >> m;
+    vector<pii>s(n + 1), e(n + 1);
+    for (int i = 1; i <= n; ++i)
+    {
+        auto& [a, b] = s[i];
+        cin >> a;
+        b = i;
+    }
+    for (int i = 1; i <= n; ++i)
+    {
+        auto& [a, b] = e[i];
+        cin >> a;
+        b = i;
+    }
+    sort(s.begin() + 1, s.end());
+    sort(e.begin() + 1, e.end());
+    int ans = 0, idx = 1, jdx = 1;
+    vector<int>visited(n + 2);
+    for (int i = 1; i <= m; ++i)
+    {
+        while (idx <= n && s[idx].first == i)
+        {
+            int num = s[idx].second;
+            ans += (visited[num - 1] == 0) + -1 * (visited[num + 1] == 1);
+            visited[num] = true;
+            idx++;
+        }
+        while (jdx <= n && e[jdx].first < i)
+        {
+            int num = e[jdx].second;
+            ans += -1 * (visited[num - 1] == 0) + (visited[num + 1] == 1);
+            visited[num] = false;
+            jdx++;
+        }
+        cout << ans << ' ';
+    }
+    return 0;
+}

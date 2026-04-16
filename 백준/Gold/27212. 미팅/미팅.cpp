@@ -1,0 +1,43 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, c = 0;
+	cin >> n >> m >> c;
+	vector<vector<ll>>v(c + 1, vector<ll>(c + 1));
+	for (int i = 1; i <= c; ++i)
+	{
+		for (int j = 1; j <= c; ++j)
+		{
+			cin >> v[i][j];
+		}
+	}
+	vector<int>A(n + 1), B(m + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> A[i];
+	}
+	for (int i = 1; i <= m; ++i)
+	{
+		cin >> B[i];
+	}
+	vector<vector<ll>>dp(n + 1, vector<ll>(m + 1, -1));
+	function<ll(int, int)> dfs = [&](int a, int b)
+		{
+			if (a == n + 1 || b == m + 1)
+			{
+				return 0LL;
+			}
+			if (dp[a][b] != -1)
+			{
+				return dp[a][b];
+			}
+			ll res = max({ dfs(a + 1,b), dfs(a + 1,b + 1) + v[A[a]][B[b]], dfs(a,b + 1) });
+			return dp[a][b] = res;
+		};
+	cout << dfs(1, 1);
+	return 0;
+}

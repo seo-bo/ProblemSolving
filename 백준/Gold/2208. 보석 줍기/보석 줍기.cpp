@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, ans = 0, pivot = INT_MAX;
+	cin >> n >> m;
+	vector<int>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+		v[i] += v[i - 1];
+		if (i < m)
+		{
+			continue;
+		}
+		pivot = min(pivot, v[i - m]);
+		ans = max(ans, v[i] - pivot);
+	}
+	cout << ans;
+	return 0;
+}

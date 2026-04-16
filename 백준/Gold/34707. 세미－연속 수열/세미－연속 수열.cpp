@@ -1,0 +1,38 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	set<int>s;
+	int left = 0;
+	for (int right = 0; right < n; ++right)
+	{
+		s.insert(v[right]);
+		if (s.size() == k + 1)
+		{
+			s.erase(v[left++]);
+		}
+		auto it = s.begin(), jt = prev(s.end());
+		if (*jt - *it == k - 1 && s.size() == k)
+		{
+			cout << "YES\n";
+			for (; left <= right; ++left)
+			{
+				cout << v[left] << ' ';
+			}
+			return 0;
+		}
+	}
+	cout << "NO";
+	return 0;
+}

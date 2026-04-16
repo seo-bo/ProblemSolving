@@ -1,0 +1,40 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>v(k + 1);
+	vector<vector<int>>ok(k + 1);
+	for (int i = n; i >= 1; --i)
+	{
+		int temp = i;
+		v[temp % k]++;
+		ok[temp % k].push_back(i);
+	}
+	vector<int>p(n);
+	for (auto& i : p)
+	{
+		cin >> i;
+		if (--v[i % k] == -1)
+		{
+			cout << 0;
+			return 0;
+		}
+	}
+	sort(p.begin(), p.end());
+	for (auto& i : p)
+	{
+		if (ok[i % k].back() < i)
+		{
+			cout << 0;
+			return 0;
+		}
+		ok[i % k].pop_back();
+	}
+	cout << 1;
+	return 0;
+}

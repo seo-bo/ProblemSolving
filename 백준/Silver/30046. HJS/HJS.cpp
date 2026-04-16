@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<string>s(3);
+	for (auto& i : s)
+	{
+		cin >> i;
+	}
+	auto cal = [&](int a, int b, int c, char p)
+		{
+			if (p == 'H')
+			{
+				return a;
+			}
+			if (p == 'J')
+			{
+				return b;
+			}
+			return c;
+		};
+	for (int a = 1; a <= 3; ++a)
+	{
+		for (int b = 1; b <= 3; ++b)
+		{
+			for (int c = 1; c <= 3; ++c)
+			{
+				if (a == b || a == c || b == c)
+				{
+					continue;
+				}
+				int f1 = 0, f2 = 0, f3 = 0; // 0 - 아직 모름, 1 - 우위임, -1 - 모순
+				for (int i = 0; i < n; ++i)
+				{
+					int p1 = cal(a, b, c, s[0][i]);
+					int p2 = cal(a, b, c, s[1][i]);
+					int p3 = cal(a, b, c, s[2][i]);
+					if ((p1 > p2 && f1 == 0) || (p1 > p3 && f2 == 0) || (p2 > p3 && f3 == 0))
+					{
+						f1 = f2 = f3 = -1;
+						break;
+					}
+					if (p1 < p2)
+					{
+						f1 = 1;
+					}
+					if (p1 < p3)
+					{
+						f2 = 1;
+					}
+					if (p2 < p3)
+					{
+						f3 = 1;
+					}
+				}
+				if (f1 == 1 && f2 == 1 && f3 == 1)
+				{
+					cout << "HJS! HJS! HJS!";
+					return 0;
+				}
+			}
+		}
+	}
+	cout << "Hmm...";
+	return 0;
+}

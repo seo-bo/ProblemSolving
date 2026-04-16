@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+ll tree[300001];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, cnt = 1;
+	cin >> n;
+	vector<ll>v(n), a;
+	for (auto& i : v)
+	{
+		cin >> i;
+		a.push_back(i);
+	}
+	sort(a.begin(), a.end());
+	a.erase(unique(a.begin(), a.end()), a.end());
+	auto update = [&](int idx, ll delta)
+		{
+			while (idx <= n)
+			{
+				tree[idx] = max(tree[idx], delta);
+				idx += idx & -idx;
+			}
+		};
+	auto query = [&](int idx)
+		{
+			ll res = 0;
+			while (idx)
+			{
+				res = max(res, tree[idx]);
+				idx -= idx & -idx;
+			}
+			return res;
+		};
+	for (auto& i : v)
+	{
+		int p = lower_bound(a.begin(), a.end(), i) - a.begin() + 1;
+		if (p == 1)
+		{
+			update(1, i);
+			continue;
+		}
+		update(p, i + query(p - 1));
+	}
+	cout << query(n);
+	return 0;
+}

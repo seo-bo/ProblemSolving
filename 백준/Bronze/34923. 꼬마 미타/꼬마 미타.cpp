@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void) // 1분 - 6도
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string a, b;
+	cin >> a >> b;
+	auto cal = [&](string str, int idx)
+		{
+			int co = int(str[idx] - '0') * 10 + int(str[idx + 1] - '0');
+			return ((co == 12 && idx == 0)) ? 0 : co;
+		};
+	int res1 = 0, res2 = 0;
+	int A = cal(a, 0) * 60 + cal(a, 3);
+	int B = cal(b, 0) * 60 + cal(b, 3);
+	int pa = A, pb = A;
+	while (pa != B)
+	{
+		pa = (pa + 1) % 720;
+		res1++;
+	}
+	while (pb != B)
+	{
+		pb = (pb + 719) % 720;
+		res2++;
+	}
+	cout << min(res1, res2) * 6;
+	return 0;
+}

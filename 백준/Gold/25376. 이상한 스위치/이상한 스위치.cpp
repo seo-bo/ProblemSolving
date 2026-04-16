@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, base = 0;
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		base |= (temp) ? (1 << i) : 0;
+	}
+	vector<int>visited((1 << 20), INT_MAX);
+	visited[base] = 0;
+	vector<vector<int>>graph(n);
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		graph[i].push_back(i);
+		for (int j = 0; j < a; ++j)
+		{
+			int temp = 0;
+			cin >> temp;
+			graph[i].push_back(temp - 1);
+		}
+	}
+	queue<int>q;
+	q.push(base);
+	while (!q.empty())
+	{
+		int cur = q.front();
+		q.pop();
+		if (__builtin_popcount(cur) == n)
+		{
+			cout << visited[cur];
+			return 0;
+		}
+		for (int i = 0; i < n; ++i)
+		{
+			int mask = cur;
+			if (mask & (1 << i))
+			{
+				continue;
+			}
+			for (auto& j : graph[i])
+			{
+				if (mask & (1 << j))
+				{
+					mask &= ~(1 << j);
+				}
+				else
+				{
+					mask |= (1 << j);
+				}
+			}
+			if (visited[mask] > visited[cur] + 1)
+			{
+				visited[mask] = visited[cur] + 1;
+				q.push(mask);
+			}
+		}
+	}
+	cout << -1;
+	return 0;
+}

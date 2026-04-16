@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, q = 0;
+	cin >> n >> q;
+	vector<vector<int>>v(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		for (int j = 0; j < a; ++j)
+		{
+			int temp = 0;
+			cin >> temp;
+			v[i].push_back(temp);
+		}
+		sort(v[i].begin(), v[i].end());
+	}
+	while (q--)
+	{
+		int a = 0, b = 0, c = 0, pivot = 0;
+		cin >> a >> b >> c >> pivot;
+		auto cal = [&](ll mid)
+			{
+				int left = 0;
+				for (auto& i : { a, b, c })
+				{
+					auto it = lower_bound(v[i].begin(), v[i].end(), mid) - v[i].begin();
+					left += it;
+				}
+				return left;
+			};
+		ll left = 1, right = INT_MAX, ans = -1;
+		while (left <= right)
+		{
+			ll mid = (left + right) / 2;
+			auto L = cal(mid);
+			if (pivot > L)
+			{
+				left = mid + 1;
+			}
+			else
+			{
+				ans = mid;
+				right = mid - 1;
+			}
+		}
+		cout << ans - 1 << '\n';
+	}
+	return 0;
+}

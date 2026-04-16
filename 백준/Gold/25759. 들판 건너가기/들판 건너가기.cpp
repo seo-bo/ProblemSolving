@@ -1,0 +1,34 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>dp(101, -1);
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		vector<int>temp = dp;
+		temp[a] = max(temp[a], 0);
+		for (int j = 1; j <= 100; ++j)
+		{
+			if (dp[j] == -1)
+			{
+				continue;
+			}
+			temp[a] = max(temp[a], dp[j] + (a - j) * (a - j));
+		}
+		dp = move(temp);
+	}
+	int ans = 0;
+	for (int i = 1; i <= 100; ++i)
+	{
+		ans = max(ans, dp[i]);
+	}
+	cout << ans;
+	return 0;
+}

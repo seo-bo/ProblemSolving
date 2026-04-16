@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<ll, int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, T = 0;
+	cin >> n >> T;
+	vector<vector<int>>v(n + 1, vector<int>(n + 1, 0));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			cin >> v[i][j];
+		}
+	}
+	vector<vector<vector<ll>>>visited(n + 1, vector<vector<ll>>(n + 1, vector<ll>(3, LLONG_MAX)));
+	visited[1][1][0] = 0;
+	priority_queue<tp, vector<tp>, greater<tp>>pq;
+	pq.push(make_tuple(0, 1, 1, 0));
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	while (!pq.empty())
+	{
+		auto [co, x, y, cnt] = pq.top();
+		pq.pop();
+		if (visited[x][y][cnt] < co)
+		{
+			continue;
+		}
+		for (int i = 0; i < 4; ++i)
+		{
+			int nx = x + dir[i][0];
+			int ny = y + dir[i][1];
+			if (nx >= 1 && nx <= n && ny >= 1 && ny <= n)
+			{
+				ll cost = co + T + (cnt == 2) * v[nx][ny];
+				int nxt = (cnt + 1) % 3;
+				if (visited[nx][ny][nxt] > cost)
+				{
+					visited[nx][ny][nxt] = cost;
+					pq.push(make_tuple(cost, nx, ny, nxt));
+				}
+			}
+		}
+	}
+	ll ans = LLONG_MAX;
+	for (int i = 0; i < 3; ++i)
+	{
+		ans = min(ans, visited[n][n][i]);
+	}
+	cout << ans;
+	return 0;
+}

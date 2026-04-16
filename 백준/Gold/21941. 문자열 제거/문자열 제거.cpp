@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<string, int>psi;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string str;
+	cin >> str;
+	int n = 0, len = str.size();
+	cin >> n;
+	vector<psi>v(n);
+	for (auto& [a, b] : v)
+	{
+		cin >> a >> b;
+	}
+	vector<ll>dp(len + 1, -1);
+	function<ll(int)> dfs = [&](int idx)
+		{
+			if (idx == len)
+			{
+				return 0LL;
+			}
+			if (dp[idx] != -1)
+			{
+				return dp[idx];
+			}
+			ll res = dfs(idx + 1) + 1;
+			for (auto& [a, b] : v)
+			{
+				int siz = a.size();
+				if (idx + siz <= len)
+				{
+					bool f = true;
+					for (int i = 0; i < siz; ++i)
+					{
+						if (str[idx + i] != a[i])
+						{
+							f = false;
+							break;
+						}
+					}
+					if (f)
+					{
+						res = max(res, b + dfs(idx + siz));
+					}
+				}
+			}
+			return dp[idx] = res;
+		};
+	cout << dfs(0);
+	return 0;
+}

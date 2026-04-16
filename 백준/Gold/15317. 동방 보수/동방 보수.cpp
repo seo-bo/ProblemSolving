@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, x = 0;
+	cin >> n >> m >> x;
+	vector<int>a(n), b(m);
+	for (auto& i : a)
+	{
+		cin >> i;
+	}
+	for (auto& i : b)
+	{
+		cin >> i;
+	}
+	sort(a.begin(), a.end());
+	sort(b.rbegin(), b.rend());
+	auto cal = [&](int pivot)
+		{
+			ll cost = 0;
+			for (int i = pivot - 1, j = 0; j < pivot; --i, ++j)
+			{
+				cost += max(0, a[i] - b[j]);
+			}
+			return cost <= x;
+		};
+	int left = 0, right = min(n, m), ans = 0;
+	while (left <= right)
+	{
+		int mid = (left + right) / 2;
+		if (cal(mid))
+		{
+			ans = mid;
+			left = mid + 1;
+		}
+		else
+		{
+			right = mid - 1;
+		}
+	}
+	cout << ans;
+	return 0;
+}

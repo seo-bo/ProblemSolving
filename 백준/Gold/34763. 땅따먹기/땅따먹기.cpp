@@ -1,0 +1,42 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		ll n = 0, k = 0;
+		cin >> n >> k;
+		auto cal = [&] // x^2 - (n+1) * x + k
+			{
+				__int128 p = (n + 1) * (n + 1) - 4 * k;
+				if (p < 0)
+				{
+					return false;
+				}
+				__int128 rt = sqrt(p);
+				while (rt * rt > p)
+				{
+					rt--;
+				}
+				while (rt * rt < p)
+				{
+					rt++;
+				}
+				if (rt * rt == p)
+				{
+					if (!((n + 1 - rt) & 1))
+					{
+						return true;
+					}
+				}
+				return false;
+			};
+		cout << ((cal()) ? "YES\n" : "NO\n");
+	}
+	return 0;
+}

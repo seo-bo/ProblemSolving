@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define N 52
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<int>conv, rev(130);
+	for (int i = 'A'; i <= 'Z'; ++i)
+	{
+		rev[i] = conv.size();
+		conv.push_back(i);
+	}
+	for (int i = 'a'; i <= 'z'; ++i)
+	{
+		rev[i] = conv.size();
+		conv.push_back(i);
+	}
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>graph(N, vector<int>(N));
+	for (int i = 0; i < N; ++i)
+	{
+		graph[i][i] = 1;
+	}
+	cin.ignore();
+	for (int i = 0; i < n; ++i)
+	{
+		string str;
+		getline(cin, str);
+		int a = rev[int(str[0])], b = rev[int(str[5])];
+		graph[a][b] = 1;
+	}
+	for (int k = 0; k < N; ++k)
+	{
+		for (int i = 0; i < N; ++i)
+		{
+			for (int j = 0; j < N; ++j)
+			{
+				if (graph[i][k] && graph[k][j])
+				{
+					graph[i][j] = 1;
+				}
+			}
+		}
+	}
+	vector<pii>ans;
+	for (int i = 0; i < N; ++i)
+	{
+		for (int j = 0; j < N; ++j)
+		{
+			if (i == j)
+			{
+				continue;
+			}
+			if (graph[i][j])
+			{
+				ans.push_back(make_pair(conv[i], conv[j]));
+			}
+		}
+	}
+	cout << ans.size() << '\n';
+	for (auto& [a, b] : ans)
+	{
+		cout << format("{} => {}\n", char(a), char(b));
+	}
+	return 0;
+}

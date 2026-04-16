@@ -1,0 +1,82 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<int>>graph(n + 1);
+	vector<int>color(n + 1, -1);
+	for (int i = 1; i <= n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		for (int j = 0; j < a; ++j)
+		{
+			int b = 0;
+			cin >> b;
+			graph[i].push_back(b);
+		}
+	}
+	auto bfs = [&](int start)
+		{
+			color[start] = 0;
+			queue<int>q;
+			q.push(start);
+			while (!q.empty())
+			{
+				int cur = q.front();
+				q.pop();
+				for (auto& i : graph[cur])
+				{
+					if (color[i] == -1)
+					{
+						color[i] = (color[cur] + 1) % 2;
+						q.push(i);
+					}
+				}
+			}
+		};
+	vector<int>A, B;
+	for (int i = 1; i <= n; ++i)
+	{
+		if (color[i] == -1)
+		{
+			bfs(i);
+		}
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		if (color[i])
+		{
+			B.push_back(i);
+		}
+		else
+		{
+			A.push_back(i);
+		}
+	}
+	if (A.size() > B.size())
+	{
+		swap(A, B);
+	}
+	if (A.empty())
+	{
+		A.push_back(B.back());
+		B.pop_back();
+	}
+	cout << A.size() << '\n';
+	for (auto& i : A)
+	{
+		cout << i << ' ';
+	}
+	cout << '\n';
+	cout << B.size() << '\n';
+	for (auto& i : B)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}

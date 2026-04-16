@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>a(n + 1), b(n + 1), A(n + 1), B(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> a[i];
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> b[i];
+	}
+	auto update = [&](vector<int>& BIT, int idx, int f)
+		{
+			while (idx <= n)
+			{
+				BIT[idx] += f;
+				idx += idx & -idx;
+			}
+		};
+	auto query = [&](vector<int>& BIT, int idx)
+		{
+			int res = 0;
+			while (idx)
+			{
+				res += BIT[idx];
+				idx -= idx & -idx;
+			}
+			return res;
+		};
+	int ans = 1;
+	vector<int>v;
+	for (int i = 1; i <= n; ++i)
+	{
+		if (query(A, a[i]) != query(B, b[i]))
+		{
+			ans++;
+			for (auto& j : v)
+			{
+				update(A, a[j], -1);
+				update(B, b[j], -1);
+			}
+			vector<int>().swap(v);
+		}
+		update(A, a[i], 1);
+		update(B, b[i], 1);
+		v.push_back(i);
+	}
+	cout << ans;
+	return 0;
+}

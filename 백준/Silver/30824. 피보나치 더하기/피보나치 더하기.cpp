@@ -1,0 +1,50 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll a = 1, b = 1;
+	vector<ll>v = { 1 };
+	while ((__int128)a + b <= (__int128)LLONG_MAX)
+	{
+		ll temp = a + b;
+		v.push_back(temp);
+		a = b;
+		b = temp;
+	}
+	function<bool(__int128, __int128, int, int)> dfs = [&](__int128 sum, __int128 ts, int depth, int td)
+		{
+			if (depth == td)
+			{
+				return (sum == ts);
+			}
+			for (auto& i : v)
+			{
+				if (sum + i > ts)
+				{
+					continue;
+				}
+				if (dfs(sum + i, ts, depth + 1, td))
+				{
+					return true;
+				}
+			}
+			return false;
+		};
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		ll a = 0, b = 0;
+		cin >> a >> b;
+		if (dfs(0, b, 0, a))
+		{
+			cout << "YES\n";
+			continue;
+		}
+		cout << "NO\n";
+	}
+	return 0;
+}

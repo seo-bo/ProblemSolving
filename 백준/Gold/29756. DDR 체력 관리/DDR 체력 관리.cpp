@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>s(n + 1), h(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> s[i];
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> h[i];
+	}
+	vector<vector<int>>dp(n + 1, vector<int>(101, -1));
+	function<int(int, int)> dfs = [&](int idx, int hp)
+		{
+			if (idx == n + 1)
+			{
+				return 0;
+			}
+			if (dp[idx][hp] != -1)
+			{
+				return dp[idx][hp];
+			}
+			int res = dfs(idx + 1, min(100, hp + k));
+			if (hp - h[idx] >= 0)
+			{
+				res = max(res, dfs(idx + 1, min(100, hp - h[idx] + k)) + s[idx]);
+			}
+			return dp[idx][hp] = res;
+		};
+	cout << dfs(1, 100);
+	return 0;
+}

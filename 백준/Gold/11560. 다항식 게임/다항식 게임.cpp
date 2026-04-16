@@ -1,0 +1,29 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<vector<ll>>dp(21, vector<ll>(300, 0));
+	dp[1][0] = dp[1][1] = 1;
+	for (int i = 2; i <= 20; ++i)
+	{
+		for (int j = 0; j <= i; ++j)
+		{
+			for (int k = 0; dp[i - 1][k]; ++k)
+			{
+				dp[i][k + j] += dp[i - 1][k];
+			}
+		}
+	}
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		cout << dp[a][b] << '\n';
+	}
+	return 0;
+}

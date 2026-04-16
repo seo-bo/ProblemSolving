@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+#include <unordered_set>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n);
+	unordered_map<int, int>idx;
+	for (int i = 0; i < n; ++i)
+	{
+		cin >> v[i];
+		idx[v[i]] = i;
+	}
+	vector<int>ans;
+	auto cal = [&](int term)
+		{
+			unordered_set<int>s;
+			for (int i = 0; i < n; ++i)
+			{
+				if (idx.find(v[i] + term) == idx.end())
+				{
+					continue;
+				}
+				s.insert(i);
+				s.insert(idx[v[i] + term]);
+			}
+			if (s.size() == n)
+			{
+				ans.push_back(term);
+			}
+		};
+	for (int i = 1; i <= n / 2; ++i)
+	{
+		cal(v[i] - v[0]);
+	}
+	cout << ans.size() << '\n';
+	for (auto& i : ans)
+	{
+		cout << i << ' ';
+	}
+	return 0;
+}

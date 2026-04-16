@@ -1,0 +1,36 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	int pivot = INT_MAX;
+	int ansx = -1, ansy = -1;
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= m; ++j)
+		{
+			int temp = 0;
+			cin >> temp;
+			if (temp)
+			{
+				continue;
+			}
+			int dist = i + abs((m + 1) / 2 - j);
+			if (dist < pivot)
+			{
+				pivot = dist;
+				ansx = i, ansy = j;
+			}
+		}
+	}
+	if (ansx == -1)
+	{
+		cout << -1;
+		return 0;
+	}
+	cout << ansx << ' ' << ansy;
+	return 0;
+}

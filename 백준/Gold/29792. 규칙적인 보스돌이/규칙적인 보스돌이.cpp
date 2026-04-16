@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0;
+	cin >> n >> m >> k;
+	vector<ll>d(n), v(n);
+	vector<pll>p(k);
+	for (auto& i : d)
+	{
+		cin >> i;
+	}
+	for (auto& [a, b] : p)
+	{
+		cin >> a >> b;
+	}
+	for (int i = 0; i < (1 << k); ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			ll time = 0, money = 0;
+			for (int z = 0; z < k && time <= 900; ++z)
+			{
+				auto [a, b] = p[z];
+				if (i & (1 << z))
+				{
+					time += (a + d[j] - 1) / d[j];
+					money += b;
+				}
+			}
+			money *= (time <= 900);
+			v[j] = max(v[j], money);
+		}
+	}
+	sort(v.rbegin(), v.rend());
+	ll ans = 0;
+	for (int i = 0; i < m; ++i)
+	{
+		ans += v[i];
+	}
+	cout << ans;
+	return 0;
+}

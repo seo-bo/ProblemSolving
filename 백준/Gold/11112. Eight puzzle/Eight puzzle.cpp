@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	ll p = 100000000;
+	vector<ll>div(9);
+	for (auto& i : div)
+	{
+		i = p;
+		p /= 10;
+	}
+	unordered_map<ll, int>visited;
+	visited[123456789] = 0;
+	queue<ll>q;
+	q.push(123456789);
+	vector<int>o(9);
+	auto cal = [&](int a, int b, ll now)
+		{
+			ll ok = now - o[a] * div[a] - o[b] * div[b] + o[b] * div[a] + o[a] * div[b];
+			if (visited.find(ok) == visited.end())
+			{
+				visited[ok] = visited[now] + 1;
+				q.push(ok);
+			}
+		};
+	while (!q.empty())
+	{
+		ll cur = q.front();
+		q.pop();
+		int idx = -1;
+		for (int i = 0; i < 9; ++i)
+		{
+			o[i] = cur / div[i] % 10;
+			if (o[i] == 9)
+			{
+				idx = i;
+			}
+		}
+		if (idx - 3 >= 0)
+		{
+			cal(idx - 3, idx, cur);
+		}
+		if (idx + 3 < 9)
+		{
+			cal(idx, idx + 3, cur);
+		}
+		if (idx % 3)
+		{
+			cal(idx - 1, idx, cur);
+		}
+		if (idx % 3 != 2)
+		{
+			cal(idx, idx + 1, cur);
+		}
+	}
+	while (T--)
+	{
+		cin.ignore();
+		string str;
+		for (int i = 0; i < 3; ++i)
+		{
+			string temp;
+			cin >> temp;
+			if (temp.find('#') != string::npos)
+			{
+				temp[temp.find('#')] = '9';
+			}
+			str += temp;
+		}
+		ll base = stoll(str);
+		if (visited.find(base) == visited.end())
+		{
+			cout << "impossible\n";
+		}
+		else
+		{
+			cout << visited[base] << '\n';
+		}
+	}
+	return 0;
+}

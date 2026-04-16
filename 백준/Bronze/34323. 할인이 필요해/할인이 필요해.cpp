@@ -1,0 +1,12 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+ 
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, m = 0, s = 0;
+	cin >> n >> m >> s;
+	cout << min(s * (m + 1) * (100 - n) / 100, s * m);
+	return 0;
+}

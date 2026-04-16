@@ -1,0 +1,47 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<pii>v(n);
+	for (auto& [a, b] : v)
+	{
+		cin >> a >> b;
+	}
+	int T = 0;
+	cin >> T;
+	for (int i = 1; i <= T; ++i)
+	{
+		ll a = 0, b = 0;
+		cin >> a >> b;
+		ll ans = LLONG_MAX;
+		for (int i = 0; i < (1 << n); ++i)
+		{
+			ll pa = a, pb = 0;
+			for (int j = 0; j < n; ++j)
+			{
+				if (i & (1 << j))
+				{
+					pa -= b * v[j].first;
+					pb += v[j].second;
+				}
+			}
+			if (pa <= 0)
+			{
+				ans = min(ans, pb);
+			}
+		}
+		string res = "IMPOSSIBLE";
+		if (ans != LLONG_MAX)
+		{
+			res = to_string(ans);
+		}
+		cout << format("Case {}: {}\n", i, res);
+	}
+	return 0;
+}

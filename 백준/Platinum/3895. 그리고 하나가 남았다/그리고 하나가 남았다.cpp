@@ -1,0 +1,69 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MAX 10000
+
+int tree[4 * (MAX + 1)];
+
+void update(int start, int end, int node, int idx, int delta)
+{
+    if (idx < start || idx > end)
+    {
+        return;
+    }
+    if (start == end)
+    {
+        tree[node] = delta;
+        return;
+    }
+    int mid = (start + end) / 2;
+    update(start, mid, node * 2, idx, delta);
+    update(mid + 1, end, node * 2 + 1, idx, delta);
+    tree[node] = tree[node * 2] + tree[node * 2 + 1];
+}
+
+int query(int start, int end, int node, int k)
+{
+    if (start == end)
+    {
+        return start;
+    }
+    int mid = (start + end) / 2;
+    if (tree[node * 2] >= k)
+    {
+        return query(start, mid, node * 2, k);
+    }
+    return query(mid + 1, end, node * 2 + 1, k - tree[node * 2]);
+}
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    while (1)
+    {
+        int n = 0, m = 0, k = 0;
+        cin >> n >> k >> m;
+        if (n == 0 && m == 0 && k == 0)
+        {
+            break;
+        }
+        int p = (m - 1) % (n - 1);
+        for (int i = 1; i <= n; ++i)
+        {
+            if (i == m)
+            {
+                continue;
+            }
+            update(1, n, 1, i, 1);
+        }
+        for (int i = n - 1; i > 1; --i)
+        {
+            p = (p + k - 1) % i;
+            int idx = query(1, n, 1, p + 1);
+            update(1, n, 1, idx, 0);
+        }
+        cout << query(1, n, 1, 1) << '\n';
+        memset(tree, 0, sizeof(tree));
+    }
+    return 0;
+}

@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, r = 0;
+	cin >> n >> r;
+	vector<pii>v(n);
+	for (auto& [a, b] : v)
+	{
+		cin >> a >> b;
+	}
+	int pivot = 0, x = -1, y = -1;
+	for (int i = -100; i <= 100; ++i)
+	{
+		for (int j = -100; j <= 100; ++j)
+		{
+			int temp = 0;
+			for (auto& [a, b] : v)
+			{
+				temp += ((i - a) * (i - a) + (j - b) * (j - b) <= r * r);
+			}
+			if (pivot < temp)
+			{
+				pivot = temp;
+				x = i, y = j;
+			}
+		}
+	}
+	cout << x << ' ' << y;
+	return 0;
+}

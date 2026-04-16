@@ -1,0 +1,71 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0, m = 0;
+		cin >> n >> m;
+		auto cal = [&](int x, int y)
+			{
+				return m * x + y;
+			};
+		vector<int>parent(n * m + 2), rank(n * m + 2);
+		iota(parent.begin(), parent.end(), 0);
+		function<int(int)> find = [&](int root)
+			{
+				return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+			};
+		auto merge = [&](int a, int b)
+			{
+				int r1 = find(a), r2 = find(b);
+				if (rank[r1] > rank[r2])
+				{
+					swap(r1, r2);
+				}
+				parent[r1] = r2;
+				rank[r2] += (rank[r1] == rank[r2]);
+			};
+		vector<tp>v;
+		for (int i = 0; i < n; ++i)
+		{
+			for (int j = 1; j < m; ++j)
+			{
+				int co = 0;
+				cin >> co;
+				int sx = cal(i, j), ex = sx + 1;
+				v.push_back(make_tuple(co, sx, ex));
+			}
+		}
+		for (int i = 0; i < n - 1; ++i)
+		{
+			for (int j = 1; j <= m; ++j)
+			{
+				int co = 0;
+				cin >> co;
+				int sx = cal(i, j), ex = sx + m;
+				v.push_back(make_tuple(co, sx, ex));
+			}
+		}
+		sort(v.begin(), v.end());
+		int len = v.size(), ans = 0;
+		for (int i = 0, cnt = 0; i < len && cnt < n * m - 1; ++i)
+		{
+			auto [cost, sx, ex] = v[i];
+			if (find(sx) != find(ex))
+			{
+				merge(sx, ex);
+				cnt++;
+				ans += cost;
+			}
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}

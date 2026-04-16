@@ -1,0 +1,56 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<pii>>graph(n + 1);
+	for (int i = 0; i < n - 1; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	graph[1].push_back(make_pair(0, 0));
+	vector<ll>dp(n + 1, 0), ans(n + 1);
+	vector<int>siz(n + 1, 0);
+	function<int(int, int)> dfs1 = [&](int parent, int node)
+		{
+			int res = 1;
+			for (auto& [a, b] : graph[node])
+			{
+				if (a == parent)
+				{
+					continue;
+				}
+				int cnt = dfs1(node, a);
+				res += cnt;
+				dp[node] += dp[a] + cnt * b;
+			}
+			return siz[node] = res;
+		};
+	dfs1(0, 1);
+	function<void(int, int, ll)> dfs2 = [&](int parent, int node, ll sum)
+		{
+			for (auto& [a, b] : graph[node])
+			{
+				if (a == parent)
+				{
+					ans[node] = sum + dp[node];
+					continue;
+				}
+				dfs2(node, a, sum + dp[node] - dp[a] - siz[a] * b + (n - siz[a]) * b);
+			}
+		};
+	dfs2(0, 1, 0);
+	for (int i = 1; i <= n; ++i)
+	{
+		cout << ans[i] << '\n';
+	}
+	return 0;
+}

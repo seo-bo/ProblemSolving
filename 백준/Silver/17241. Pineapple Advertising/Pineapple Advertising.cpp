@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, q = 0;
+	cin >> n >> m >> q;
+	vector<vector<int>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+	}
+	vector<int>visited(n + 1);
+	while (q--)
+	{
+		int a = 0;
+		cin >> a;
+		int ans = visited[a] ^ 1;
+		visited[a] = 1;
+		for (auto& i : graph[a])
+		{
+			if (!visited[i])
+			{
+				visited[i] = 1;
+				ans++;
+			}
+		}
+		graph[a].clear();
+		cout << ans << '\n';
+	}
+	return 0;
+}

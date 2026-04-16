@@ -1,0 +1,93 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int>tp;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<vector<int>>v(5, vector<int>(5, 0));
+	for (int i = 0; i < 5; ++i)
+	{
+		for (int j = 0; j < 5; ++j)
+		{
+			cin >> v[i][j];
+		}
+	}
+	vector<vector<vector<int>>>visited(5, vector<vector<int>>(5, vector<int>(8, INT_MAX)));
+	int sx = 0, sy = 0;
+	cin >> sx >> sy;
+	visited[sx][sy][1] = 0;
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	queue<tp>q;
+	q.push(make_tuple(sx, sy, 1));
+	auto cal = [&](int x, int y, int nxt)
+		{
+			for (int i = 0; i < 4; ++i)
+			{
+				int nx = x, ny = y;
+				while (1)
+				{
+					int tx = nx + dir[i][0], ty = ny + dir[i][1];
+					if (tx >= 0 && tx < 5 && ty >= 0 && ty < 5 && v[tx][ty] != -1)
+					{
+						nx = tx, ny = ty;
+						if (v[nx][ny] == 7)
+						{
+							break;
+						}
+					}
+					else
+					{
+						break;
+					}
+				}
+				if (x == nx && y == ny)
+				{
+					continue;
+				}
+				int co = nxt;
+				if (v[nx][ny] == nxt && v[nx][ny] != 7)
+				{
+					co++;
+				}
+				if (visited[nx][ny][co] > visited[x][y][nxt] + 1)
+				{
+					visited[nx][ny][co] = visited[x][y][nxt] + 1;
+					q.push(make_tuple(nx, ny, co));
+				}
+			}
+		};
+	while (!q.empty())
+	{
+		auto [x, y, nxt] = q.front();
+		q.pop();
+		if (nxt == 7)
+		{
+			cout << visited[x][y][nxt];
+			return 0;
+		}
+		for (int i = 0; i < 4; ++i)
+		{
+			int nx = x + dir[i][0];
+			int ny = y + dir[i][1];
+			if (nx >= 0 && nx < 5 && ny >= 0 && ny < 5 && v[nx][ny] != -1)
+			{
+				int co = nxt;
+				if (v[nx][ny] == nxt && v[nx][ny] != 7)
+				{
+					co++;
+				}
+				if (visited[nx][ny][co] > visited[x][y][nxt] + 1)
+				{
+					visited[nx][ny][co] = visited[x][y][nxt] + 1;
+					q.push(make_tuple(nx, ny, co));
+				}
+			}
+		}
+		cal(x, y, nxt);
+	}
+	cout << -1;
+	return 0;
+}

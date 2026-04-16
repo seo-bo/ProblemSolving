@@ -1,0 +1,47 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MAX 4000000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<bool>prime(MAX + 1, true);
+	prime[0] = prime[1] = false;
+	for (ll i = 2; i * i <= MAX; ++i)
+	{
+		if (prime[i])
+		{
+			for (ll j = i * i; j <= MAX; j += i)
+			{
+				prime[j] = false;
+			}
+		}
+	}
+	int a = 0, b = 0, c = 0, ans = 0;
+	cin >> a >> b >> c;
+	auto sv = [&](int pivot)
+		{
+			while (pivot)
+			{
+				if (pivot % 10 == c)
+				{
+					return true;
+				}
+				pivot /= 10;
+			}
+			return false;
+		};
+	for (int i = a; i <= b; ++i)
+	{
+		if (prime[i])
+		{
+			if (sv(i))
+			{
+				ans++;
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}

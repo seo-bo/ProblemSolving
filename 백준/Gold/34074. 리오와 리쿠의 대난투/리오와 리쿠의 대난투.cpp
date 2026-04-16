@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	if (n == 1 && m == 1)
+	{
+		cout << -1;
+		return 0;
+	}
+	if (n >= m)
+	{
+		int high = 1e9, mid = 2000, low = 1;
+		for (int i = 0; i < n / 2; ++i)
+		{
+			cout << high-- << ' ';
+		}
+		for (int i = 0; i < n - n / 2; ++i)
+		{
+			cout << low++ << ' ';
+		}
+		cout << '\n';
+		for (int i = 0; i < m; ++i)
+		{
+			cout << mid++ << ' ';
+		}
+	}
+	else if (n < m)
+	{
+		int high = 1e9, mid = high - 2000, low = 1;
+		for (int i = 0; i < n; ++i)
+		{
+			cout << mid++ << ' ';
+		}
+		cout << '\n';
+		int t = (m + 1) / 2;
+		for (int i = 0; i < t; ++i)
+		{
+			cout << high-- << ' ';
+		}
+		for (int i = 0; i < m - t; ++i)
+		{
+			cout << low++ << ' ';
+		}
+	}
+	return 0;
+}

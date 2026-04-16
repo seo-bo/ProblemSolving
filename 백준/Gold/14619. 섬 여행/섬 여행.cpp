@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<int>>graph(n + 1);
+	vector<int>cost(n + 1);
+	vector<vector<int>>dp(n + 1, vector<int>(511, INT_MAX));
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> cost[i];
+		dp[i][0] = cost[i];
+	}
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+	}
+	for (int i = 1; i <= 510; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			int temp = INT_MAX;
+			for (auto& k : graph[j])
+			{
+				temp = min(temp, dp[k][i - 1]);
+			}
+			dp[j][i] = temp;
+		}
+	}
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		cout << ((dp[a][b] == INT_MAX) ? -1 : dp[a][b]) << '\n';
+	}
+	return 0;
+}

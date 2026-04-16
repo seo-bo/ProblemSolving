@@ -1,0 +1,33 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, q = 0;
+	cin >> n >> m >> q;
+	unordered_map<int, unordered_map<int, int>>mm;
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		if (mm.find(a) == mm.end() || mm[a].find(b) == mm[a].end() || mm[a][b] > c)
+		{
+			mm[a][b] = c;
+			mm[b][a] = c;
+		}
+	}
+	while (q--)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		if (mm.find(a) == mm.end() || mm[a].find(b) == mm[a].end())
+		{
+			cout << -1 << '\n';
+			continue;
+		}
+		cout << mm[a][b] << '\n';
+	}
+	return 0;
+}

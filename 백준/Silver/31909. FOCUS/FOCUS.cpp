@@ -1,0 +1,26 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(8);
+	iota(v.begin(), v.end(), 0);
+	while (n--)
+	{
+		int a = 0;
+		cin >> a;
+		if (__builtin_popcount(a) != 2)
+		{
+			continue;
+		}
+		swap(v[__builtin_ctz(a)], v[__builtin_ctz(a & (a - 1))]);
+	}
+	int c = 0;
+	cin >> c;
+	cout << v[c];
+	return 0;
+}

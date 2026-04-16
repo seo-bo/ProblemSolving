@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef long double ld;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int w = 0, h = 0, r = 0;
+	cin >> w >> h >> r;
+	ld pi = 3.141592;
+	cout << fixed << setprecision(12) << (ld)w * h - pi * r * r / 4;
+	return 0;
+}

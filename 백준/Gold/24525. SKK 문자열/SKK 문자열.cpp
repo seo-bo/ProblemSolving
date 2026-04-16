@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string str;
+	cin >> str;
+	int len = str.size(), prefix = 0, ans = -1;
+	vector<int>idx(len + 1);
+	unordered_map<int, int>mm;
+	mm[0] = 0;
+	for (int i = 1; i <= len; ++i)
+	{
+		int a = (str[i - 1] == 'S'), b = (str[i - 1] == 'K');
+		prefix = prefix + 2 * a - b;
+		idx[i] = idx[i - 1] + a;
+		if (mm.find(prefix) == mm.end())
+		{
+			mm[prefix] = i;
+			continue;
+		}
+		int left = mm[prefix];
+		if (idx[i] - idx[left] == 0)
+		{
+			continue;
+		}
+		ans = max(ans, i - left);
+	}
+	cout << ans;
+	return 0;
+}

@@ -1,0 +1,20 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll m = 0, seed = 0, x1 = 0, x2 = 0;
+	cin >> m >> seed >> x1 >> x2;
+	for (ll i = 0; i < m; ++i)
+	{
+		ll p = ((x1 - i * seed) % m + m) % m; // c % m
+		if ((i * x1 + p) % m == x2)
+		{
+			cout << i << ' ' << p;
+			return 0;
+		}
+	}
+	return 0;
+}

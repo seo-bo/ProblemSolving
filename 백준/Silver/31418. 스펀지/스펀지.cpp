@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 998244353
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0, t = 0;
+	cin >> n >> m >> k >> t;
+	ll ans = 1;
+	for (int i = 0; i < k; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		ll pa = min(n, a + t) - max(1, a - t) + 1, pb = min(m, b + t) - max(1, b - t) + 1;
+		ans = ans * ((pa * pb) % MOD) % MOD;
+	}
+	cout << ans;
+	return 0;
+}

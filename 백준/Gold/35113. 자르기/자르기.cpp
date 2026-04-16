@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n + 1), suffix(n + 2);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	for (int i = n; i >= 1; --i)
+	{
+		suffix[i] = max(suffix[i + 1], v[i]);
+	}
+	ll ans = LLONG_MAX, prefix = v[1];
+	for (int i = 2; i <= n - 2; ++i)
+	{
+		prefix = max(prefix, (ll)v[i]);
+		ans = min(ans, prefix + min(v[1], v[i]) + suffix[i + 1] + min(v[i + 1], v[n]));
+	}
+	cout << ans;
+	return 0;
+}

@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int dp[2001][2001];
+int v[2001];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	memset(dp, -1, sizeof(dp));
+	int n = 0;
+	cin >> n;
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	function<int(int, int)>dfs = [&](int left, int right)
+		{
+			if (left > right)
+			{
+				return 0;
+			}
+			if (dp[left][right] != -1)
+			{
+				return dp[left][right];
+			}
+			int pivot = left - right + n;
+			int res = max(pivot * v[left] + dfs(left + 1, right), pivot * v[right] + dfs(left, right - 1));
+			return dp[left][right] = res;
+		};
+	cout << dfs(1, n);
+	return 0;
+}

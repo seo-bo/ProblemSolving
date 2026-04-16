@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<int>cost(n + 1);
+	set<int>s;
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> cost[i];
+		s.insert(i);
+	}
+	vector<int>weight(m + 1);
+	for (int i = 1; i <= m; ++i)
+	{
+		cin >> weight[i];
+	}
+	ll ans = 0;
+	queue<int>wait;
+	map<int, int>mm;
+	for (int i = 0; i < 2 * m; ++i)
+	{
+		if (!s.empty() && !wait.empty())
+		{
+			auto it = s.begin();
+			int pivot = wait.front();
+			ans += weight[pivot] * cost[*it];
+			mm[pivot] = *it;
+			s.erase(it);
+			wait.pop();
+		}
+		int temp = 0;
+		cin >> temp;
+		if (temp > 0)
+		{
+			wait.push(temp);
+		}
+		else
+		{
+			temp = -temp;
+			s.insert(mm[temp]);
+			mm.erase(temp);
+		}
+	}
+	cout << ans;
+	return 0;
+}

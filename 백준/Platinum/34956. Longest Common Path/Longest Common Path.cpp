@@ -1,0 +1,85 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	unordered_map<int, unordered_set<int>>mm;
+	vector<vector<int>>graph(n + 1);
+	for (int i = 0; i < 2 * (n - 1); ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		if (a > b)
+		{
+			swap(a, b);
+		}
+		if (i < n - 1)
+		{
+			mm[a].insert(b);
+			continue;
+		}
+		if (mm[a].find(b) != mm[a].end())
+		{
+			graph[a].push_back(b);
+			graph[b].push_back(a);
+		}
+	}
+	vector<bool>visited(n + 1);
+	auto bfs = [&](int start)
+		{
+			unordered_map<int, int>dist;
+			queue<int>q;
+			q.push(start);
+			visited[start] = true;
+			dist[start] = 0;
+			while (!q.empty())
+			{
+				int cur = q.front();
+				q.pop();
+				for (auto& i : graph[cur])
+				{
+					if (dist.find(i) == dist.end() || dist[i] > dist[cur] + 1)
+					{
+						dist[i] = dist[cur] + 1;
+						visited[i] = true;
+						q.push(i);
+					}
+				}
+			}
+			int pivot = -1, ver = -1;
+			for (auto& [v, co] : dist)
+			{
+				if (co > pivot)
+				{
+					pivot = co;
+					ver = v;
+				}
+			}
+			return make_pair(pivot, ver);
+		};
+	int ans = 0, a = -1, b = -1;
+	for (int i = 1; i <= n; ++i)
+	{
+		if (!visited[i])
+		{
+			auto [_, na] = bfs(i);
+			auto [co, nb] = bfs(na);
+			if (co > ans)
+			{
+				ans = co;
+				a = na, b = nb;
+			}
+		}
+	}
+	if (ans == 0)
+	{
+		cout << -1;
+		return 0;
+	}
+	cout << a << ' ' << b;
+	return 0;
+}

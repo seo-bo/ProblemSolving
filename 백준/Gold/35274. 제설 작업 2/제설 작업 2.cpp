@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll, ll>pll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, m = 0, l = 0, sum = 0;
+	cin >> n >> m >> l;
+	vector<ll>A(n + 1);
+	int flag = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> A[i];
+		sum += A[i];
+		if (A[i])
+		{
+			flag = 1;
+		}
+	}
+	if (!flag)
+	{
+		cout << flag;
+		return 0;
+	}
+	ll left = 1, right = sum, ans = -1;
+	auto cal = [&](ll mid)
+		{
+			ll cnt = 0;
+			queue<pll>q;
+			for (int i = 1; i <= n; ++i)
+			{
+				ll now = A[i];
+				while (!q.empty() && now)
+				{
+					auto& [idx, co] = q.front();
+					if (idx < i)
+					{
+						q.pop();
+						continue;
+					}
+					ll temp = min(now, co);
+					now -= temp;
+					co -= temp;
+					if (!co)
+					{
+						q.pop();
+					}
+				}
+				ll need = (now + mid - 1) / mid, idx = min(2 * n, i + l - 1), s = need * mid - now;
+				if (q.empty() || q.back().first != idx)
+				{
+					q.push(make_pair(idx, s));
+				}
+				else if (q.back().first == idx)
+				{
+					q.back().second = min(sum, q.back().second + s);
+				}
+				cnt += need;
+			}
+			return (cnt <= m);
+		};
+	while (left <= right)
+	{
+		ll mid = (left + right) / 2;
+		if (cal(mid))
+		{
+			ans = mid;
+			right = mid - 1;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+	}
+	cout << ans;
+	return 0;
+}

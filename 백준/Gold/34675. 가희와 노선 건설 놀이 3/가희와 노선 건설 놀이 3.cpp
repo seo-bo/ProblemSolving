@@ -1,0 +1,66 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, sum = 0;
+	cin >> n;
+	vector<int>v(n + 1);
+	vector<vector<pii>>dp(201, vector<pii>(30001, make_pair(-1, -1))); // par, cur
+	dp[0][0] = make_pair(0, 0);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+		sum += v[i];
+		for (int j = 0; j <= 30000; ++j)
+		{
+			if (j - v[i] >= 0 && dp[i - 1][j - v[i]].first != -1)
+			{
+				auto [a, b] = dp[i - 1][j - v[i]];
+				dp[i][j] = make_pair(b, i);
+			}
+			else
+			{
+				dp[i][j] = dp[i - 1][j];
+			}
+		}
+	}
+	int idx = 0, pivot = 0;
+	vector<int>ans;
+	for (int i = sum / 2; i >= 0; --i)
+	{
+		if (dp[n][i].second > 0)
+		{
+			idx = dp[n][i].second;
+			pivot = i;
+			break;
+		}
+	}
+	vector<bool>visited(n + 1);
+	while (idx)
+	{
+		visited[idx] = true;
+		ans.push_back(idx);
+		auto [a, b] = dp[idx][pivot];
+		idx = a;
+		pivot -= v[b];
+	}
+	cout << ans.size() << '\n';
+	for (auto& i : ans)
+	{
+		cout << i << ' ';
+	}
+	cout << '\n';
+	cout << n - ans.size() << '\n';
+	for (int i = 1; i <= n; ++i)
+	{
+		if (!visited[i])
+		{
+			cout << i << ' ';
+		}
+	}
+	return 0;
+}

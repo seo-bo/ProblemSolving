@@ -1,0 +1,54 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string A = "MOBIS", B = "SIBOM";
+	vector<vector<int>>dir = { {1,-1},{1,0},{1,1},{0,1} };
+	int n = 0;
+	cin >> n;
+	vector<vector<char>>v(n, vector<char>(n));
+	for (auto& i : v)
+	{
+		for (auto& j : i)
+		{
+			cin >> j;
+		}
+	}
+	auto cal = [&](int x, int y, int d)
+		{
+			string res;
+			res += v[x][y];
+			for (int i = 0; i < 4; ++i)
+			{
+				int nx = x + dir[d][0];
+				int ny = y + dir[d][1];
+				if (nx >= 0 && nx < n && ny >= 0 && ny < n)
+				{
+					res += v[nx][ny];
+					x = nx, y = ny;
+					continue;
+				}
+				return false;
+			}
+			return (res == A || res == B);
+		};
+	int ans = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < n; ++j)
+		{
+			for (int k = 0; k < 4; ++k)
+			{
+				if (cal(i, j, k))
+				{
+					ans++;
+				}
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}

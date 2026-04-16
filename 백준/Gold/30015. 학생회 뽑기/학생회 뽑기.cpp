@@ -1,0 +1,29 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0, ans = 0;
+	cin >> n >> k;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	for (int i = 20; i >= 0; --i)
+	{
+		int pivot = ans | (1 << i), cnt = 0;
+		for (int j = 0; j < n && cnt < k; ++j)
+		{
+			cnt += ((pivot & v[j]) == pivot);
+		}
+		if (cnt == k)
+		{
+			ans = pivot;
+		}
+	}
+	cout << ans;
+	return 0;
+}

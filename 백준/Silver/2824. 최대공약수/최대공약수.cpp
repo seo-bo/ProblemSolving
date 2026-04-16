@@ -1,0 +1,95 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+#define MOD 1000000000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<bool>flag(40001, true);
+	vector<int>prime;
+	flag[0] = flag[1] = false;
+	for (int i = 2; i <= 40000; ++i)
+	{
+		if (flag[i])
+		{
+			prime.push_back(i);
+			for (ll j = i * i; j <= 40000; j += i)
+			{
+				flag[j] = false;
+			}
+		}
+	}
+	__int128 ans = 1;
+	unordered_map<ll, ll>A;
+	int n = 0, p = 0, m = 0, len = prime.size();
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+	{
+		ll temp = 0;
+		cin >> temp;
+		for (int j = 0; j < len && prime[j] * prime[j] <= temp; ++j)
+		{
+			while (temp % prime[j] == 0)
+			{
+				A[prime[j]]++;
+				temp /= prime[j];
+			}
+		}
+		if (temp > 1)
+		{
+			A[temp]++;
+		}
+	}
+	cin >> m;
+	auto cal = [&](ll a, ll b)
+		{
+			ll r = min(a, A[b]);
+			A[b] -= r;
+			while (r--)
+			{
+				__int128 x = ans;
+				ans *= b;
+				if (ans >= MOD)
+				{
+					p = 1;
+				}
+				ans %= MOD;
+			}
+		};
+	for (int i = 0; i < m; ++i)
+	{
+		ll temp = 0;
+		cin >> temp;
+		for (int j = 0; j < len && prime[j] * prime[j] <= temp; ++j)
+		{
+			ll cnt = 0;
+			while (temp % prime[j] == 0)
+			{
+				cnt++;
+				temp /= prime[j];
+			}
+			if (cnt)
+			{
+				cal(cnt, prime[j]);
+			}
+		}
+		if (temp > 1)
+		{
+			cal(1LL, temp);
+		}
+	}
+	ll pivot = ans;
+	if (!p)
+	{
+		cout << pivot;
+		return 0;
+	}
+	string res = to_string(pivot);
+	for (int i = 0; i + res.size() < 9; ++i)
+	{
+		cout << 0;
+	}
+	cout << res;
+	return 0;
+}

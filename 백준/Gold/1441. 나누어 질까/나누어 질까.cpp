@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, l = 0, r = 0;
+	cin >> n >> l >> r;
+	vector<ll>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	ll ans = 0;
+	for (int i = 1; i < (1 << n); ++i)
+	{
+		ll p = 1, a = __builtin_popcount(i);
+		for (int j = 0; j < n && p <= r; ++j)
+		{
+			if (i & (1 << j))
+			{
+				p = lcm(p, v[j]);
+			}
+		}
+		ans += (r / p - (l - 1) / p) * ((a & 1) ? 1 : -1);
+	}
+	cout << ans;
+	return 0;
+}

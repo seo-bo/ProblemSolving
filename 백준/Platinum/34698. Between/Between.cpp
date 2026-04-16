@@ -1,0 +1,75 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<int>>v(n + 1, vector<int>(n + 1, (1 << 20)));
+	vector<vector<int>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+	}
+	auto bfs = [&](int base)
+		{
+			v[base][base] = 0;
+			queue<int>q;
+			q.push(base);
+			while (!q.empty())
+			{
+				int cur = q.front();
+				q.pop();
+				for (auto& i : graph[cur])
+				{
+					if (v[base][i] > v[base][cur] + 1)
+					{
+						v[base][i] = v[base][cur] + 1;
+						q.push(i);
+					}
+				}
+			}
+		};
+	for (int i = 1; i <= n; ++i)
+	{
+		bfs(i);
+	}
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int a = 0, b = 0, k = 0;
+		cin >> a >> b >> k;
+		vector<int>pos = { a,b };
+		for (int i = 0; i < k; ++i)
+		{
+			int c = 0;
+			cin >> c;
+			pos.push_back(c);
+		}
+		if (v[a][b] == (1 << 20))
+		{
+			cout << "NO\n";
+			continue;
+		}
+		sort(pos.begin(), pos.end(), [&](const int& A, const int& B)
+			{
+				return v[a][A] < v[a][B];
+			});
+		int pivot = v[a][b], f = 1;
+		for (int i = 1; i < k + 2; ++i)
+		{
+			if (v[a][pos[i]] + v[pos[i]][b] != pivot || v[pos[i - 1]][pos[i]] != v[a][pos[i]] - v[a][pos[i - 1]])
+			{
+				f = 0;
+				break;
+			}
+		}
+		cout << ((f) ? "YES\n" : "NO\n");
+	}
+	return 0;
+}

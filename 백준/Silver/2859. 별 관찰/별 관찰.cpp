@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<string>v = { "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday" };
+	vector<int>o(4);
+	auto cal = [&](char a, char b)
+		{
+			return (a - '0') * 10 + (b - '0');
+		};
+	for (int i = 0; i < 4; ++i)
+	{
+		string str;
+		cin >> str;
+		o[i] = cal(str[0], str[1]) * 60 + cal(str[3], str[4]);
+	}
+	ll pa = o[0], pb = o[1], a = o[2], b = o[3];
+	if (pa > pb)
+	{
+		swap(pa, pb);
+		swap(a, b);
+	}
+	ll lim = pb + a / gcd(a, b) * b;
+	while (pa <= lim)
+	{
+		while (pa < pb)
+		{
+			pa += a;
+		}
+		while (pb < pa)
+		{
+			pb += b;
+		}
+		if (pa == pb)
+		{
+			ll time = pa % 1440;
+			cout << v[pa / 1440 % 7] << '\n';
+			if (time / 60 < 10)
+			{
+				cout << 0;
+			}
+			cout << time / 60 << ":";
+			if (time % 60 < 10)
+			{
+				cout << 0;
+			}
+			cout << time % 60;
+			return 0;
+		}
+		if (pa > pb)
+		{
+			swap(pa, pb);
+			swap(a, b);
+		}
+	}
+	cout << "Never";
+	return 0;
+}

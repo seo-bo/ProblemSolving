@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	map<string, vector<pii>>mm;
+	set<string>s;
+	for (int i = 0; i < n; ++i)
+	{
+		string a, b;
+		int c = 0, d = 0;
+		cin >> a >> b >> c >> d;
+		if (s.find(a) != s.end())
+		{
+			continue;
+		}
+		s.insert(a);
+		mm[b].push_back(make_pair(c, d));
+	}
+	string name;
+	int start = 0, end = -1, pivot = -1;
+	for (auto& [a, b] : mm)
+	{
+		vector<int>prefix(50005);
+		for (auto& [c, d] : b)
+		{
+			prefix[c]++, prefix[d]--;
+		}
+		int maxi = 0;
+		for (int i = 1; i <= 50000; ++i)
+		{
+			prefix[i] += prefix[i - 1];
+			maxi = max(prefix[i], maxi);
+		}
+		if (maxi <= pivot)
+		{
+			continue;
+		}
+		int s = -1;
+		for (int i = 1; i <= 50000; ++i)
+		{
+			if (prefix[i] == maxi)
+			{
+				if (s == -1)
+				{
+					s = i;
+				}
+				int e = i + 1, dist = e - s;
+				if (maxi > pivot || (start == s && end - start < dist))
+				{
+					name = a, start = s, end = e, pivot = maxi;
+				}
+				continue;
+			}
+			s = -1;
+		}
+	}
+	cout << format("{} {} {}", name, start, end);
+	return 0;
+}

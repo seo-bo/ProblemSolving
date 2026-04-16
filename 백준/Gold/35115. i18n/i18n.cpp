@@ -1,0 +1,58 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int dp[2001][2001];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string a, b;
+	cin >> a >> b;
+	int alen = a.size(), blen = b.size();
+	memset(dp, -1, sizeof(dp));
+	function<int(int, int)> dfs = [&](int i, int j)
+		{
+			if (i == alen && j == blen)
+			{
+				return 1;
+			}
+			if (i >= alen || j >= blen)
+			{
+				return 0;
+			}
+			if (dp[i][j] != -1)
+			{
+				return dp[i][j];
+			}
+			int temp = 0;
+			if (a[i] == b[j])
+			{
+				if (dfs(i + 1, j + 1))
+				{
+					return dp[i][j] = 1;
+				}
+			}
+			for (int idx = j; idx < blen; ++idx)
+			{
+				if ('0' <= b[idx] && b[idx] <= '9')
+				{
+					int co = b[idx] - '0';
+					temp = temp * 10 + co;
+					if (!temp || temp >= 2001)
+					{
+						break;
+					}
+					if (dfs(i + temp, idx + 1))
+					{
+						return dp[i][j] = 1;
+					}
+					continue;
+				}
+				break;
+			}
+			return dp[i][j] = 0;
+		};
+	cout << ((dfs(0, 0) ? "Yes" : "No"));
+	return 0;
+}

@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, q = 0;
+	cin >> n >> q;
+	vector<int>parent(n + 2);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	vector<ll>v(n + 1), m(n + 2);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	while (q--)
+	{
+		int a = 0, x = 0;
+		cin >> a >> x;
+		if (a == 2)
+		{
+			cout << m[x] << '\n';
+			continue;
+		}
+		ll c = 0;
+		cin >> c;
+		while (c && ((x = find(x)) != n + 1))
+		{
+			ll pivot = min(c, v[x] - m[x]);
+			c -= pivot;
+			m[x] += pivot;
+			if (m[x] == v[x])
+			{
+				parent[x] = find(x + 1);
+			}
+		}
+	}
+	return 0;
+}

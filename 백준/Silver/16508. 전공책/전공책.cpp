@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string str;
+	cin >> str;
+	vector<int>base(26);
+	for (auto& i : str)
+	{
+		base[int(i - 'A')]++;
+	}
+	int n = 0;
+	cin >> n;
+	vector<int>cost(n);
+	vector<vector<int>>alpha(n, vector<int>(26));
+	for (int i = 0; i < n; ++i)
+	{
+		string temp;
+		cin >> cost[i] >> temp;
+		for (auto& j : temp)
+		{
+			alpha[i][int(j - 'A')]++;
+		}
+	}
+	int ans = INT_MAX;
+	for (int i = 0; i < (1 << n); ++i)
+	{
+		int pivot = 0;
+		vector<int>temp = base;
+		for (int j = 0; j < n; ++j)
+		{
+			if (i & (1 << j))
+			{
+				for (int k = 0; k < 26; ++k)
+				{
+					temp[k] = max(0, temp[k] - alpha[j][k]);
+				}
+				pivot += cost[j];
+			}
+		}
+		bool flag = true;
+		for (int j = 0; j < 26; ++j)
+		{
+			if (temp[j])
+			{
+				flag = false;
+				break;
+			}
+		}
+		if (flag)
+		{
+			ans = min(ans, pivot);
+		}
+	}
+	cout << ((ans == INT_MAX) ? -1 : ans);
+	return 0;
+}

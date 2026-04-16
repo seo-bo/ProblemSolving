@@ -1,0 +1,55 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0, m = 0;
+		cin >> n >> m;
+		vector<vector<int>>go(n + 1), rev(n + 1);
+		for (int i = 0; i < m; ++i)
+		{
+			int a = 0, b = 0;
+			cin >> a >> b;
+			go[a].push_back(b);
+			rev[b].push_back(a);
+		}
+		auto bfs = [&](vector<vector<int>>& graph, int start)
+			{
+				queue<int>q;
+				vector<ll>dist(n + 1, INT_MAX);
+				dist[start] = 0;
+				q.push(start);
+				while (!q.empty())
+				{
+					int cur = q.front();
+					q.pop();
+					for (auto& i : graph[cur])
+					{
+						if (dist[i] > dist[cur] + 1)
+						{
+							dist[i] = dist[cur] + 1;
+							q.push(i);
+						}
+					}
+				}
+				return dist;
+			};
+		vector<ll>A = bfs(go, 1), B = bfs(rev, n);
+		ll pivot = A[n];
+		for (int i = 1; i <= n; ++i)
+		{
+			if (A[i] + B[i] == pivot)
+			{
+				cout << i << ' ';
+			}
+		}
+		cout << '\n';
+	}
+	return 0;
+}

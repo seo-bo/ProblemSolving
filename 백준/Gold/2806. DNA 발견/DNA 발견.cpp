@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, a = 0, b = (1 << 25);
+	cin >> n;
+	string str;
+	cin >> str;
+	reverse(str.begin(), str.end());
+	for (auto& i : str)
+	{
+		int cost = (i == 'B'), temp = a;
+		a = min(a, b + 1) + cost;
+		b = min(b, temp + 1) + (cost ^ 1);
+	}
+	cout << min(a, b);
+	return 0;
+}

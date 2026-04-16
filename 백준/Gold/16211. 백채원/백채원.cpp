@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0;
+	cin >> n >> m >> k;
+	vector<vector<pii>>graph(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, c));
+		graph[b].push_back(make_pair(a, c));
+	}
+	vector<int>v = { 1 };
+	auto dijkstra = [&]
+		{
+			vector<int>dist(n + 1, INT_MAX);
+			priority_queue<pii, vector<pii>, greater<pii>>pq;
+			for (auto& i : v)
+			{
+				dist[i] = 0;
+				pq.push(make_pair(0, i));
+			}
+			while (!pq.empty())
+			{
+				auto [co, ver] = pq.top();
+				pq.pop();
+				if (dist[ver] < co)
+				{
+					continue;
+				}
+				for (auto& [nv, nc] : graph[ver])
+				{
+					if (dist[nv] > co + nc)
+					{
+						dist[nv] = co + nc;
+						pq.push(make_pair(dist[nv], nv));
+					}
+				}
+			}
+			return dist;
+		};
+	vector<int>A = dijkstra();
+	v.pop_back();
+	for (int i = 0; i < k; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		v.push_back(a);
+	}
+	vector<int>B = dijkstra();
+	int flag = 0;
+	for (int i = 2; i <= n; ++i)
+	{
+		if (A[i] < B[i])
+		{
+			flag = 1;
+			cout << i << ' ';
+		}
+	}
+	if (!flag)
+	{
+		cout << 0;
+	}
+	return 0;
+}

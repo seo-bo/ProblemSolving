@@ -1,0 +1,24 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<map<int, int>>v(11);
+	for (int i = 0; i < 2047; ++i)
+	{
+		for (int j = 0; j < 11; ++j)
+		{
+			int a = 0;
+			cin >> a;
+			v[j][a]++;
+		}
+	}
+	for (auto& i : v)
+	{
+		auto it = i.begin(), jt = next(it);
+		cout << ((it->second > jt->second) ? jt->first : it->first) << ' ';
+	}
+	return 0;
+}

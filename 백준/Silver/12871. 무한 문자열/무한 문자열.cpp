@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string A, B;
+	cin >> A >> B;
+	int alen = A.size(), blen = B.size();
+	int pivot = lcm(alen, blen);
+	string pa, pb;
+	while ((int)pa.size() < pivot)
+	{
+		pa += A;
+	}
+	while ((int)pb.size() < pivot)
+	{
+		pb += B;
+	}
+	cout << (pa == pb);
+	return 0;
+}

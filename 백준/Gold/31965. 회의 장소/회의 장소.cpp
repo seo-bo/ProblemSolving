@@ -1,0 +1,35 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, q = 0;
+	cin >> n >> q;
+	vector<ll>v(n + 1), prefix(n + 1);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+		prefix[i] = prefix[i - 1] + v[i];
+	}
+	while (q--)
+	{
+		ll l = 0, r = 0;
+		cin >> l >> r;
+		int left = lower_bound(v.begin(), v.end(), l) - v.begin();
+		int right = upper_bound(v.begin(), v.end(), r) - v.begin() - 1;
+		int p = (left + right) / 2;
+		auto cal = [&](int idx)
+			{
+				if (idx > right || idx < left)
+				{
+					return LLONG_MAX;
+				}
+				ll a = idx - left, b = right - idx;
+				return prefix[right] - prefix[idx] - prefix[idx - 1] + prefix[left - 1] + a * v[idx] - b * v[idx];
+			};
+		cout << max(cal(left), cal(right)) - min({ cal(p - 1),cal(p), cal(p + 1) }) << '\n';
+	}
+	return 0;
+}

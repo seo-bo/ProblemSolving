@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<bool>prime(10010, true);
+	prime[0] = prime[1] = false;
+	for (ll i = 2; i * i <= 10001; ++i)
+	{
+		if (prime[i])
+		{
+			for (ll j = i * i; j <= 10001; j += i)
+			{
+				prime[j] = false;
+			}
+		}
+	}
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int a = 0;
+		cin >> a;
+		if (prime[a + 1])
+		{
+			cout << 1 << '\n' << 1 << ' ' << a + 1 << '\n';
+			continue;
+		}
+		cout << 0 << '\n';
+	}
+	return 0;
+}

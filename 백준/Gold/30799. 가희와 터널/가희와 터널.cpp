@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 998244353
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<ll>dp(8, 0);
+	dp[0] = 1;
+	for (int i = 1; i <= n; ++i)
+	{
+		vector<ll>temp(8, 0);
+		for (int j = 0; j <= 7; ++j)
+		{
+			int nxt = min(7, j + 1);
+			temp[j] = (temp[j] + dp[j] * 6) % MOD;
+			temp[nxt] = (temp[nxt] + dp[j]) % MOD;
+		}
+		dp = move(temp);
+	}
+	cout << dp[7];
+	return 0;
+}

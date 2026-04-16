@@ -1,0 +1,50 @@
+#include "sprout.h"
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int diff(int K, std::vector<std::vector<int>> V) {
+	int n = V.size();
+	vector<vector<int>>sum(n + 2, vector<int>(n + 2, 0));
+	vector<vector<vector<int>>>count(n + 2, vector<vector<int>>(n + 2, vector<int>(31, 0)));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			int cost = V[i - 1][j - 1];
+			count[i][j][cost]++;
+			sum[i][j] = cost + sum[i - 1][j] + sum[i][j - 1] - sum[i - 1][j - 1];
+			for (int k = 0; k <= 30; ++k)
+			{
+				count[i][j][k] += count[i - 1][j][k] + count[i][j - 1][k] - count[i - 1][j - 1][k];
+			}
+		}
+	}
+	auto query = [&](int sx, int sy, int ex, int ey, int flag)
+		{
+			if (flag)
+			{
+				int idx = 0;
+				for (int i = 0; i <= 30; ++i)
+				{
+					idx += count[ex][ey][i] - count[sx - 1][ey][i] - count[ex][sy - 1][i] + count[sx - 1][sy - 1][i];
+					if (idx >= (K * K + 1) / 2)
+					{
+						return i;
+					}
+				}
+
+			}
+			return sum[ex][ey] - sum[sx - 1][ey] - sum[ex][sy - 1] + sum[sx - 1][sy - 1];
+		};
+	int ans = INT_MIN;
+	for (int i = 1; i <= n - K + 1; ++i)
+	{
+		for (int j = 1; j <= n - K + 1; ++j)
+		{
+			int sx = i, sy = j, ex = i + K - 1, ey = j + K - 1;
+			ans = max(ans, abs(query(sx, sy, ex, ey, 0) - query(sx, sy, ex, ey, 1) * K * K));
+		}
+	}
+	return ans;
+}

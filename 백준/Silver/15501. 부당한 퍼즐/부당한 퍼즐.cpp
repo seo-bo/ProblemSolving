@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n);
+	for (int i = 0; i < n; ++i)
+	{
+		int temp = 0;
+		cin >> temp;
+		v[temp - 1] = i;
+	}
+	vector<int>A(n);
+	int st = -1;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		A[i] = v[a - 1];
+		if (!A[i])
+		{
+			st = i;
+		}
+	}
+	auto sv = [&](int t)
+		{
+			int idx = st, now = 0;
+			do
+			{
+				if (A[idx] != now)
+				{
+					return false;
+				}
+				idx = (idx + t + n) % n;
+				now++;
+			} while (idx != st);
+			return true;
+		};
+	if (sv(1) || sv(-1))
+	{
+		cout << "good puzzle";
+	}
+	else
+	{
+		cout << "bad puzzle";
+	}
+	return 0;
+}

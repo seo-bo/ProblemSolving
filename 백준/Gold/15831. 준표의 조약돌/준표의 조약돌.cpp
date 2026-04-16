@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, B = 0, W = 0;
+	cin >> n >> B >> W;
+	string str;
+	cin >> str;
+	int right = 0, black = 0, white = 0, ans = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		while (right < n && black <= B)
+		{
+			if (str[right] == 'W')
+			{
+				white++;
+			}
+			else
+			{
+				if (black == B)
+				{
+					break;
+				}
+				black++;
+			}
+			right++;
+		}
+		if (black <= B && white >= W)
+		{
+			ans = max(ans, right - i);
+		}
+		if (i == right)
+		{
+			right++;
+			continue;
+		}
+		if (str[i] == 'W')
+		{
+			white--;
+		}
+		else
+		{
+			black--;
+		}
+	}
+	cout << ans;
+	return 0;
+}

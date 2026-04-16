@@ -1,0 +1,59 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, T = 0;
+	cin >> n >> T;
+	map<int, set<int>>mm;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		mm[a].insert(b);
+	}
+	map<pii, int>visited;
+	queue<pii>q;
+	q.push(make_pair(0, 0));
+	visited[make_pair(0, 0)] = 0;
+	while (!q.empty())
+	{
+		auto [x, y] = q.front();
+		q.pop();
+		pii pos = make_pair(x, y);
+		if (y == T)
+		{
+			cout << visited[pos];
+			return 0;
+		}
+		vector<pii>e;
+		for (auto it = mm.lower_bound(x - 2); it != mm.end() && it->first <= x + 2; ++it)
+		{
+			int xx = it->first;
+			for (auto jt = it->second.lower_bound(y - 2); jt != it->second.end() && *jt <= y + 2; ++jt)
+			{
+				int yy = *jt;
+				pii np = make_pair(xx, yy);
+				if (visited.find(np) == visited.end())
+				{
+					visited[np] = visited[pos] + 1;
+					q.push(make_pair(xx, yy));
+					e.push_back(make_pair(xx, yy));
+				}
+			}
+		}
+		for (auto& [a, b] : e)
+		{
+			mm[a].erase(b);
+			if (mm[a].empty())
+			{
+				mm.erase(a);
+			}
+		}
+	}
+	cout << -1;
+	return 0;
+}

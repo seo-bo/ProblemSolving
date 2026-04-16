@@ -1,0 +1,41 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	unordered_set<ll>s;
+	ll a = 0, b = 0;
+	cin >> a >> b;
+	s.insert(a);
+	while (!s.empty())
+	{
+		vector<ll>A, B;
+		for (auto& i : s)
+		{
+			if (i == b)
+			{
+				cout << "YES";
+				return 0;
+			}
+			ll ta = (i + 1) / 2, tb = i / 2;
+			A.push_back(i);
+			B.push_back(ta);
+			B.push_back(tb);
+		}
+		for (auto& i : A)
+		{
+			s.erase(i);
+		}
+		for (auto& i : B)
+		{
+			if (i >= b)
+			{
+				s.insert(i);
+			}
+		}
+	}
+	cout << "NO";
+	return 0;
+}

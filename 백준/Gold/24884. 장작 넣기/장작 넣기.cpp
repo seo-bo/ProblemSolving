@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, w = 0, t = 0, k = 0;
+	cin >> n >> w >> t >> k;
+	w++;
+	vector<int>v(n + 2);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+	}
+	auto cal = [&](vector<int>& fire, int idx)
+		{
+			return 1 + (fire[idx - 1] == 0) + (fire[idx + 1] == 0);
+		};
+	int ans = 0;
+	function<void(vector<int>&, int, int)> dfs = [&](vector<int>& fire, int time, int pos)
+		{
+			vector<int>temp = fire;
+			for (int i = 1; i <= n; ++i)
+			{
+				if (i == pos)
+				{
+					continue;
+				}
+				temp[i] = max(0, temp[i] - cal(fire, i));
+			}
+			if (time == t)
+			{
+				int cnt = 0;
+				for (int i = 1; i <= n; ++i)
+				{
+					cnt += (temp[i] != 0);
+				}
+				if (cnt >= k)
+				{
+					ans++;
+				}
+				return;
+			}
+			if (time == 1)
+			{
+				pos = w;
+			}
+			for (int i = -1; i <= 1; ++i)
+			{
+				if (pos + i >= 1 && pos + i <= n)
+				{
+					dfs(temp, time + 1, pos + i);
+				}
+			}
+		};
+	dfs(v, 1, -1);
+	cout << ans;
+	return 0;
+}

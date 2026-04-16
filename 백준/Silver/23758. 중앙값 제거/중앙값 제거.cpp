@@ -1,0 +1,27 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	sort(v.begin(), v.end());
+	int ans = 0;
+	for (int i = 0; i < (n + 1) / 2; ++i)
+	{
+		while (v[i] > 1)
+		{
+			v[i] /= 2;
+			ans++;
+		}
+	}
+	cout << ans + 1;
+	return 0;
+}

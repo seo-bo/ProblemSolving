@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<ll>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	sort(v.begin(), v.end());
+	ll left = 0, right = n - 1, t = 0, prev = 0, ans = 0;
+	while (k--)
+	{
+		ll idx = right;
+		if (t)
+		{
+			idx = left;
+		}
+		ans += max(0LL, v[idx] - prev);
+		prev = v[idx];
+		if (t)
+		{
+			left = ++idx;
+		}
+		else
+		{
+			right = --idx;
+		}
+		t = (t + 1) % 2;
+	}
+	cout << ans;
+	return 0;
+}

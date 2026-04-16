@@ -1,0 +1,47 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int q = 0;
+	cin >> q;
+	vector<int>o = { 0,100,90,95,90,80 };
+	while (q--)
+	{
+		int a = 0, b = 0, c = 0, d = 0;
+		cin >> a >> b >> c >> d;
+		auto cal = [&]
+			{
+				if (a > 2)
+				{
+					return false;
+				}
+				if (d < 50)
+				{
+					return false;
+				}
+				int a1 = 0, a2 = 0;
+				vector<int>temp = { b,c };
+				for (auto& i : temp)
+				{
+					if (o[a] > i * 3)
+					{
+						a1++;
+					}
+					if (i < 22)
+					{
+						a2++;
+					}
+				}
+				if (a1 < 2 && a2 < 1)
+				{
+					return false;
+				}
+				return true;
+			};
+		cout << ((cal() ? "YES\n" : "NO\n"));
+	}
+	return 0;
+}

@@ -1,0 +1,44 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		int a = 0;
+		cin >> a;
+		a++;
+		int now = 360;
+		while (a && now <= 1440)
+		{
+			now += 6;
+			a = max(0, a - 50);
+			now += 6;
+		}
+		if (!a)
+		{
+			now -= 6;
+			now %= 1440;
+			int h = now / 60, m = now % 60;
+			if (h < 10)
+			{
+				cout << 0;
+			}
+			cout << h << ":";
+			if (m < 10)
+			{
+				cout << 0;
+			}
+			cout << m << '\n';
+		}
+		else
+		{
+			cout << -1 << '\n';
+		}
+	}
+	return 0;
+}

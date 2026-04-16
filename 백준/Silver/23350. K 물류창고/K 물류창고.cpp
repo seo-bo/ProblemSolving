@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	ll ans = 0;
+	vector<int>pri(m + 2);
+	queue<pii>q;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		pri[a]++;
+		q.push(make_pair(a, b)); // 우선순위, 무게
+	}
+	for (int i = m; i >= 0 && !q.empty(); --i)
+	{
+		vector<int>wei(103, 0);
+		while (pri[i])
+		{
+			while (q.front().first != i)
+			{
+				ans += q.front().second;
+				q.push(q.front());
+				q.pop();
+			}
+			ll cost = 0;
+			auto [a, b] = q.front();
+			for (int j = 0; j < b; ++j)
+			{
+				cost += j * wei[j];
+			}
+			ans += 2 * cost + b;
+			wei[b]++;
+			q.pop();
+			pri[i]--;
+		}
+	}
+	cout << ans;
+	return 0;
+}

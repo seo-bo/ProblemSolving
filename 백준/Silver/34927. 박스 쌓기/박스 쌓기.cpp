@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	sort(v.begin(), v.end());
+	ll now = v[0], idx = 1, res = 1;
+	while (idx < n)
+	{
+		while (idx < n && v[idx] < now)
+		{
+			idx++;
+		}
+		if (idx == n)
+		{
+			break;
+		}
+		now += v[idx];
+		res++;
+	}
+	cout << res;
+	return 0;
+}

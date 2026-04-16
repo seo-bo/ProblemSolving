@@ -1,0 +1,39 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0;
+	cin >> n >> k;
+	vector<int>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	int cnt = 1, ans = 0;
+	for (;; ++cnt)
+	{
+		bool flag = false;
+		for (int i = 0; i + k < n; ++i)
+		{
+			if (v[i] < v[i + k])
+			{
+				ans += v[i + k] - v[i];
+				v[i + k] = v[i];
+				flag = true;
+				break;
+			}
+		}
+		if (!flag)
+		{
+			cnt--;
+			break;
+		}
+		sort(v.begin(), v.end());
+	}
+	cout << ans << ' ' << cnt;
+	return 0;
+}

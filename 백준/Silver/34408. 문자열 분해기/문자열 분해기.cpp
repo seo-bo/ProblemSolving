@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string A;
+	cin >> A;
+	vector<int>v(30);
+	for (auto& i : A)
+	{
+		v[i - 'A']++;
+	}
+	string B;
+	cin >> B;
+	for (auto& i : B)
+	{
+		if (--v[i - 'A'] == -1)
+		{
+			cout << "NEED FIX";
+			return 0;
+		}
+	}
+	cout << "OK";
+	return 0;
+}

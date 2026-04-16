@@ -1,0 +1,90 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+ll dp[1002][1002][2];
+ll prefix[1002];
+int v[1002], n = 0;
+
+ll dfs(int left, int right, int type)
+{
+	if (left == 1 && right == n)
+	{
+		return 0LL;
+	}
+	if (dp[left][right][type] != -1)
+	{
+		return dp[left][right][type];
+	}
+	ll pos = ((type) ? v[right] : v[left]), res = LLONG_MAX / 8;
+	if (left - 1 >= 1)
+	{
+		ll time = (pos - v[left - 1]);
+		ll l = prefix[left - 1] * time;
+		ll r = (prefix[n] - prefix[right]) * time;
+		res = min(res, dfs(left - 1, right, 0) + l + r);
+	}
+	if (right + 1 <= n)
+	{
+		ll time = (v[right + 1] - pos);
+		ll l = prefix[left - 1] * time;
+		ll r = (prefix[n] - prefix[right]) * time;
+		res = min(res, dfs(left, right + 1, 1) + l + r);
+	}
+	return dp[left][right][type] = res;
+}
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		memset(dp, -1, sizeof(dp));
+		memset(prefix, 0, sizeof(prefix));
+		memset(v, 0, sizeof(v));
+		cin >> n;
+		map<int, int>mm;
+		for (int i = 1; i <= n; ++i)
+		{
+			int a = 0;
+			cin >> v[i] >> a;
+			mm[v[i]] = a;
+		}
+		sort(v + 1, v + n + 2);
+		n++;
+		int st = -1;
+		for (int i = 1; i <= n; ++i)
+		{
+			if (v[i] == 0)
+			{
+				st = i;
+			}
+			prefix[i] = prefix[i - 1] + mm[v[i]];
+		}
+		ll ans = LLONG_MAX;
+		for (int i = 1; i <= n; ++i)
+		{
+			ll left = ((i == 1) ? v[i] : v[i - 1] + 1);
+			ll right = ((i == n) ? v[i] : v[i + 1] - 1);
+			ll res = -1, pivot = v[i];
+			while (left <= right)
+			{
+				ll mid = (left + right) / 2;
+				if (mid * mid + llabs(mid - pivot) * prefix[n] <= (mid + 1) * (mid + 1) + llabs(mid + 1 - pivot) * prefix[n])
+				{
+					res = mid;
+					right = mid - 1;
+				}
+				else
+				{
+					left = mid + 1;
+				}
+			}
+			ans = min(ans, res * res + prefix[n] * llabs(pivot - res) + dfs(i, i, 0));
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}

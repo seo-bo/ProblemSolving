@@ -1,0 +1,49 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, q = 0;
+	cin >> n >> q;
+	vector<set<int>>v(n + 1);
+	vector<int>num(n + 1), rev(n + 1);
+	iota(num.begin(), num.end(), 0);
+	for (int i = 1; i <= n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		for (int j = 0; j < a; ++j)
+		{
+			int b = 0;
+			cin >> b;
+			v[i].insert(b);
+		}
+	}
+	while (q--)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b;
+		if (a == 1)
+		{
+			cin >> c;
+			int B = num[b], C = num[c];
+			if (v[B].size() < v[C].size())
+			{
+				swap(num[b], num[c]);
+				swap(B, C);
+			}
+			for (auto& i : v[C])
+			{
+				v[B].insert(i);
+			}
+			v[C].clear();
+		}
+		else
+		{
+			cout << v[num[b]].size() << '\n';
+		}
+	}
+	return 0;
+}

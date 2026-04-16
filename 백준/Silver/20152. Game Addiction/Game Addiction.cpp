@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	if (n > m)
+	{
+		swap(n, m);
+	}
+	vector<vector<ll>>dp(32, vector<ll>(32, -1));
+	function<ll(int, int)> dfs = [&](int x, int y)
+		{
+			if (x > m || y > m)
+			{
+				return 0LL;
+			}
+			if (x == m && y == m)
+			{
+				return 1LL;
+			}
+			if (dp[x][y] != -1)
+			{
+				return dp[x][y];
+			}
+			ll res = dfs(x + 1, y);
+			if (y + 1 <= x)
+			{
+				res += dfs(x, y + 1);
+			}
+			return dp[x][y] = res;
+		};
+	cout << dfs(n, n);
+	return 0;
+}

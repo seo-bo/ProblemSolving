@@ -1,0 +1,74 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, maxi = 0;
+	cin >> n >> m;
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	vector<vector<int>>v(n, vector<int>(m));
+	vector<vector<int>>visited(n, vector<int>(m, INT_MAX));
+	int px = 0, py = 0, a = 0, b = 0, c = 0;
+	cin >> px >> py >> a >> b >> c;
+	px--;
+	py--;
+	priority_queue<tp, vector<tp>, greater<tp>>pq;
+	pq.push(make_tuple(0, px, py));
+	visited[px][py] = 0;
+	for (auto& i : v)
+	{
+		for (auto& j : i)
+		{
+			cin >> j;
+			maxi = max(maxi, j);
+		}
+	}
+	while (!pq.empty())
+	{
+		auto [cost, x, y] = pq.top();
+		pq.pop();
+		if (visited[x][y] < cost)
+		{
+			continue;
+		}
+		for (int i = 0; i < 4; ++i)
+		{
+			int nx = x + dir[i][0];
+			int ny = y + dir[i][1];
+			if (nx >= 0 && nx < n && ny >= 0 && ny < m && abs(v[nx][ny] - v[x][y]) <= c)
+			{
+				int diff = v[nx][ny] - v[x][y];
+				int cost = 1;
+				if (diff > 0)
+				{
+					cost = a * diff;
+				}
+				else if (diff < 0)
+				{
+					cost = b * -diff;
+				}
+				if (visited[nx][ny] > visited[x][y] + cost)
+				{
+					visited[nx][ny] = visited[x][y] + cost;
+					pq.push(make_tuple(visited[nx][ny], nx, ny));
+				}
+			}
+		}
+	}
+	int ans = INT_MAX;
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			if (maxi == v[i][j])
+			{
+				ans = min(ans, visited[i][j]);
+			}
+		}
+	}
+	cout << ((ans == INT_MAX) ? -1 : ans);
+	return 0;
+}

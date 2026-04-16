@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, k = 0, a = 0;
+	cin >> n >> k >> a;
+	auto cal = [&](int left, int right)
+		{
+			int len = (right - left + 1);
+			int cnt = len / (a + 1);
+			if (cnt * (a + 1) + a <= len)
+			{
+				cnt++;
+			}
+			return cnt;
+		};
+	int cnt = cal(1, n);
+	set<int>s = { 0, n + 1 };
+	int q = 0;
+	cin >> q;
+	for (int i = 1; i <= q; ++i)
+	{
+		int p = 0;
+		cin >> p;
+		auto it = s.lower_bound(p), jt = prev(it);
+		int left = *jt + 1, right = *it - 1;
+		cnt -= cal(left, right), cnt += cal(left, p - 1), cnt += cal(p + 1, right);
+		if (cnt < k)
+		{
+			cout << i;
+			return 0;
+		}
+		s.insert(p);
+	}
+	cout << -1;
+	return 0;
+}

@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<pii>>graph(n + 1), rev(n + 1);
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		graph[a].push_back(make_pair(b, -c));
+		rev[b].push_back(make_pair(a, -c));
+	}
+	vector<int>cycle, parent(n + 1, -1);
+	auto bellman_ford = [&](vector<vector<pii>>& G, int start)
+		{
+			vector<int>visited(n + 1, INT_MAX);
+			visited[start] = 0;
+			for (int k = 1; k <= n; ++k)
+			{
+				for (int i = 1; i <= n; ++i)
+				{
+					for (auto& [nv, nc] : G[i])
+					{
+						if (visited[i] != INT_MAX && visited[nv] > visited[i] + nc)
+						{
+							if (k == n && start == 1)
+							{
+								cycle.push_back(i);
+							}
+							visited[nv] = visited[i] + nc;
+							if (start == n)
+							{
+								parent[nv] = i;
+							}
+						}
+					}
+				}
+			}
+			return visited;
+		};
+	vector<int>A = bellman_ford(graph, 1), B = bellman_ford(rev, n);
+	for (auto& i : cycle)
+	{
+		if (B[i] != INT_MAX)
+		{
+			cout << -1;
+			return 0;
+		}
+	}
+	int x = 1;
+	while (x != -1)
+	{
+		cout << x << ' ';
+		x = parent[x];
+	}
+	return 0;
+}

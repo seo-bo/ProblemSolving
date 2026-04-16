@@ -1,0 +1,88 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MAX 30
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	vector<vector<int>>graph(MAX, vector<int>(MAX, INT_MAX));
+	for (int i = 0; i < MAX; ++i)
+	{
+		graph[i][i] = 0;
+		int x = i / 10, y = i % 10;
+		for (int j = 0; j < 4; ++j)
+		{
+			int nx = x + dir[j][0];
+			int ny = y + dir[j][1];
+			int pos = nx * 10 + ny;
+			if (0 <= nx && nx < 3 && 0 <= ny && ny < 10)
+			{
+				graph[i][pos] = 1;
+				graph[pos][i] = 1;
+			}
+		}
+	}
+	for (int k = 0; k < MAX; ++k)
+	{
+		for (int i = 0; i < MAX; ++i)
+		{
+			for (int j = 0; j < MAX; ++j)
+			{
+				if (graph[i][k] == INT_MAX || graph[k][j] == INT_MAX)
+				{
+					continue;
+				}
+				graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j]);
+			}
+		}
+	}
+	string str = "qwertyuiopasdfghjkl;zxcvbnm,./";
+	string a = "qwertasdfgzxcv";
+	vector<bool>A(MAX, false);
+	map<char, int>mm;
+	for (int i = 0; i < 30; ++i)
+	{
+		mm[str[i]] = i;
+	}
+	for (auto& i : a)
+	{
+		A[mm[i]] = true;
+	}
+	char l, r;
+	cin >> l >> r;
+	string t;
+	cin >> t;
+	int left = mm[l], right = mm[r], len = t.size();
+	vector<int>v;
+	for (auto& i : t)
+	{
+		v.push_back(mm[i]);
+	}
+	vector<vector<vector<int>>>dp(len + 1, vector<vector<int>>(MAX, vector<int>(MAX, -1)));
+	function<int(int, int, int)> dfs = [&](int idx, int L, int R)
+		{
+			if (idx == len)
+			{
+				return 0;
+			}
+			if (dp[idx][L][R] != -1)
+			{
+				return dp[idx][L][R];
+			}
+			int res = (1 << 25);
+			int target = v[idx];
+			if (A[target])
+			{
+				res = min(res, dfs(idx + 1, target, R) + graph[L][target]);
+			}
+			else
+			{
+				res = min(res, dfs(idx + 1, L, target) + graph[R][target]);
+			}
+			return dp[idx][L][R] = res;
+		};
+	cout << dfs(0, left, right) + len;
+	return 0;
+}

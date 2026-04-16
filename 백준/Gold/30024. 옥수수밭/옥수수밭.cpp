@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<vector<int>>v(n, vector<int>(m));
+	priority_queue<pii>pq;
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			cin >> v[i][j];
+			if (i == 0 || i == n - 1 || j == 0 || j == m - 1)
+			{
+				pq.push(make_pair(v[i][j], i * m + j));
+				v[i][j] = -1;
+			}
+		}
+	}
+	vector<vector<int>>dir = { {-1,0},{1,0},{0,-1},{0,1} };
+	int k = 0;
+	cin >> k;
+	while (k--)
+	{
+		auto [_, pos] = pq.top();
+		pq.pop();
+		int x = pos / m, y = pos % m;
+		cout << x + 1 << ' ' << y + 1 << '\n';
+		for (int i = 0; i < 4; ++i)
+		{
+			int nx = x + dir[i][0];
+			int ny = y + dir[i][1];
+			if (nx >= 0 && nx < n && ny >= 0 && ny < m && v[nx][ny] != -1)
+			{
+				pq.push(make_pair(v[nx][ny], nx * m + ny));
+				v[nx][ny] = -1;
+			}
+		}
+	}
+	return 0;
+}

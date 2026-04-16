@@ -1,0 +1,42 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef __int128 i128;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll n = 0, k = 0;
+	cin >> n >> k;
+	vector<ll>v(n);
+	for (auto& i : v)
+	{
+		cin >> i;
+	}
+	ll left = 0, right = LLONG_MAX, ans = -1;
+	while (left <= right)
+	{
+		i128 mid = ((i128)left + right) / 2;
+		i128 cnt = 0, now = v.front();
+		for (auto& i : v)
+		{
+			i128 gap = max((i128)0, mid - (i - now));
+			i128 a = mid * (mid + 1) / 2;
+			a -= gap * (gap + 1) / 2;
+			cnt += a;
+			now = i;
+		}
+		cnt += mid * (mid + 1) / 2;
+		if (cnt >= k)
+		{
+			ans = mid;
+			right = mid - 1;
+		}
+		else
+		{
+			left = mid + 1;
+		}
+	}
+	cout << ans;
+	return 0;
+}

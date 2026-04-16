@@ -1,0 +1,37 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string A, B;
+	cin >> A >> B;
+	vector<vector<int>>v(26);
+	vector<int>idx(26);
+	for (int i = 0; i < (int)A.size(); ++i)
+	{
+		v[int(A[i] - 'a')].push_back(i);
+	}
+	int ans = 0;
+	while (1)
+	{
+		int pre = -1;
+		for (auto& _ : B)
+		{
+			int i = int(_ - 'a'), len = v[i].size();
+			while (idx[i] < len && v[i][idx[i]] < pre)
+			{
+				idx[i]++;
+			}
+			if (idx[i] == len)
+			{
+				cout << ans;
+				return 0;
+			}
+			pre = v[i][idx[i]++];
+		}
+		ans++;
+	}
+	return 0;
+}

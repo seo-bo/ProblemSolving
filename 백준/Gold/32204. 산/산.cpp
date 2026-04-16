@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, pre = 0;
+	ll ans = 1, x = 1, y = 0;
+	cin >> n >> pre;
+	for (int i = 2; i <= n; ++i)
+	{
+		ll now = 0, nx = 0, ny = 0;
+		cin >> now;
+		nx = x + 1, ny = y * (pre == now);
+		if (pre > now)
+		{
+			nx = 1, ny = x + y;
+		}
+		ans += nx + ny;
+		x = nx, y = ny, pre = now;
+	}
+	cout << ans;
+	return 0;
+}

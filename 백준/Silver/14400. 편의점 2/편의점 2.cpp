@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>a(n), b(n);
+	for (int i = 0; i < n; ++i)
+	{
+		cin >> a[i] >> b[i];
+	}
+	sort(a.begin(), a.end());
+	sort(b.begin(), b.end());
+	int idx = n / 2;
+	ll ans = 0;
+	for (int i = 0; i < n; ++i)
+	{
+		ans += abs(a[idx] - a[i]) + abs(b[idx] - b[i]);
+	}
+	cout << ans;
+	return 0;
+}

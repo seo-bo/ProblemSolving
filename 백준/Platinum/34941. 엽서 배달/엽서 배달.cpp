@@ -1,0 +1,51 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<int, ll, ll>tp;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<vector<tp>>graph(n + 1);
+	for (int i = 0; i < n - 1; ++i)
+	{
+		int a = 0, b = 0, c = 0, d = 0;
+		cin >> a >> b >> c >> d;
+		graph[a].push_back(make_tuple(b, c, d));
+		graph[b].push_back(make_tuple(a, d, c));
+	}
+	vector<ll>siz(n + 1), dp(n + 1);
+	function<void(int, int)> dfs = [&](int parent, int node)
+		{
+			siz[node] = 1;
+			for (auto& [ver, co, rev] : graph[node])
+			{
+				if (ver == parent)
+				{
+					continue;
+				}
+				dfs(node, ver);
+				dp[node] += dp[ver] + siz[ver] * co;
+				siz[node] += siz[ver];
+			}
+		};
+	dfs(0, 1);
+	ll ans = LLONG_MAX;
+	function<void(ll, int, int)> res = [&](ll sum, int parent, int node)
+		{
+			ans = min(ans, sum + dp[node]);
+			for (auto& [ver, rev, co] : graph[node])
+			{
+				if (ver == parent)
+				{
+					continue;
+				}
+				res(sum + dp[node] - dp[ver] - siz[ver] * rev + (n - siz[ver]) * co, node, ver);
+			}
+		};
+	res(0, 0, 1);
+	cout << ans;
+	return 0;
+}

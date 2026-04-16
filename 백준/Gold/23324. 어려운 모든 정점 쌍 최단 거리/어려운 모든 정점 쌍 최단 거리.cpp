@@ -1,0 +1,48 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0, k = 0;
+	cin >> n >> m >> k;
+	vector<int>parent(n + 1), siz(n + 1, 1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)>find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (siz[r1] < siz[r2])
+			{
+				swap(r1, r2);
+			}
+			parent[r2] = r1;
+			siz[r1] += siz[r2];
+		};
+	int x1 = 0, x2 = 0;
+	for (int i = 1; i <= m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		if (i == k)
+		{
+			x1 = a, x2 = b;
+			continue;
+		}
+		if (find(a) != find(b))
+		{
+			merge(a, b);
+		}
+	}
+	if (find(x1) == find(x2))
+	{
+		cout << 0;
+		return 0;
+	}
+	cout << (ll)siz[find(x1)] * siz[find(x2)];
+	return 0;
+}

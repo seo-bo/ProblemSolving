@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef tuple<int, int, int>tp;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<int>parent(n + 1), rank(n + 1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (rank[r1] < rank[r2])
+			{
+				swap(r1, r2);
+			}
+			parent[r2] = r1;
+			rank[r1] += (rank[r1] == rank[r2]);
+		};
+	int cnt = 0;
+	for (int i = 0; i < m; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		if (find(a) != find(b))
+		{
+			merge(a, b);
+			cnt++;
+		}
+	}
+	vector<tp>edge;
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			int co = 0;
+			cin >> co;
+			if (i < j)
+			{
+				if (n == 2)
+				{
+					if (m == 0)
+					{
+						cout << co << ' ' << 1 << '\n';
+						cout << 1 << ' ' << 2 << '\n';
+					}
+					else
+					{
+						cout << 0 << ' ' << 0 << '\n';
+					}
+					return 0;
+				}
+				if (i > 1)
+				{
+					edge.push_back(make_tuple(co, i, j));
+				}
+			}
+		}
+	}
+	sort(edge.begin(), edge.end());
+	int ans = 0;
+	vector<pii>res;
+	for (int i = 0; i < (int)edge.size() && cnt < n - 2; ++i)
+	{
+		auto [co, a, b] = edge[i];
+		if (find(a) != find(b))
+		{
+			merge(a, b);
+			cnt++;
+			res.push_back(make_pair(a, b));
+			ans += co;
+		}
+	}
+	cout << ans << ' ' << (int)res.size() << '\n';
+	for (auto& [a, b] : res)
+	{
+		cout << a << ' ' << b << '\n';
+	}
+	return 0;
+}

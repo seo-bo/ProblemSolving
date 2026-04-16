@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, pivot = 0, flag = 0;
+	cin >> n >> pivot;
+	int pre = pivot;
+	for (int i = 1; i <= n; ++i)
+	{
+		int temp = 0;
+		cout << format("{} {}", i - flag, i) << endl;
+		cin >> temp;
+		if (!temp)
+		{
+			return 0;
+		}
+		if (flag)
+		{
+			pivot = temp;
+			if (temp < pre)
+			{
+				flag = 0;
+				pre = temp;
+			}
+		}
+		else
+		{
+			if (temp < pivot)
+			{
+				pivot = pre = temp;
+			}
+			else
+			{
+				flag = 1;
+				pre = pivot;
+				pivot = temp;
+			}
+		}
+	}
+	return 0;
+}

@@ -1,0 +1,72 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0;
+		cin >> n;
+		vector<int>v(n + 1), a(n + 1), left(n + 2, 1), right(n + 2, 1);
+		for (int i = 1; i <= n; ++i)
+		{
+			cin >> v[i];
+			a[i] = v[i];
+		}
+		map<int, int>mm;
+		sort(a.begin() + 1, a.end());
+		for (int i = 1, cnt = 1; i <= n; ++i)
+		{
+			if (mm.find(a[i]) == mm.end())
+			{
+				mm[a[i]] = cnt++;
+			}
+		}
+		for (int i = 2; i <= n; ++i)
+		{
+			if (v[i] > v[i - 1])
+			{
+				left[i] = left[i - 1] + 1;
+			}
+		}
+		for (int i = n - 1; i >= 1; --i)
+		{
+			if (v[i] < v[i + 1])
+			{
+				right[i] = right[i + 1] + 1;
+			}
+		}
+		vector<int>BIT(n + 1);
+		auto update = [&](int idx, int delta)
+			{
+				while (idx <= n)
+				{
+					BIT[idx] = max(BIT[idx], delta);
+					idx += idx & -idx;
+				}
+			};
+		auto query = [&](int idx)
+			{
+				int res = 0;
+				while (idx)
+				{
+					res = max(res, BIT[idx]);
+					idx -= idx & -idx;
+				}
+				return res;
+			};
+		int ans = 1;
+		for (int i = 1; i <= n; ++i)
+		{
+			int p = mm[v[i]];
+			update(p, left[i]);
+			ans = max(ans, right[i] + query(p - 1));
+		}
+		cout << ans << '\n';
+	}
+	return 0;
+}

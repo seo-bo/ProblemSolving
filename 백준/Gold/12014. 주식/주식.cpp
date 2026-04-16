@@ -1,0 +1,30 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	for (int i = 1; i <= T; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		vector<int>v;
+		for (int i = 0; i < a; ++i)
+		{
+			int p = 0;
+			cin >> p;
+			auto it = lower_bound(v.begin(), v.end(), p);
+			if (it == v.end())
+			{
+				v.push_back(p);
+				continue;
+			}
+			*it = p;
+		}
+		cout << format("Case #{}\n{}\n", i, int(v.size() >= b));
+	}
+	return 0;
+}

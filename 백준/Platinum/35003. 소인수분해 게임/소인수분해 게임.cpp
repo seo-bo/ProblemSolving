@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MAX 1000000
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	vector<bool>flag(MAX + 1, true);
+	flag[0] = flag[1] = false;
+	vector<ll>prime;
+	for (ll i = 2; i <= MAX; ++i)
+	{
+		if (flag[i])
+		{
+			prime.push_back(i);
+			for (ll j = i * i; j <= MAX; j += i)
+			{
+				flag[j] = false;
+			}
+		}
+	}
+	int T = 0, len = prime.size();
+	cin >> T;
+	while (T--)
+	{
+		ll a = 0;
+		cin >> a;
+		string str;
+		for (int i = 0; i < len && prime[i] * prime[i] <= a; ++i)
+		{
+			int cnt = 0;
+			while (a % prime[i] == 0)
+			{
+				cnt++;
+				a /= prime[i];
+			}
+			if (cnt)
+			{
+				str += char(cnt);
+			}
+		}
+		if (a > 1)
+		{
+			str += char(1);
+		}
+		str += char(20);
+		int siz = str.size() - 1;
+		unordered_map<string, int>dp;
+		function<int(string)> dfs = [&](string s)
+			{
+				if (dp.find(s) != dp.end())
+				{
+					return dp[s];
+				}
+				int ban = int(s.back());
+				for (int i = 0; i < siz; ++i)
+				{
+					string now = s;
+					if (i == ban)
+					{
+						continue;
+					}
+					if (int(now[i]) == 0)
+					{
+						continue;
+					}
+					now[i]--;
+					now.back() = char(i);
+					if (!dfs(now))
+					{
+						return dp[s] = 1;
+					}
+				}
+				return dp[s] = 0;
+			};
+		cout << ((dfs(str)) ? "yyyy7089" : "toycartoon") << '\n';
+	}
+	return 0;
+}

@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int x = 0, y = 0;
+	cin >> x >> y;
+	vector<pii>v(3);
+	for (auto& [a, b] : v)
+	{
+		cin >> a >> b;
+	}
+	vector<int>per(3);
+	iota(per.begin(), per.end(), 0);
+	long double ans = INT_MAX;
+	do
+	{
+		int nx = x, ny = y;
+		long double temp = 0;
+		for (int i = 0; i < 3; ++i)
+		{
+			auto [a, b] = v[per[i]];
+			temp += sqrt((long double)(a - nx) * (a - nx) + (long double)(b - ny) * (b - ny));
+			nx = a, ny = b;
+		}
+		ans = min(ans, temp);
+	} while (next_permutation(per.begin(), per.end()));
+	cout << int(ans);
+	return 0;
+}

@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	ll a = 0, b = 0, c = 0;
+	cin >> a >> b >> c;
+	ll t = a + b, ans = 0;
+	if (a <= c)
+	{
+		cout << t;
+		return 0;
+	}
+	ll left = max(0LL, a - c), right = min(t, a + c);
+	for (ll i = 1; i * i <= t; ++i)
+	{
+		if (t % i)
+		{
+			continue;
+		}
+		vector<ll>v = { i,t / i };
+		for (auto& j : v)
+		{
+			if (right / j * j >= left)
+			{
+				ans = max(ans, j);
+			}
+		}
+	}
+	cout << ans;
+	return 0;
+}

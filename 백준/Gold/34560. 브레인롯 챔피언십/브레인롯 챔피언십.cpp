@@ -1,0 +1,89 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <algorithm>
+#include <cstring>
+using namespace std;
+
+char name[3000][32];
+short status[3000][3];
+vector<vector<short>>graph(3000);
+short degree[3000];
+
+int main(void)
+{
+	short n = 0;
+	scanf("%hd", &n);
+	for (short i = 0; i < n; ++i)
+	{
+		scanf("%s", name[i]);
+		for (short j = 0; j < 3; ++j)
+		{
+			scanf("%hd", &status[i][j]);
+		}
+		for (short j = 0; j < i; ++j)
+		{
+			short a = 0, b = 0;
+			for (short k = 0; k < 3; ++k)
+			{
+				if (status[i][k] > status[j][k])
+				{
+					a++;
+				}
+				else if (status[i][k] < status[j][k])
+				{
+					b++;
+				}
+			}
+			if (a > b)
+			{
+				graph[i].push_back(j);
+				degree[j]++;
+			}
+			else if (a < b)
+			{
+				graph[j].push_back(i);
+				degree[i]++;
+			}
+		}
+	}
+	short p = n;
+	vector<short>ans;
+	queue<short>q;
+	for (short i = 0; i < n; ++i)
+	{
+		if (!degree[i])
+		{
+			q.push(i);
+			ans.push_back(i);
+			p--;
+		}
+	}
+	while (!q.empty())
+	{
+		short cur = q.front();
+		q.pop();
+		for (auto& i : graph[cur])
+		{
+			if (--degree[i] == 0)
+			{
+				p--;
+				q.push(i);
+			}
+		}
+	}
+	if (p)
+	{
+		printf("Paradoxe Absurdo");
+		return 0;
+	}
+	sort(ans.begin(), ans.end(), [&](const short& a, const short& b)
+		{
+			return strcmp(name[a], name[b]) < 0;
+		});
+	for (auto& i : ans)
+	{
+		printf("%s\n", name[i]);
+	}
+	return 0;
+}

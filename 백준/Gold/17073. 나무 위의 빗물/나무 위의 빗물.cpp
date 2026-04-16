@@ -1,0 +1,37 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	double w = 0;
+	cin >> n >> w;
+	vector<vector<int>>graph(n + 1);
+	int pivot = 0;
+	for (int i = 0; i < n - 1; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		graph[a].push_back(b);
+		graph[b].push_back(a);
+	}
+	function<void(int, int)> dfs = [&](int parent, int node)
+		{
+			int cnt = 0;
+			for (auto& i : graph[node])
+			{
+				if (parent == i)
+				{
+					continue;
+				}
+				cnt++;
+				dfs(node, i);
+			}
+			pivot += (cnt == 0);
+		};
+	dfs(0, 1);
+	cout << fixed << setprecision(12) << (w / pivot);
+	return 0;
+}

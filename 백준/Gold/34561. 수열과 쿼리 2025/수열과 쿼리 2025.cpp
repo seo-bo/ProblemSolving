@@ -1,0 +1,77 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>v(n + 1), rank(n + 1, 1), parent(n + 1), root(300001, -1);
+	iota(parent.begin(), parent.end(), 0);
+	function<int(int)> find = [&](int root)
+		{
+			return (parent[root] == root) ? parent[root] : parent[root] = find(parent[root]);
+		};
+	auto merge = [&](int a, int b)
+		{
+			int r1 = find(a), r2 = find(b);
+			if (r1 != r2)
+			{
+				if (rank[r1] > rank[r2])
+				{
+					parent[r2] = r1;
+					rank[r1] += rank[r2];
+				}
+				else
+				{
+					parent[r1] = r2;
+					rank[r2] += rank[r1];
+				}
+			}
+		};
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> v[i];
+		if (root[v[i]] == -1)
+		{
+			root[v[i]] = i;
+		}
+		else
+		{
+			merge(root[v[i]], i);
+		}
+		root[v[i]] = find(i);
+	}
+	int q = 0;
+	cin >> q;
+	while (q--)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b;
+		if (a == 1)
+		{
+			cin >> c;
+			if (root[b] == -1)
+			{
+				continue;
+			}
+			int idx = root[b];
+			if (root[c] != -1 && find(idx) != find(root[c]))
+			{
+				merge(idx, root[c]);
+			}
+			root[c] = find(idx);
+			v[root[c]] = c;
+			if (b != c)
+			{
+				root[b] = -1;
+			}
+		}
+		else
+		{
+			cout << v[find(b)] << '\n';
+		}
+	}
+	return 0;
+}

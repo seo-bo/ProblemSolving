@@ -1,0 +1,38 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	string str, base = "PAUL";
+	string res;
+	cin >> str;
+	vector<int>idx = { -1, };
+	for (int i = 0; i < n; ++i)
+	{
+		if (base.find(str[i]) != string::npos)
+		{
+			res += str[i];
+			idx.push_back(i);
+		}
+	}
+	if (res != "PAUL")
+	{
+		cout << "NO";
+		return 0;
+	}
+	idx.push_back(n);
+	for (int i = 1; i < idx.size(); ++i)
+	{
+		if ((idx[i] - idx[i - 1] - 1) % 2)
+		{
+			cout << "NO";
+			return 0;
+		}
+	}
+	cout << "YES";
+	return 0;
+}

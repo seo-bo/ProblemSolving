@@ -1,0 +1,32 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int T = 0;
+	cin >> T;
+	while (T--)
+	{
+		int n = 0;
+		cin >> n;
+		vector<int>v;
+		for (int i = 0; i < n; ++i)
+		{
+			int temp = 0;
+			cin >> temp;
+			auto it = lower_bound(v.begin(), v.end(), temp);
+			if (it == v.end())
+			{
+				v.push_back(temp);
+			}
+			else if (*it > temp)
+			{
+				*it = temp;
+			}
+		}
+		cout << v.size() << '\n';
+	}
+	return 0;
+}

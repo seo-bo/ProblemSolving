@@ -1,0 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	map<int, vector<int>>mm;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, b = 0;
+		cin >> a >> b;
+		mm[b].push_back(a);
+	}
+	ll pre = 0, ans = LLONG_MAX;
+	for (auto [a, b] : mm)
+	{
+		sort(b.rbegin(), b.rend());
+		ll cnt = 1;
+		for (auto& i : b)
+		{
+			pre += i;
+			if (pre >= m)
+			{
+				ans = min(ans, cnt * a);
+			}
+			cnt++;
+		}
+	}
+	cout << ((ans == LLONG_MAX) ? -1 : ans);
+	return 0;
+}

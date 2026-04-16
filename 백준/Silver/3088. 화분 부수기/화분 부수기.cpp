@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+bool visited[1000005];
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, ans = 0;
+	cin >> n;
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0, b = 0, c = 0;
+		cin >> a >> b >> c;
+		if (!visited[a] && !visited[b] && !visited[c])
+		{
+			ans++;
+		}
+		visited[a] = visited[b] = visited[c] = true;
+	}
+	cout << ans;
+	return 0;
+}

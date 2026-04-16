@@ -1,0 +1,71 @@
+#include<bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0, m = 0;
+	cin >> n >> m;
+	vector<pii>base(n + 1), edge(m);
+	for (int i = 1; i <= n; ++i)
+	{
+		cin >> base[i].first;
+		base[i].second = i;
+	}
+	for (auto& [a, b] : edge)
+	{
+		cin >> a >> b;
+	}
+	vector<vector<int>>graph(n + 1);
+	sort(edge.begin(), edge.end());
+	int pa = -1, pb = -1;
+	for (auto& [a, b] : edge)
+	{
+		if (pa == a && pb == b)
+		{
+			continue;
+		}
+		pa = a, pb = b;
+		if (base[a].first > base[b].first)
+		{
+			swap(a, b);
+		}
+		graph[a].push_back(b);
+	}
+	sort(base.begin() + 1, base.end(), [&](const pii& a, const pii& b)
+		{
+			return a.first < b.first;
+		});
+	vector<int>dp(n + 1, -1);
+	function<int(int)> dfs = [&](int idx)
+		{
+			if (graph[idx].empty())
+			{
+				return dp[idx] = 1;
+			}
+			if (dp[idx] != -1)
+			{
+				return dp[idx];
+			}
+			int res = 1;
+			for (auto& i : graph[idx])
+			{
+				res = max(res, dfs(i) + 1);
+			}
+			return dp[idx] = res;
+		};
+	for (int i = 1; i <= n; ++i)
+	{
+		if (dp[base[i].second] == -1)
+		{
+			dfs(base[i].second);
+		}
+	}
+	for (int i = 1; i <= n; ++i)
+	{
+		cout << dp[i] << '\n';
+	}
+	return 0;
+}

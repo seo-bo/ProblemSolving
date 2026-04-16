@@ -1,0 +1,55 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	string base = "WB";
+	vector<vector<int>>A(n + 1, vector<int>(n + 1)), B(n + 1, vector<int>(n + 1));
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			char a;
+			cin >> a;
+			A[i][j] = (i + j + (a == 'W')) % 2;
+			B[i][j] = (i + j + (a == 'B')) % 2;
+		}
+	}
+	ll ans = 0;
+	auto cal = [&](vector<vector<int>>& v, int idx)
+		{
+			ll now = 0;
+			vector<pii>s;
+			for (int i = 1; i <= n; ++i)
+			{
+				if (!v[idx][i])
+				{
+					s.clear(), now = 0;
+					continue;
+				}
+				v[idx][i] += v[idx - 1][i];
+				int co = v[idx][i], cnt = 1;
+				while (!s.empty() && s.back().first >= co)
+				{
+					auto [a, b] = s.back();
+					s.pop_back();
+					now -= a * b;
+					cnt += b;
+				}
+				s.push_back(make_pair(co, cnt));
+				now += co * cnt;
+				ans += now;
+			}
+		};
+	for (int i = 1; i <= n; ++i)
+	{
+		cal(A, i), cal(B, i);
+	}
+	cout << ans;
+	return 0;
+}

@@ -1,0 +1,41 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define MOD 1000000007
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	vector<int>cnt(30, 0);
+	for (int i = 0; i < n; ++i)
+	{
+		int a = 0;
+		cin >> a;
+		for (int j = 0; j < 30; ++j)
+		{
+			if (a & (1 << j))
+			{
+				cnt[j]++;
+			}
+		}
+	}
+	ll ans = 1;
+	for (int i = 1; i <= n; ++i)
+	{
+		ll temp = 0;
+		for (int j = 0; j < 30; ++j)
+		{
+			if (!cnt[j])
+			{
+				continue;
+			}
+			temp |= (1LL << j);
+			cnt[j]--;
+		}
+		ans = (ans * temp) % MOD;
+	}
+	cout << ans;
+	return 0;
+}

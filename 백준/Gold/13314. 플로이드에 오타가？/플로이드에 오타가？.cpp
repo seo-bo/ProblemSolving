@@ -1,0 +1,30 @@
+#include<bits/stdc++.h> 
+using namespace std;
+typedef long long ll;
+typedef pair<int, int>pii;
+
+int main(void)
+{
+    cin.tie(0)->sync_with_stdio(0);
+    cout << 100 << '\n';
+    for (int i = 1; i <= 100; ++i)
+    {
+        for (int j = 1; j <= 100; ++j)
+        {
+            if (i == j)
+            {
+                cout << 0 << ' ';
+            }
+            else if (i == 100 || j == 100)
+            {
+                cout << 1 << ' ';
+            }
+            else
+            {
+                cout << 10000 << ' ';
+            }
+        }
+        cout << '\n';
+    }
+    return 0;
+}
