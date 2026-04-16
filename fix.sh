@@ -1,3 +1,4 @@
+
 TARGET_DIR="${1:-.}"
 
 find "$TARGET_DIR" -type f -name "*.undefined" | while read -r file; do
