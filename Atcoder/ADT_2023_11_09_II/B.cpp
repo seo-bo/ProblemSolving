@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	string str;
+	cin >> str;
+	int p = str.back() - '0';
+	str.pop_back(), str.pop_back();
+	cout << str;
+	if (p <= 2)
+	{
+		cout << '-';
+	}
+	if (p >= 7)
+	{
+		cout << '+';
+	}
+	return 0;
+}
