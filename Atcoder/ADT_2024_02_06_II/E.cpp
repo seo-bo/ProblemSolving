@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+#include <atcoder/all>
+using namespace std;
+using namespace atcoder;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	set<string>s;
+	for (int i = 0; i < n; ++i)
+	{
+		string str;
+		cin >> str;
+		string rev = str;
+		reverse(rev.begin(), rev.end());
+		s.insert(min(str, rev));
+	}
+	cout << s.size();
+	return 0;
+}
