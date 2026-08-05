@@ -1,0 +1,21 @@
+#include <bits/stdc++.h>
+#include <atcoder/all>
+using namespace std;
+using namespace atcoder;
+typedef long long ll;
+
+int main(void)
+{
+	cin.tie(0)->sync_with_stdio(0);
+	int n = 0;
+	cin >> n;
+	ll pre = 0;
+	for (int i = 1; i <= n; ++i)
+	{
+		ll now = 0;
+		cin >> now;
+		cout << now - pre << ' ';
+		pre = now;
+	}
+	return 0;
+}
